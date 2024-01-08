@@ -1,0 +1,39 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+    
+env:
+  OPENAI_TOKEN: mockKey
+  
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    
+      - name: checkout repo
+        uses: actions/checkout@main
+        
+      - name: build code-generator
+        run: make code-generator
+        
+      - name: build appwish-gui
+        run: make appwish
+      
+    
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: snyk/actions/setup@master
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        working-directory: cg/CodeGenerator/CodeGenerator
+        run: snyk test
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
