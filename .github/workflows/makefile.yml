@@ -41,6 +41,8 @@ jobs:
     steps:
       - uses: snyk/actions/setup@master
       - uses: actions/checkout@master
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Snyk to check for vulnerabilities in code-generator-gui-ollama
         working-directory: AppWish/AppWish/
         run: snyk test
