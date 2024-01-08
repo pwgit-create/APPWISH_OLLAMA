@@ -6,8 +6,6 @@ on:
   pull_request:
     branches: [ "master" ]
     
-env:
-  OPENAI_TOKEN: mockKey
   
 jobs:
   build:
@@ -26,14 +24,29 @@ jobs:
         run: make appwish
       
     
-  security:
+  security-code_generator:
     runs-on: ubuntu-latest
     steps:
       - uses: snyk/actions/setup@master
       - uses: actions/checkout@master
-      - name: Run Snyk to check for vulnerabilities
+      - name: Run Snyk to check for vulnerabilities in code-generator-ollama
         working-directory: cg/CodeGenerator/CodeGenerator
         run: snyk test
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  security-appWish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: snyk/actions/setup@master
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities in code-generator-gui-ollama
+        working-directory: /AppWish/AppWish/
+        run: snyk test
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          
+
+          
