@@ -40,6 +40,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: snyk/actions/setup@master
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@master
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
