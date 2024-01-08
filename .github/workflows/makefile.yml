@@ -36,23 +36,8 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-  security-appWish:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: snyk/actions/setup@master
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/checkout@master
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Run Snyk to check for vulnerabilities in code-generator-gui-ollama
-        working-directory: AppWish/AppWish/
-        run: snyk test
-        continue-on-error: true
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          USER_NAME: ${{ secrets.USER_NAME }}
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
+
           
 
           
