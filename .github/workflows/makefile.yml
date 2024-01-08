@@ -33,29 +33,13 @@ jobs:
         working-directory: cg/CodeGenerator/CodeGenerator
         run: snyk test
         continue-on-error: true
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
-  security-appWish:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: snyk/actions/setup@master
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/checkout@master
-      
-      - name: maven-settings
-        uses: s4u/maven-settings-action@v2
-        with:
-          servers: '[{"id": "github", "username": "${{ secrets.USER_NAME }}", "password": "${{ secrets.ACCESS_TOKEN }}"}]'
-          githubServer: false
-      
       - name: Run Snyk to check for vulnerabilities in code-generator-gui-ollama
         working-directory: AppWish/AppWish/
         run: snyk test
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-     
+
+
 
           
