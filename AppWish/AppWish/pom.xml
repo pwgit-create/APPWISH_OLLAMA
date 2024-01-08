@@ -70,6 +70,32 @@
         </dependency>
     </dependencies>
 
+         
+
+you have to define access repository url in pom.xml of your project where you wanted to access.
+
+Just define like below,
+
+<repositories>
+    <repository>
+      <id>central</id>
+      <url>https://repo1.maven.org/maven2</url>
+      <releases><enabled>true</enabled></releases>
+      <snapshots><enabled>true</enabled></snapshots>
+    </repository>
+    <repository>
+      <id>github</id>
+      <url>https://maven.pkg.github.com/pwgit-create/APPWISH_OLLMA</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+  </repositories>
+
+
     <build>
         <plugins>
             <plugin>
