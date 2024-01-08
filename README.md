@@ -2,7 +2,7 @@
 AppWish OLLMA Repository uses a local LLM running with OLLMA. 
 For more info on how to set up OLLMA see: https://ollama.ai
 
-You can change the MODEL in the prop file located at [] if you don’t want to use the LLMA2 Model (set by default)
+You can change the MODEL in the prop file located [here](https://github.com/pwgit-create/APPWISH_OLLMA/blob/master/AppWish/AppWish/src/main/resources/ollama_model.props) if you don’t want to use the LLMA2 Model (set by default)
 
 # Turn Your App Ideas into Reality!
 
