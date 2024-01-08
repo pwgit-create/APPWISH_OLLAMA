@@ -13,6 +13,9 @@ Note: Please keep in mind that while App Wish strives to generate functional cod
 
 <br/>
 
+
+![Logo](https://github.com/pwgit-create/APPWISH_OLLMA/blob/master/AppWish/AppWish/src/main/resources/shooting_star.png?raw=true)
+
 ## AppWish Quick Start Guide:
 Follow these simple steps to get started with AppWish:
 
