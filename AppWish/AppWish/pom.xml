@@ -10,7 +10,7 @@
 
 
     <description>The GUI interface for the PN.dev.code-generator library is included in this package. Using this library requires the pn.dev.code-generator-ollama package to be added as a dependency</description>
-    <inceptionYear>2023</inceptionYear>
+    <inceptionYear>2024</inceptionYear>
 
     <developers>
         <developer>
