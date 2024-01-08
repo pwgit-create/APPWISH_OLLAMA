@@ -42,7 +42,7 @@ jobs:
       - uses: snyk/actions/setup@master
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities in code-generator-gui-ollama
-        working-directory: /AppWish/AppWish/
+        working-directory: AppWish/AppWish/
         run: snyk test
         continue-on-error: true
         env:
