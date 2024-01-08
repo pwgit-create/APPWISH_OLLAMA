@@ -70,12 +70,6 @@
         </dependency>
     </dependencies>
 
-         
-
-you have to define access repository url in pom.xml of your project where you wanted to access.
-
-Just define like below,
-
 <repositories>
     <repository>
       <id>central</id>
