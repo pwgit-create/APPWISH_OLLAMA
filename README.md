@@ -1,8 +1,12 @@
-# APPWISH OLLMA
-AppWish OLLMA Repository uses a local LLM running with OLLMA. 
-For more info on how to set up OLLMA see: https://ollama.ai
+# APPWISH OLLAMA
+AppWish OLLAMA Repository uses a local LLM running with OLLAMA. 
+For more info on how to set up OLLAMA see: https://ollama.ai
 
-You can change the MODEL in the prop file located [here](https://github.com/pwgit-create/APPWISH_OLLMA/blob/master/AppWish/AppWish/src/main/resources/ollama_model.props) if you don’t want to use the LLMA2 Model (set by default)
+## Start OLLAMA with the codeup model (before starting AppWish)
+```ollama run codeup```
+
+
+You can change the MODEL in the prop file located [here](https://github.com/pwgit-create/APPWISH_OLLMA/blob/master/AppWish/AppWish/src/main/resources/ollama_model.props) if you don’t want to use the Codeup model (set by default)
 
 # Turn Your App Ideas into Reality!
 
@@ -17,14 +21,10 @@ Note: Please keep in mind that while App Wish strives to generate functional cod
 ![Logo](https://github.com/pwgit-create/APPWISH_OLLMA/blob/master/AppWish/AppWish/src/main/resources/shooting_star.png?raw=true)
 
 ## AppWish Quick Start Guide:
-Follow these simple steps to get started with AppWish:
-
-See article from howtogeek for more information: https://www.howtogeek.com/787217/how-to-edit-environment-variables-on-windows-10-or-11/
-
 
 
 #### 1. In your terminal , use the following command to start the application:
-##### <ins>On Linux:<ins> ```make run``` 
+##### ```make run``` 
 
 
 
