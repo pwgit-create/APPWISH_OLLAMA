@@ -37,6 +37,23 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
 
+  security-appwish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: snyk/actions/setup@master
+      - uses: actions/checkout@master
+     
+      - name: build dependency requriment for appwish
+        run: make code-generator
+      
+      - name: Run Snyk to check for vulnerabilities in code-generator-ollama-gui
+        working-directory: AppWish/AppWish
+        run: snyk test
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+
 
           
 
