@@ -62,7 +62,11 @@ public class QuestionConstants {
      *
      * @use-info This String should be concatenated at the tail of the WITH_MAIN_METHOD
      */
-    public final static String AND_CORRECT_IMPORTS = " and correct imports";
+
+    public final static String AND_CORRECT_IMPORTS = " and correct imports that are added into the source code";
+
+     public final static String INCLUDE_IN_ONE_FILE= " and include everything in one file";
+
 
 
 }
