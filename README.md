@@ -13,8 +13,6 @@ You can change the MODEL in the prop file located [here](https://github.com/pwgi
 Introducing App Wish, a groundbreaking platform that empowers you to transform your app concepts into fully functional applications. 
 With App Wish, you can unleash your creativity without worrying about the complexities of coding. Whether you're a seasoned developer or a non-technical individual, this platform bridges the gap, making app development accessible to all.
 
-Note: Please keep in mind that while App Wish strives to generate functional code, it's important to review and refine the output to ensure it aligns with your specific requirements and best practices.
-
 <br/>
 
 
