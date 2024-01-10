@@ -1,7 +1,7 @@
     name: SAST Scan
     on:
       pull_request:
-        types: [opened, synchronize, reopened]
+        types: [opened,reopened]
     jobs:
       build:
         name: Build and analyze
@@ -39,12 +39,8 @@
               SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
             run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=pn-dev_appwish-ollama
 
-          - name: Cache Maven packages
-            uses: actions/cache@v3
-            with:
-              path: ~/.m2
-              key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-              restore-keys: ${{ runner.os }}-m2
+          - name: build dependency requriment for appwish
+            run: make code-generator
 
           - name: Build and analyze code-generator-ollama-gui
             working-directory: AppWish/AppWish
