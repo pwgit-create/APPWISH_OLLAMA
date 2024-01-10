@@ -1,8 +1,11 @@
-    name: SAST Scan
-    on:
-      pull_request:
-        types: [opened,reopened]
-    jobs:
+name: SAST Scan
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
       build:
         name: Build and analyze
         runs-on: ubuntu-latest
