@@ -39,6 +39,13 @@
               SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
             run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=pn-dev_appwish-ollama
 
+          - name: Cache Maven packages
+            uses: actions/cache@v3
+            with:
+              path: ~/.m2
+              key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+              restore-keys: ${{ runner.os }}-m2
+
           - name: Build and analyze code-generator-ollama-gui
             working-directory: AppWish/AppWish
             env:
