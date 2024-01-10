@@ -43,7 +43,7 @@ jobs:
       - uses: snyk/actions/setup@master
       - uses: actions/checkout@master
      
-      - name: build dependency requriment for appwish
+      - name: build dependency requirement for code-generator-ollama-gui
         run: make code-generator
       
       - name: Run Snyk to check for vulnerabilities in code-generator-ollama-gui
