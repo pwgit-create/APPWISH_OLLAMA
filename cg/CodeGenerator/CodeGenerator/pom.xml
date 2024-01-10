@@ -6,7 +6,7 @@
 
     <groupId>pn.dev</groupId>
     <artifactId>code-generator-ollama</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
 
 
     <description>The Java Application-Generator (pn.dev.code-generator-ollama) creates applications by giving a string of your desired features for a Java application, like this: AppSystem.StartCodeGenerator("mp3 player with gui" true, false)</description>
@@ -37,7 +37,7 @@
    <repository>
      <id>github</id>
      <name>GitHub pwgit-create Apache Maven Packages</name>
-     <url>https://maven.pkg.github.com/pwgit-create/APPWISH_OLLMA</url>
+     <url>https://maven.pkg.github.com/pwgit-create/APPWISH_OLLAMA</url>
    </repository>
 </distributionManagement>
 

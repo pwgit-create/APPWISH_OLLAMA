@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>pn.dev</groupId>
     <artifactId>code-generator-gui-ollama</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
     <name>CodeGenerator-GUI</name>
 
 
@@ -35,7 +35,7 @@
    <repository>
      <id>github</id>
      <name>GitHub pwgit-create Apache Maven Packages</name>
-     <url>https://maven.pkg.github.com/pwgit-create/APPWISH_OLLMA</url>
+     <url>https://maven.pkg.github.com/pwgit-create/APPWISH_OLLAMA</url>
    </repository>
 </distributionManagement>
     
@@ -43,7 +43,7 @@
         <dependency>
             <groupId>pn.dev</groupId>
             <artifactId>code-generator-ollama</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -69,26 +69,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-<repositories>
-    <repository>
-      <id>central</id>
-      <url>https://repo1.maven.org/maven2</url>
-      <releases><enabled>true</enabled></releases>
-      <snapshots><enabled>true</enabled></snapshots>
-    </repository>
-    <repository>
-      <id>github</id>
-      <url>https://maven.pkg.github.com/pwgit-create/APPWISH_OLLMA</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </repository>
-  </repositories>
-
 
     <build>
         <plugins>
