@@ -34,8 +34,10 @@ jobs:
               path: ~/.m2
               key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
               restore-keys: ${{ runner.os }}-m2
+              working-directory: cg/CodeGenerator/CodeGenerator
           
           - name: Build and analyze code-generator-ollama
+            working-directory: cg/CodeGenerator/CodeGenerator
             env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
               SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
