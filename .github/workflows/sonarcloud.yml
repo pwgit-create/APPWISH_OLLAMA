@@ -1,6 +1,7 @@
-name: SAST Scan
+name: SAST Scan Scheduled
 on:
-  workflow_dispatch:
+ schedule: 
+    - cron: '00 19 * * 4'
 
 jobs:
       build:
