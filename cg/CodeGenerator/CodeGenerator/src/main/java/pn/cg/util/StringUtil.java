@@ -51,7 +51,7 @@ public class StringUtil {
 
     /**
      * Removes the first line of a String
-     * @param inputrt
+     * @param input
      * @return
      */
     public static String removeFirstLine(String input){
