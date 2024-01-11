@@ -1,5 +1,7 @@
 name: check_that_pushes_to_the_master_branch_is_from_develop
-on: [workflow_dispatch]
+on:
+ pull_request:
+    branches: [ "master" ]
 
 jobs:
   check-if-source-branch-is-develop:
