@@ -1,7 +1,7 @@
 # APPWISH OLLAMA
 AppWish OLLAMA Repository uses a local LLM running with OLLAMA. 
 For more info on how to set up OLLAMA see: https://ollama.ai
-
+test powershell script
 ## Start OLLAMA with the codeup model (before starting AppWish)
 ```ollama run codeup```
 
