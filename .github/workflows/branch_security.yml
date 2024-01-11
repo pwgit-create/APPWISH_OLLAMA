@@ -12,7 +12,7 @@ jobs:
 
     - name: Exit if the branch is not develop
       run: |
-        if [[ "${{ github.head_ref || github.ref_name || github.event.pull_request.head.ref }}" != "refs/heads/develop" ]]; then
+        if [[ "${{github.event.pull_request.head.ref }}" != "refs/heads/develop" ]]; then
           echo "Branch is not develop, exiting and failing the job."
           exit 1
         fi
