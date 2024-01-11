@@ -1,10 +1,8 @@
 name: SAST Scan
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    types: [opened, synchronize, reopened]
+  schedule: 
+    - cron: '00 18 * * 4'
+
 jobs:
       build:
         name: Build and analyze
@@ -28,7 +26,7 @@ jobs:
               key: ${{ runner.os }}-sonar
               restore-keys: ${{ runner.os }}-sonar
           
-          - name: Cache Maven packages
+          - name: Cache Maven packages for code-generator-ollama
             uses: actions/cache@v3
             with:
               path: ~/.m2
@@ -38,6 +36,21 @@ jobs:
           
           - name: Build and analyze code-generator-ollama
             working-directory: cg/CodeGenerator/CodeGenerator
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+              SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=pn-dev_appwish-ollama
+
+          - name: Cache Maven packages for code-generator-ollama-gui
+            uses: actions/cache@v3
+            with:
+              path: ~/.m2
+              key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+              restore-keys: ${{ runner.os }}-m2
+              working-directory: AppWish/AppWish
+          
+          - name: Build and analyze code-generator-ollama-gui
+            working-directory: AppWish/AppWish
             env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
               SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
