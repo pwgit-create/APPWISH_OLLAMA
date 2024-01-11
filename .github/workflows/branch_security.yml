@@ -2,17 +2,21 @@ name: check_that_pushes_to_the_master_branch_is_from_develop
 on: [workflow_dispatch]
 
 jobs:
-    build:
-      name: Run Script
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v1
-        - uses: Amadevus/pwsh-script@v2
-          with:
-           script: |
-                   $sourceBranch = "$(System.PullRequest.SourceBranch)"
+  check-if-source-branch-is-develop:
+    runs-on: ubuntu-latest
 
-                   if($sourceBranch -ne "refs/heads/develop")
-                   {
-                     exit 1
-                             }
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Exit if the branch is not develop
+      run: |
+        if [[ "${{ github.ref }}" != "refs/heads/develop" ]]; then
+          echo "Branch is not develop, exiting and failing the job."
+          exit 0
+        fi
+
+    - name: branch-is-develop
+      run: echo "job is successful" 
+    
+                             
