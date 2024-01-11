@@ -1,0 +1,32 @@
+name: Makefile CI for the develop branch
+
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+    
+  
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    
+      - name: checkout repo
+        uses: actions/checkout@main
+        
+      - name: build code-generator
+        run: make code-generator
+        
+      - name: build appwish-gui
+        run: make appwish
+      
+    
+
+
+
+          
+
+          

@@ -1,29 +1,14 @@
-name: Makefile CI
+name: Makefile CI for the master branch (Security check)
 
 on:
   push:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-    
-  
+
+
 jobs:
-  build:
 
-    runs-on: ubuntu-latest
-
-    steps:
-    
-      - name: checkout repo
-        uses: actions/checkout@main
-        
-      - name: build code-generator
-        run: make code-generator
-        
-      - name: build appwish-gui
-        run: make appwish
-      
-    
   security-code_generator:
     runs-on: ubuntu-latest
     steps:
@@ -43,7 +28,7 @@ jobs:
       - uses: snyk/actions/setup@master
       - uses: actions/checkout@master
      
-      - name: build dependency requriment for appwish
+      - name: build dependency requirement for code-generator-ollama-gui
         run: make code-generator
       
       - name: Run Snyk to check for vulnerabilities in code-generator-ollama-gui
@@ -52,6 +37,8 @@ jobs:
         continue-on-error: false
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+        
 
 
 
