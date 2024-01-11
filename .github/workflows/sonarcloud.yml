@@ -4,7 +4,7 @@ on:
 
 jobs:
       build:
-        name: Build and analyze
+        name: Build and analyze code quality
         runs-on: ubuntu-latest
         
         steps:
@@ -47,6 +47,9 @@ jobs:
               key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
               restore-keys: ${{ runner.os }}-m2
               working-directory: AppWish/AppWish
+
+          - name: build dependency requirement for code-generator-ollama-gui
+            run: make code-generator
           
           - name: Build and analyze code-generator-ollama-gui
             working-directory: AppWish/AppWish
