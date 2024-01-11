@@ -1,7 +1,5 @@
 name: check_that_pushes_to_the_master_branch_is_from_develop
-on:
- pull_request:
-    branches: [ "master" ]
+on: workflow_dispatch
 jobs:
   check-if-source-branch-is-develop:
     runs-on: ubuntu-latest
