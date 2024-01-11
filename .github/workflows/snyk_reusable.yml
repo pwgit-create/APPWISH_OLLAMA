@@ -1,0 +1,38 @@
+name: Snyk Reusable Workflow
+
+on:
+  workflow_call:
+    inputs:
+      snyk-name:
+        required: true
+        type: string
+      snyk-working-path:
+        required: true
+        type: string
+      fetch-cg-dependecy:
+        required: true
+        type: boolean
+
+jobs:
+  snyk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: build dependency requirement for code-generator-ollama-gui
+        if: ${{ inputs.fetch-cg-dependecy}})
+        run: make code-generator 
+     
+      - uses: snyk/actions/setup@master
+      - uses: actions/checkout@master
+      - name: ${{ inputs.snyk-name}}
+        working-directory: ${{ inputs.snyk-working-path}}
+        run: snyk test
+        continue-on-error: false
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+
+
+
+
+
+
