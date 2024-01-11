@@ -7,36 +7,37 @@ on:
     branches: [ "master" ]
 
 
-jobs:
-
-  security-code_generator:
+jobs:    
+  prepare:
     runs-on: ubuntu-latest
     steps:
-      - uses: snyk/actions/setup@master
-      - uses: actions/checkout@master
-      - name: Run Snyk to check for vulnerabilities in code-generator-ollama
-        working-directory: cg/CodeGenerator/CodeGenerator
-        run: snyk test
-        continue-on-error: false
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      -
+        run: echo Prepare!
+        shell: bash
+      
+  security-code_generator:
+        needs: prepare
+        uses: pwgit-create/APPWISH_OLLAMA/.github/workflows/snyk_reusable.yml@main
+        with:
+         snyk-name: "Run Snyk to check for vulnerabilities in code-generator-ollama"
+         snyk-working-path: "cg/CodeGenerator/CodeGenerator"
+         fetch-cg-dependecy: false
 
 
   security-appwish:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: snyk/actions/setup@master
-      - uses: actions/checkout@master
+        needs: prepare
+        uses:  pwgit-create/APPWISH_OLLAMA/.github/workflows/snyk_reusable.yml@main
+        with:
+         snyk-name: "Run Snyk to check for vulnerabilities in code-generator-ollama-gui"
+         snyk-working-path: "AppWish/AppWish"
+         fetch-cg-dependecy: true
+
+ 
+    
+
+    
      
-      - name: build dependency requirement for code-generator-ollama-gui
-        run: make code-generator
-      
-      - name: Run Snyk to check for vulnerabilities in code-generator-ollama-gui
-        working-directory: AppWish/AppWish
-        run: snyk test
-        continue-on-error: false
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+     
 
         
 
