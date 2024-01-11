@@ -9,8 +9,7 @@ import pn.cg.datastorage.constant.ScriptConstants;
 import pn.cg.task.CompileClassTask;
 import pn.cg.util.TaskUtil;
 
-import java.io.File;
-import java.util.Objects;
+
 import java.util.concurrent.ExecutorService;
 
 public class ClassCompiler {
@@ -32,8 +31,7 @@ public class ClassCompiler {
 
         log.debug("Compiler path -> "+TaskUtil.addFilePathToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION));
 
-        String scriptToUse = Objects.equals(File.separator, "/") ? ScriptConstants.JAVAC_SCRIPT_NAME : ScriptConstants.JAVAC_WIN_SCRIPT_NAME;
-
+        String scriptToUse =  ScriptConstants.JAVAC_SCRIPT_NAME;
         log.debug("script used when compiling -> "+scriptToUse);
 
         executor.execute(new CompileClassTask(scriptToUse, new String[]{TaskUtil.addFilePathToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION)}));

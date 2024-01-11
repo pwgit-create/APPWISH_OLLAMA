@@ -11,9 +11,6 @@ public class StringUtil {
     private static final Logger log = LoggerFactory.getLogger(StringUtil.class);
 
 
-    private static final String ERROR_PREFIX_LOG_ERROR = "Could not extract class name from java code file" +
-            "with text: \n---------------------------\n";
-
     /**
      * Extracts the public class name from a text with java classes
      *
@@ -54,12 +51,21 @@ public class StringUtil {
 
     /**
      * Removes the first line of a String
-     * @param input
+     * @param inputrt
      * @return
      */
     public static String removeFirstLine(String input){
-
-        return input.split("\n",2)[1];
+        
+        String returnValue = input;
+        try{ String tmpValue; 
+            tmpValue = input.split("\n",2)[1];
+             if(!tmpValue.startsWith("import"));
+              returnValue = tmpValue;
+        }
+        catch (Exception e){
+            log.info("Could not remove first line");
+        }
+        return returnValue;
     }
 
 
@@ -105,16 +111,26 @@ public class StringUtil {
 
    
      public static String IncludeEveryThingAfterStartChar(String input){
+        String returnValue = input;
 
-        return input.split("```")[1];
+        try{ returnValue = input.split("```java")[1];
+            returnValue = input.split("```")[1];
+                }
+        catch (Exception e){
+            log.info("Could not include everything afterStartChar");
+        }
+        return returnValue;
 
     }
 
 
     public static String RemoveEveryThingAfterEndChar(String input){
-
-        return input.split("```")[0];
-
+        String returnValue = input;
+        try{ returnValue = input.split("```")[0];}
+        catch (Exception e){
+            log.info("Could not RemoveEveryThingAfterEndChar");
+        }
+        return returnValue;
     }
 
 
