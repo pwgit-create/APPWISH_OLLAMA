@@ -2,7 +2,6 @@ name: check_that_pushes_to_the_master_branch_is_from_develop
 on:
  pull_request:
     branches: [ "master" ]
-
 jobs:
   check-if-source-branch-is-develop:
     runs-on: ubuntu-latest
@@ -13,7 +12,7 @@ jobs:
 
     - name: Exit if the branch is not develop
       run: |
-        if [[ "${{ github.ref }}" != "refs/heads/develop" ]]; then
+        if [[ "${{github.event.pull_request.head.ref }}" != "refs/heads/develop" ]]; then
           echo "Branch is not develop, exiting and failing the job."
           exit 1
         fi
