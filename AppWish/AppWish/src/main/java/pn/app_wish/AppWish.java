@@ -16,7 +16,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.slf4j.simple.SimpleLogger;
 import pn.app_wish.constant.GUIConstants;
-import pn.app_wish.util.AppWishUtil;
 import pn.cg.app_system.AppSystem;
 import pn.cg.app_system.code_generation.model.CompilationJob;
 import pn.cg.datastorage.DataStorage;
@@ -85,50 +84,26 @@ public class AppWish extends Application  {
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     }
 
+    /**
+     * Appwish GUI lifecycle 
+     * @param ae
+     */
     @FXML
     private void onAppWish(ActionEvent ae) {
 
         ThreadPoolMaster.getInstance().getExecutor().execute(() -> {
+               startGuiThread();
 
-            DataStorage.getInstance().setCompilationJob(new CompilationJob(GUIConstants.DEFAULT_STAGE_TITLE));
-            Platform.runLater(() -> {
-                btn_create_application.setVisible(false);
-                output_label.setVisible(true);
-                output_label.setText("Generating code...");
-                btn_run_application.setVisible(false);
-                btnStopGeneratedApp.setVisible(false);
+               startCodeGeneration();
 
+               waitForCompilationResult();
 
+               handleCompilationResult();    
+                
             });
-
-            if (tf_input != null) {
-                // Make a recursive call to AppSystem
-                AppSystem.StartCodeGenerator(tf_input.getText(), true, false);
-
-                while (!DataStorage.getInstance().getCompilationJob().isResult()) {
-                }
-                if (DataStorage.getInstance().getCompilationJob().isResult()) {
-                    javaExecutablePath = DataStorage.getInstance().getJavaExecutionPath();
-                    // Draw success or error texts, and show run app button
-                    Platform.runLater(() -> {
-                        if (DataStorage.getInstance().getJavaExecutionPath() != null) {
-                            output_label.setText("Completed Successfully");
-                            try {
-                                Thread.sleep(2500);
-                            } catch (InterruptedException e) {
-                                throw new RuntimeException(e);
-                            }
-                            output_label.setVisible(false);
-                            btn_run_application.setVisible(true);
-                            btn_create_application.setVisible(true);
-                        } else {
-                            output_label.setText("Error");
-                            btn_create_application.setVisible(true);
-                        }
-                    });
-                }
-            }
-        });
+            
+        //Wait for 1.5 sec 
+        
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
@@ -145,10 +120,9 @@ public class AppWish extends Application  {
             System.out.println("Executing java app on path -> " + javaExecutablePath);
             try {
                 ProcessBuilder pb;
-                if(AppWishUtil.isLinux())
+               
                  pb = new ProcessBuilder("/bin/bash", "-c", "java " + javaExecutablePath);
-                else
-                    pb = new ProcessBuilder("java.exe",javaExecutablePath);
+                
                 executingJavaAppProcess = pb.inheritIO().start();
             } catch (IOException e) {
                 System.out.println("RuntimeException while starting Java executable");
@@ -175,7 +149,80 @@ public class AppWish extends Application  {
         btnStopGeneratedApp.setVisible(false);
     }
 
+    /**
+     * Starts a thread that handles GUI Updates and 
+     * sends a message to the shared singleton that a new compilation job is about to start
+     * 
+
+     */
+    private void startGuiThread(){
+
+
+        
+
+            DataStorage.getInstance().setCompilationJob(new CompilationJob(GUIConstants.DEFAULT_STAGE_TITLE));
+            Platform.runLater(() -> {
+                btn_create_application.setVisible(false);
+                output_label.setVisible(true);
+                output_label.setText("Generating code...");
+                btn_run_application.setVisible(false);
+                btnStopGeneratedApp.setVisible(false);
+
+
+            });
+
 
 }
+
+/**
+ * Starts the AI Code-Generation if the text input field is not null
+ */
+private void startCodeGeneration(){
+
+    if (tf_input != null) {
+        // Make a recursive call to AppSystem
+        AppSystem.StartCodeGenerator(tf_input.getText(), true, false);
+}
+}
+
+/**
+ * Wait until the singleton in code-generator-ollama has a compilation job with a result
+ */
+private void waitForCompilationResult(){
+
+    while (!DataStorage.getInstance().getCompilationJob().isResult()) {
+    }
+}
+/**
+ *  If a compilation result exist , check if the singleton in code-generator-ollama contains a path for a executable Java file
+ *  If the above is true , activate the "run application" button and remove the "generating code..." text
+ */
+private void handleCompilationResult(){
+
+    if (DataStorage.getInstance().getCompilationJob().isResult()) {
+        javaExecutablePath = DataStorage.getInstance().getJavaExecutionPath();
+        // Draw success or error texts, and show run app button
+        Platform.runLater(() -> {
+            if (DataStorage.getInstance().getJavaExecutionPath() != null) {
+                output_label.setText("Completed Successfully");
+                try {
+                    Thread.sleep(2500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                output_label.setVisible(false);
+                btn_run_application.setVisible(true);
+                btn_create_application.setVisible(true);
+            } else {
+                output_label.setText("Error");
+                btn_create_application.setVisible(true);
+            }
+        });
+    }
+
+}
+
+}
+
 
 

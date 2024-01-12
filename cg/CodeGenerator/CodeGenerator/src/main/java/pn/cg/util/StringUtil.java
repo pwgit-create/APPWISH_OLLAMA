@@ -1,8 +1,10 @@
 package pn.cg.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pn.cg.datastorage.constant.CommonStringConstants;
+
 
 import java.util.Arrays;
 
@@ -68,6 +70,24 @@ public class StringUtil {
         return returnValue;
     }
 
+    /**
+     * If the AI returns a line that specifices that the output is java code - Remove it
+     * @param input
+     * @return
+     */
+    public static String ifFirstlineStartsWithJavaRemoveIt(String input){
+
+        String returnValue = input;
+        try{ String tmpValue; 
+            tmpValue = input.split("\n",2)[1];
+             if(tmpValue.startsWith("java"));
+              returnValue = tmpValue;
+        }
+        catch (Exception e){
+            log.info("Could not remove first line");
+        }
+        return returnValue;
+    }
 
 
     /**
@@ -114,10 +134,15 @@ public class StringUtil {
         String returnValue = input;
 
         try{ returnValue = input.split("```java")[1];
-            returnValue = input.split("```")[1];
+            
                 }
         catch (Exception e){
-            log.info("Could not include everything afterStartChar");
+            log.info("Could not include everything afterStartChar: ```java  ");
+        }
+
+        try{returnValue = input.split("```")[1];}
+        catch (Exception e){
+            log.info("Could not include everything afterStartChar: ``` ");
         }
         return returnValue;
 
@@ -126,14 +151,16 @@ public class StringUtil {
 
     public static String RemoveEveryThingAfterEndChar(String input){
         String returnValue = input;
-        try{ returnValue = input.split("```")[0];}
+        try{ 
+            
+            returnValue = StringUtils.substringBeforeLast(input, "```");
+        }
+         
         catch (Exception e){
             log.info("Could not RemoveEveryThingAfterEndChar");
         }
         return returnValue;
     }
-
-
 
 
 }
