@@ -108,6 +108,7 @@ public class AppWish extends Application  {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
 
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -208,7 +209,7 @@ private void handleCompilationResult(){
                 try {
                     Thread.sleep(2500);
                 } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    Thread.currentThread().interrupt();
                 }
                 output_label.setVisible(false);
                 btn_run_application.setVisible(true);
