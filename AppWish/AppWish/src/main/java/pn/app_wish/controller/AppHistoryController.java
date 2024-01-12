@@ -74,10 +74,9 @@ public class AppHistoryController implements Initializable {
 
         try {
             ProcessBuilder processBuilder;
-            if(AppWishUtil.isLinux())
-           processBuilder = new ProcessBuilder("/bin/bash", "-c","java " +selectedFile.getAbsolutePath().replace(".class",".java"));
-            else
-                processBuilder = new ProcessBuilder("java.exe",selectedFile.getAbsolutePath().replace(".class",".java"));
+           
+            processBuilder = new ProcessBuilder("/bin/bash", "-c","java " +selectedFile.getAbsolutePath().replace(".class",".java"));
+            
             executingJavaAppProcess = processBuilder.inheritIO().start();
 
         }
