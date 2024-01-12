@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.Properties;
 
-import pn.cg.datastorage.constant.PathConstants;
+
 import pn.cg.util.PropUtil;
 
 public class CodeGeneratorConfig {

@@ -84,6 +84,8 @@ log.debug("className -> "+className);
             //remove everything after endchar
             javaSourceCode = StringUtil.RemoveEveryThingAfterEndChar(javaSourceCode);
 
+            javaSourceCode = StringUtil.ifFirstlineStartsWithJavaRemoveIt(javaSourceCode);
+
             log.info("Java source code after modification = " +javaSourceCode);
             // Create file instance with class name and file extension
             File file = new File(TaskUtil.addFilePathToClassName(className + JAVA_FILE_EXTENSION));
