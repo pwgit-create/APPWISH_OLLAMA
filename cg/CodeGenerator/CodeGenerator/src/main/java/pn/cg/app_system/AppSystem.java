@@ -44,6 +44,7 @@ public class AppSystem {
             try {
                 Thread.sleep(3500);
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
             if (!appWishCompileResult) {
 

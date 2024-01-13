@@ -61,7 +61,7 @@ public class OllamaRemoteSystem {
             if(DataStorage.getInstance().getCompilationJob() != null && DataStorage.getInstance().getCompilationJob().getErrorMessage() != null) {
                 log.error("Class did not compile\nSending new request... ");}
                 if(DataStorage.getInstance().getCompilationJob() != null && !DataStorage.getInstance().getCompilationJob().isResult()) {
-                    outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(QuestionConstants.CLASS_DID_NOT_COMPILE_PREFIX_2 + appWish);
+                    outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(QuestionConstants.CLASS_DID_NOT_COMPILE_PREFIX_2 + questionBuilder.createFeatureQuestion());
                 }
             }
 
@@ -77,14 +77,12 @@ log.debug("className -> "+className);
         }
 
         else {
-            //remove the request query from the text output
-            String javaSourceCode = StringUtil.removeFirstLine(outputFromOLLMA);
+            
+            String javaSourceCode = outputFromOLLMA;
 
             javaSourceCode = StringUtil.IncludeEveryThingAfterStartChar(javaSourceCode);
-            //remove everything after endchar
+        
             javaSourceCode = StringUtil.RemoveEveryThingAfterEndChar(javaSourceCode);
-
-            javaSourceCode = StringUtil.ifFirstlineStartsWithJavaRemoveIt(javaSourceCode);
 
             log.info("Java source code after modification = " +javaSourceCode);
             // Create file instance with class name and file extension

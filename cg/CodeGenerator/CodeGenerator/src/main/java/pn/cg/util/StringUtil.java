@@ -1,6 +1,6 @@
 package pn.cg.util;
 
-import org.apache.commons.lang3.StringUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pn.cg.datastorage.constant.CommonStringConstants;
@@ -133,17 +133,14 @@ public class StringUtil {
      public static String IncludeEveryThingAfterStartChar(String input){
         String returnValue = input;
 
-        try{ returnValue = input.split("```java")[1];
+        try{ 
+            returnValue = input.split(CommonStringConstants.JAVA_CODE_GENERATION_START_DELMITER_STRING)[1];
             
                 }
         catch (Exception e){
             log.info("Could not include everything afterStartChar: ```java  ");
         }
 
-        try{returnValue = input.split("```")[1];}
-        catch (Exception e){
-            log.info("Could not include everything afterStartChar: ``` ");
-        }
         return returnValue;
 
     }
@@ -153,7 +150,7 @@ public class StringUtil {
         String returnValue = input;
         try{ 
             
-            returnValue = StringUtils.substringBeforeLast(input, "```");
+            returnValue = input.split(CommonStringConstants.JAVA_CODE_GENERATION_END_DELMITER_STRING)[0];
         }
          
         catch (Exception e){
