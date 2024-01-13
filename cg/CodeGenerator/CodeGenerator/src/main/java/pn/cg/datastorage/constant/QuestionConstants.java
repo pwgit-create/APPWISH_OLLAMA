@@ -29,7 +29,7 @@ public class QuestionConstants {
      *
      * @use-info as is
      */
-    public final static String CLASS_DID_NOT_COMPILE_PREFIX_2 = "The java code you’ve sent me did not compile " +APP_WISH_PREFIX_FEATURE;
+    public final static String CLASS_DID_NOT_COMPILE_PREFIX_2 = "The java code you’ve sent me did not compile ";
 
 
     /**
@@ -63,10 +63,17 @@ public class QuestionConstants {
      * @use-info This String should be concatenated at the tail of the WITH_MAIN_METHOD
      */
 
-    public final static String AND_CORRECT_IMPORTS = " and correct imports that are added into the source code";
+   public final static String AND_CORRECT_IMPORTS = " and correct imports that are added into the source code";
 
-     public final static String INCLUDE_IN_ONE_FILE= " and include everything in one file";
+   public final static String INCLUDE_IN_ONE_FILE= " and include everything in one file";
 
 
+    /*
+     * Add information regarding start and end delimiters chars for the java code to the LLM model 
+     */
+    public final static String AND_MARK_START_AND_END_DELIMITER_CHARS = " and mark the start of the java code with the text @START_HERE and dont use it again after that and the end of the java code with the text @END_HERE and dont use it again after that" ;
 
+   
+
+    
 }
