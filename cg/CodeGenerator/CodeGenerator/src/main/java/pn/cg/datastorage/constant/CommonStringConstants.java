@@ -15,5 +15,16 @@ public class CommonStringConstants {
      */
     public static final String JAVA_FILE_EXTENSION = ".java";
 
+    /**
+     * The start delimiter String that will be requsted in the query to the LLM Model
+     */
+    public static final String JAVA_CODE_GENERATION_START_DELMITER_STRING="@START_HERE";
+
+    /**
+     * The end delimiter String that will be requsted in the query to the LLM Model
+     */
+    public static final String JAVA_CODE_GENERATION_END_DELMITER_STRING="@END_HERE";
+
+
 
 }

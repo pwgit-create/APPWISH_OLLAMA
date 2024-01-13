@@ -6,7 +6,7 @@
 
     <groupId>pn.dev</groupId>
     <artifactId>code-generator-ollama</artifactId>
-    <version>1.3</version>
+    <version>1.4</version>
 
 
     <description>The Java Application-Generator (pn.dev.code-generator-ollama) creates applications by giving a string of your desired features for a Java application, like this: AppSystem.StartCodeGenerator("mp3 player with gui" true, false)</description>
@@ -77,16 +77,6 @@
             <scope>test</scope>
             <version>3.0.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
- <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
-   <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
-<dependency>
-    <groupId>org.apache.commons</groupId>
-    <artifactId>commons-lang3</artifactId>
-    <version>3.14.0</version>
-</dependency>
-
-
     </dependencies>
     <build>
         <plugins>
