@@ -1,6 +1,8 @@
 name: Makefile CI for the master branch (Security check)
 
 on:
+  push:
+    branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 
