@@ -138,7 +138,7 @@ public class StringUtil {
             
                 }
         catch (Exception e){
-            log.info("Could not include everything afterStartChar: ```java  ");
+            log.info("Could not include everything afterStartChar");
         }
 
         return returnValue;

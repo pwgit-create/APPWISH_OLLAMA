@@ -73,7 +73,7 @@ public class QuestionConstants {
      */
     public final static String AND_MARK_START_AND_END_DELIMITER_CHARS = " and mark the start of the java code with the text @START_HERE and dont use it again after that and the end of the java code with the text @END_HERE and dont use it again after that" ;
 
-   
+    public final static String AND_MAKE_SURE_CORRECT_NUMBER_OF_BRACE_BRACKETS_ARE_USED_AT_THE_END_OF_THE_JAVA_CODE=" and make sure that the correct number of brace brackets are used at the end of the java code so it compiles without errors";
 
     
 }

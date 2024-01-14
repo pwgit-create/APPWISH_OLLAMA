@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>pn.dev</groupId>
     <artifactId>code-generator-gui-ollama</artifactId>
-    <version>1.4</version>
+    <version>1.4.1</version>
     <name>CodeGenerator-GUI</name>
 
 
@@ -45,7 +45,7 @@
         <dependency>
             <groupId>pn.dev</groupId>
             <artifactId>code-generator-ollama</artifactId>
-            <version>1.4</version>
+            <version>1.4.1</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -79,8 +79,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.10.1</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>19</source>
+                    <target>19</target>
                 </configuration>
             </plugin>
             <plugin>
