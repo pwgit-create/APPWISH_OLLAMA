@@ -16,11 +16,6 @@ jobs:
     
       - name: checkout repo
         uses: actions/checkout@main
-        
-      - uses: actions/setup-java@v3
-        with:
-          java-version: '19'
-          distribution: 'temurin'
       
       - name: build code-generator
         run: make code-generator
