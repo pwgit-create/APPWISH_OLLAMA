@@ -16,7 +16,7 @@ jobs:
     
       - name: checkout repo
         uses: actions/checkout@main
-        
+      
       - name: build code-generator
         run: make code-generator
         
