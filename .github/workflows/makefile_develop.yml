@@ -17,6 +17,11 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@main
         
+      - uses: actions/setup-java@v4
+        with:
+           distribution: 'openjdk'
+           java-version: '19'
+      
       - name: build code-generator
         run: make code-generator
         
