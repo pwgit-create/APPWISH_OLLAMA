@@ -4,12 +4,11 @@ package pn.cg.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pn.cg.datastorage.constant.CommonStringConstants;
-import pn.cg.datastorage.constant.QuestionConstants;
 
-import java.util.ArrayList;
+
+
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+
 
 public class StringUtil {
 
@@ -204,33 +203,21 @@ public class StringUtil {
     String returnValue = input;
     String delimiter ="";
     
-    
-
     try{
         
         if(isStartDelimiter){
-        
            delimiter = CommonStringConstants.JAVA_CODE_GENERATION_START_DELMITER_STRING;
-    
-          returnValue = RemoveAllExceptTheFirstOccurrenceOfaAWord(returnValue, delimiter);
-    
-
+           returnValue = RemoveAllExceptTheFirstOccurrenceOfaAWord(returnValue, delimiter);
         }
             else if(!isStartDelimiter){
-
             delimiter = CommonStringConstants.JAVA_CODE_GENERATION_END_DELMITER_STRING;
-              returnValue = RemoveAllExceptTheLastOccurrenceofAWord(returnValue, delimiter);
-
+            returnValue = RemoveAllExceptTheLastOccurrenceofAWord(returnValue, delimiter);
         }
         }
-    
-
     catch (Exception e) {
-        log.debug("Error on delimiter String removal process");
+    log.debug("Error on delimiter String removal process");
     }
-
         return returnValue;
-
 } 
 
 public static int GetUnbalancedBraceBracketsFromString(String input){
@@ -277,14 +264,11 @@ public static String AppendBraceBucketsAtEndofTheString(String input, int number
  */
  private static String RemoveAllExceptTheFirstOccurrenceOfaAWord (String input, String delimiter){
 
-        
     String firstPart = input.substring(input.indexOf(delimiter),input.indexOf(delimiter)+11);
     String afterStartDelimiterPartUnmodified = input.substring(input.indexOf(delimiter)+11);
     String cleanedafterStartDelimiterPart = afterStartDelimiterPartUnmodified.replaceAll(delimiter,"");
-    
     String finalOutputString = firstPart.concat(cleanedafterStartDelimiterPart);
     
-
     return finalOutputString;
 }
 
@@ -296,7 +280,6 @@ public static String AppendBraceBucketsAtEndofTheString(String input, int number
  */
 private static String RemoveAllExceptTheLastOccurrenceofAWord(String input, String delimiter){
 
-
     final String S=" ";
 
     String lastPart = input.substring(input.lastIndexOf(delimiter));
@@ -306,7 +289,6 @@ private static String RemoveAllExceptTheLastOccurrenceofAWord(String input, Stri
     String finalOutputString = cleanedBeforerEndDelimiterString.concat(lastPart);
    
     return finalOutputString;
-
 }
 
 }
