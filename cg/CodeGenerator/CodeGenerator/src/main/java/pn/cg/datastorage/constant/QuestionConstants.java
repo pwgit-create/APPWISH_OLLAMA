@@ -71,16 +71,17 @@ public class QuestionConstants {
     /*
      * Add information regarding start and end delimiters chars for the java code to the LLM model 
      */
-    public final static String AND_MARK_START_AND_END_DELIMITER_CHARS = " and mark the start of the java code with the text @START_HERE and dont use it again after that and the end of the java code with the text @END_HERE and dont use it again after that" ;
+    public final static String AND_MARK_START_AND_END_DELIMITER_CHARS = " and mark the start of the java code including the import statements with the text @START_HERE and and mark the end of the last line of java code with the text @END_HERE" ;
 
     /**
-      Add information to double-check that the correct number of brace brackets are used.o the LLM Model
+      Add information to double-check that the correct number of brace brackets are used by the LLM Model
      */
     public final static String AND_MAKE_SURE_CORRECT_NUMBER_OF_BRACE_BRACKETS_ARE_USED_AT_THE_END_OF_THE_JAVA_CODE=" and make sure that the correct number of brace brackets are used at the end of the java code so it compiles without errors";
     /**
      * Include details about the output's compatibility with Java 19
      */
     public final static String AND_MAKE_SURE_IT_WORKS_ON_JAVA_19 =" and ensure that it works with Java 19";
-  
+
+    
     
 }

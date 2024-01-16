@@ -80,9 +80,16 @@ log.debug("className -> "+className);
             
             String javaSourceCode = outputFromOLLMA;
 
+            javaSourceCode = StringUtil.RemoveExtraStartDelimitersInResponse(javaSourceCode);
+
+            javaSourceCode = StringUtil.RemoveExtraEndDelimitersInResponse(javaSourceCode);
+
             javaSourceCode = StringUtil.IncludeEveryThingAfterStartChar(javaSourceCode);
         
             javaSourceCode = StringUtil.RemoveEveryThingAfterEndChar(javaSourceCode);
+
+            javaSourceCode = checkAndFixUnclosedBraceBuckets(javaSourceCode);
+           
 
             log.info("Java source code after modification = " +javaSourceCode);
             // Create file instance with class name and file extension
@@ -105,6 +112,19 @@ log.debug("className -> "+className);
                 }
             }
            return DataStorage.getInstance().getCompilationJob().isResult();
+        }
+
+      
+        private String checkAndFixUnclosedBraceBuckets(String input){
+
+        
+          int unclosedBraceBuckets =  StringUtil.GetUnbalancedBraceBracketsFromString(input);
+
+          if(unclosedBraceBuckets >0){
+
+           return StringUtil.AppendBraceBucketsAtEndofTheString(input, unclosedBraceBuckets);
+          }
+          return input;
         }
     }
 

@@ -4,9 +4,12 @@ package pn.cg.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pn.cg.datastorage.constant.CommonStringConstants;
+import pn.cg.datastorage.constant.QuestionConstants;
 
-
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class StringUtil {
 
@@ -159,5 +162,151 @@ public class StringUtil {
         return returnValue;
     }
 
+    public static String RemoveExtraStartDelimitersInResponse(String input){
+          
+        String returnValue = input;
+
+        try{
+           returnValue = removeDelimiters(returnValue,true);
+        }
+
+        catch(Exception e){
+
+            log.debug("RemoveExtraStartDelimitersInResponse exception");
+        }
+
+        return returnValue;
+
+    }
+
+    public static String RemoveExtraEndDelimitersInResponse(String input){
+          
+        String returnValue = input;
+
+        try{
+           returnValue = removeDelimiters(returnValue, false);
+        }
+
+        catch(Exception e){
+
+            log.debug("RemoveExtraEndDelimitersInResponse exception");
+        }
+
+        return returnValue;
+
+    }
+
+
+
+
+    private static String removeDelimiters(String input,boolean isStartDelimiter){
+
+    String returnValue = input;
+    String delimiter ="";
+    
+    
+
+    try{
+        
+        if(isStartDelimiter){
+        
+           delimiter = CommonStringConstants.JAVA_CODE_GENERATION_START_DELMITER_STRING;
+    
+          returnValue = RemoveAllExceptTheFirstOccurrenceOfaAWord(returnValue, delimiter);
+    
+
+        }
+            else if(!isStartDelimiter){
+
+            delimiter = CommonStringConstants.JAVA_CODE_GENERATION_END_DELMITER_STRING;
+              returnValue = RemoveAllExceptTheLastOccurrenceofAWord(returnValue, delimiter);
+
+        }
+        }
+    
+
+    catch (Exception e) {
+        log.debug("Error on delimiter String removal process");
+    }
+
+        return returnValue;
+
+} 
+
+public static int GetUnbalancedBraceBracketsFromString(String input){
+    int counter = 0;
+    for (int i=0; i <input.length(); i++) {
+        if (input.toCharArray()[i] == '{') counter++;
+        else if (input.toCharArray()[i] == '}') counter--;
+    
+        if (counter < 0) break;
+    }
+    
+   return counter;
+    
+}
+
+/**
+ * Appends brace buckets at the end of the String
+ * @param input
+ * @param numberOfBraceBackets
+ * @return
+ */
+public static String AppendBraceBucketsAtEndofTheString(String input, int numberOfBraceBackets){
+
+    String returnValue = input;
+
+    try{
+    for (int i = 0; i < numberOfBraceBackets;i++){
+       returnValue = returnValue.concat("}");
+    }
+    }
+    catch(Exception e){
+
+        log.debug("Could not append braceBuckets at the end of the String");
+    }
+ 
+    return returnValue;
+
+}
+/**
+ * Repleace all occurrences (with an empty String) except the first one of the delimiter word
+ * @param input
+ * @param delimiter
+ * @return
+ */
+ private static String RemoveAllExceptTheFirstOccurrenceOfaAWord (String input, String delimiter){
+
+        
+    String firstPart = input.substring(input.indexOf(delimiter),input.indexOf(delimiter)+11);
+    String afterStartDelimiterPartUnmodified = input.substring(input.indexOf(delimiter)+11);
+    String cleanedafterStartDelimiterPart = afterStartDelimiterPartUnmodified.replaceAll(delimiter,"");
+    
+    String finalOutputString = firstPart.concat(cleanedafterStartDelimiterPart);
+    
+
+    return finalOutputString;
+}
+
+/**
+ * Repleace all occurrences (with an empty String) except the last one of the delimiter word
+ * @param input
+ * @param delimiter
+ * @return
+ */
+private static String RemoveAllExceptTheLastOccurrenceofAWord(String input, String delimiter){
+
+
+    final String S=" ";
+
+    String lastPart = input.substring(input.lastIndexOf(delimiter));
+    String beforerEndDelimiterStringUnmodified = input.substring(0,input.lastIndexOf(delimiter)-1);
+    String cleanedBeforerEndDelimiterString = beforerEndDelimiterStringUnmodified.replaceAll(delimiter, "");
+    cleanedBeforerEndDelimiterString = cleanedBeforerEndDelimiterString.concat(S);
+    String finalOutputString = cleanedBeforerEndDelimiterString.concat(lastPart);
+   
+    return finalOutputString;
+
+}
 
 }
