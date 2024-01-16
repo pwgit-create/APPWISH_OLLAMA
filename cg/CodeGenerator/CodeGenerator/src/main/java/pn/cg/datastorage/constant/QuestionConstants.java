@@ -71,7 +71,7 @@ public class QuestionConstants {
     /*
      * Add information regarding start and end delimiters chars for the java code to the LLM model 
      */
-    public final static String AND_MARK_START_AND_END_DELIMITER_CHARS = " and mark the start of the java code including the import statements with the text @START_HERE and and mark the end of the last line of java code with the text @END_HERE" ;
+    public final static String AND_MARK_START_AND_END_DELIMITER_CHARS = " and mark the start of the java code including the import statements with the text @START_HERE and and mark the end of the of the java code with the text @END_HERE" ;
 
     /**
       Add information to double-check that the correct number of brace brackets are used by the LLM Model
