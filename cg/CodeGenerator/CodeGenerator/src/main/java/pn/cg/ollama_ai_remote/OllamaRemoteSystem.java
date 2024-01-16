@@ -1,4 +1,5 @@
-package pn.cg.open_ai_remote;
+package pn.cg.ollama_ai_remote;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,8 +7,7 @@ import pn.cg.app_system.code_generation.ClassCompiler;
 import pn.cg.app_wish.QuestionBuilder;
 import pn.cg.datastorage.DataStorage;
 import pn.cg.datastorage.constant.QuestionConstants;
-import pn.cg.open_ai_remote.request.RequestHandler;
-import pn.cg.open_ai_remote.request.RequestHandlerImpl;
+import pn.cg.ollama_ai_remote.request.*;
 import pn.cg.util.FileUtil;
 import pn.cg.util.StringUtil;
 import pn.cg.util.TaskUtil;
@@ -37,7 +37,7 @@ public class OllamaRemoteSystem {
     /**
      * Create an app with default strategy
      *
-     * @param appWish (The app wish text input from the app-user)
+     * @param appWish  (The app wish text input from the app-user)
      * @param firstRun (A flag that shows if the questions to OLLAMA is the first or a retry question
      * @Strategy Send only 1 question to OLLAMA and create only one .java file (if possible)
      */
@@ -48,36 +48,34 @@ public class OllamaRemoteSystem {
         boolean isRetryCompilation;
         boolean tmpRetryCompilationValue;
 
-        if(firstRun){
-        isRetryCompilation = false;}
-
-        else{
+        if (firstRun) {
+            isRetryCompilation = false;
+        } else {
             tmpRetryCompilationValue = DataStorage.getInstance().getCompilationJob().isResult();
             isRetryCompilation = !tmpRetryCompilationValue;
         }
         // Fetch response from OllAMA remote api
 
         if (isRetryCompilation) {
-            if(DataStorage.getInstance().getCompilationJob() != null && DataStorage.getInstance().getCompilationJob().getErrorMessage() != null) {
-                log.error("Class did not compile\nSending new request... ");}
-                if(DataStorage.getInstance().getCompilationJob() != null && !DataStorage.getInstance().getCompilationJob().isResult()) {
-                    outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(QuestionConstants.CLASS_DID_NOT_COMPILE_PREFIX_2 + questionBuilder.createFeatureQuestion());
-                }
+            if (DataStorage.getInstance().getCompilationJob() != null && DataStorage.getInstance().getCompilationJob().getErrorMessage() != null) {
+                log.error("Class did not compile\nSending new request... ");
             }
+            if (DataStorage.getInstance().getCompilationJob() != null && !DataStorage.getInstance().getCompilationJob().isResult()) {
+                outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(QuestionConstants.CLASS_DID_NOT_COMPILE_PREFIX_2 + questionBuilder.createFeatureQuestion());
+            }
+        }
 
-          if(firstRun) {
+        if (firstRun) {
             outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(questionBuilder.createFeatureQuestion());
         }
 
         // Extract class name
         String className = StringUtil.extractClassNameFromTextWithJavaClasses(outputFromOLLMA);
-log.debug("className -> "+className);
+        log.debug("className -> " + className);
         if (className.equalsIgnoreCase(ERROR)) {
             //log.debug("Empty class name");
-        }
+        } else {
 
-        else {
-            
             String javaSourceCode = outputFromOLLMA;
 
             javaSourceCode = StringUtil.RemoveExtraStartDelimitersInResponse(javaSourceCode);
@@ -85,13 +83,13 @@ log.debug("className -> "+className);
             javaSourceCode = StringUtil.RemoveExtraEndDelimitersInResponse(javaSourceCode);
 
             javaSourceCode = StringUtil.IncludeEveryThingAfterStartChar(javaSourceCode);
-        
+
             javaSourceCode = StringUtil.RemoveEveryThingAfterEndChar(javaSourceCode);
 
             javaSourceCode = checkAndFixUnclosedBraceBuckets(javaSourceCode);
-           
 
-            log.info("Java source code after modification = " +javaSourceCode);
+
+            log.info("Java source code after modification = " + javaSourceCode);
             // Create file instance with class name and file extension
             File file = new File(TaskUtil.addFilePathToClassName(className + JAVA_FILE_EXTENSION));
 
@@ -108,25 +106,25 @@ log.debug("className -> "+className);
 
             classCompiler.compileClass(className);
 
-                while (DataStorage.getInstance().getCompilationJob().isResult() == null) {
-                }
+            while (DataStorage.getInstance().getCompilationJob().isResult() == null) {
             }
-           return DataStorage.getInstance().getCompilationJob().isResult();
         }
-
-      
-        private String checkAndFixUnclosedBraceBuckets(String input){
-
-        
-          int unclosedBraceBuckets =  StringUtil.GetUnbalancedBraceBracketsFromString(input);
-
-          if(unclosedBraceBuckets >0){
-
-           return StringUtil.AppendBraceBucketsAtEndofTheString(input, unclosedBraceBuckets);
-          }
-          return input;
-        }
+        return DataStorage.getInstance().getCompilationJob().isResult();
     }
+
+
+    private String checkAndFixUnclosedBraceBuckets(String input) {
+
+
+        int unclosedBraceBuckets = StringUtil.GetUnbalancedBraceBracketsFromString(input);
+
+        if (unclosedBraceBuckets > 0) {
+
+            return StringUtil.AppendBraceBucketsAtEndofTheString(input, unclosedBraceBuckets);
+        }
+        return input;
+    }
+}
 
 
 
