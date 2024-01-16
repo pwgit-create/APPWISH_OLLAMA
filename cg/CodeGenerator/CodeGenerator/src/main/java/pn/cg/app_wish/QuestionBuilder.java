@@ -19,7 +19,7 @@ public class QuestionBuilder {
      */
     public String createFeatureQuestion() {
 
-        return QuestionConstants.APP_WISH_PREFIX_FEATURE + appWish+ QuestionConstants.WITH_MAIN_METHOD+ QuestionConstants.AND_CORRECT_IMPORTS+QuestionConstants.INCLUDE_IN_ONE_FILE + QuestionConstants.AND_MAKE_SURE_CORRECT_NUMBER_OF_BRACE_BRACKETS_ARE_USED_AT_THE_END_OF_THE_JAVA_CODE + QuestionConstants.AND_MARK_START_AND_END_DELIMITER_CHARS + QuestionConstants.AND_MAKE_SURE_IT_WORKS_ON_JAVA_19 ;
+        return QuestionConstants.APP_WISH_PREFIX_FEATURE + appWish;
     }
 
     /**
