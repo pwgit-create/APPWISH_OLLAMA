@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>pn.dev</groupId>
     <artifactId>code-generator-gui-ollama</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.2</version>
     <name>CodeGenerator-GUI</name>
 
 
-    <description>The GUI interface for the pn.dev.code-generator-ollama library is included in this package. Using this library requires the pn.dev.code-generator-ollama package to be added as a dependency</description>
+    <description>The GUI interface for the pn.dev.code-generator-ollama library is included in this package</description>
     <inceptionYear>2024</inceptionYear>
 
     <developers>
@@ -45,7 +45,7 @@
         <dependency>
             <groupId>pn.dev</groupId>
             <artifactId>code-generator-ollama</artifactId>
-            <version>1.4.1</version>
+            <version>1.4.2</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
