@@ -7,7 +7,7 @@ public class QuestionConstants {
      *
      * @use-info The app wish should be concatenated at the tail of this String
      */
-    public final static String APP_WISH_PREFIX_FEATURE = "Provide me only java code on ";
+    public final static String APP_WISH_PREFIX_FEATURE = "Provide me java code for ";
 
     /**
      * A prefix for a question that will try to generate a single class
@@ -55,7 +55,7 @@ public class QuestionConstants {
      *
      * @use-info This String should be concatenated at the tail of the appWish (Instance variable in QuestionBuilder)
      */
-    public final static String WITH_MAIN_METHOD = " with a main method";
+    public final static String WITH_MAIN_METHOD = "Make sure it includes a main method";
 
     /**
      * Optional Suffix to APP_WISH
@@ -63,24 +63,29 @@ public class QuestionConstants {
      * @use-info This String should be concatenated at the tail of the WITH_MAIN_METHOD
      */
 
-   public final static String AND_CORRECT_IMPORTS = " and correct imports that are added into the source code";
+    public final static String AND_CORRECT_IMPORTS = "Make sure that correct imports are added into the source code";
 
-   public final static String INCLUDE_IN_ONE_FILE= " and include everything in one file";
+    public final static String INCLUDE_IN_ONE_FILE = "Include everything in one file";
 
 
     /*
-     * Add information regarding start and end delimiters chars for the java code to the LLM model 
+     * Add information regarding start and end delimiters chars for the java code to the LLM model
      */
-    public final static String AND_MARK_START_AND_END_DELIMITER_CHARS = " and mark the start of the java code with the text @START_HERE and dont use it again after that and the end of the java code with the text @END_HERE and dont use it again after that" ;
+    public final static String AND_MARK_START_AND_END_DELIMITER_CHARS = "Mark the start of the java code including the import statements with the text @START_HERE and the end of the the code portion of your answer by marking it with the text @END_HERE";
 
     /**
-      Add information to double-check that the correct number of brace brackets are used.o the LLM Model
+     * Add information to double-check that the correct number of brace brackets are used by the LLM Model
      */
-    public final static String AND_MAKE_SURE_CORRECT_NUMBER_OF_BRACE_BRACKETS_ARE_USED_AT_THE_END_OF_THE_JAVA_CODE=" and make sure that the correct number of brace brackets are used at the end of the java code so it compiles without errors";
+    public final static String AND_MAKE_SURE_CORRECT_NUMBER_OF_BRACE_BRACKETS_ARE_USED_AT_THE_END_OF_THE_JAVA_CODE = "Make sure that the correct number of brace brackets are used at the end of the java code so it compiles without errors";
     /**
      * Include details about the output's compatibility with Java 19
      */
-    public final static String AND_MAKE_SURE_IT_WORKS_ON_JAVA_19 =" and ensure that it works with Java 19";
-  
-    
+    public final static String AND_MAKE_SURE_IT_WORKS_ON_JAVA_19 = "Ensure that it works with Java 19";
+
+
+    /**
+     * A greeting to the AI model
+     */
+    public final static String GREETING_TO_MODEL="You are an expert coder and understand different programming languages.";
+
 }

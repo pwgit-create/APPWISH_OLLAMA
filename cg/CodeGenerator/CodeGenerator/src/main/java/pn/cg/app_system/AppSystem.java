@@ -2,7 +2,8 @@ package pn.cg.app_system;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pn.cg.open_ai_remote.OllamaRemoteSystem;
+
+import pn.cg.ollama_ai_remote.OllamaRemoteSystem;
 
 public class AppSystem {
 

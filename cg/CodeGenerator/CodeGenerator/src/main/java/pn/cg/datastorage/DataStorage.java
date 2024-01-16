@@ -6,6 +6,7 @@ public class DataStorage {
 
     /**
      * Data holder for the compilation result of a Java class
+     *
      * @Thread-Info This variable is shared between threads and is not cached
      */
     private volatile CompilationJob compilationJob;

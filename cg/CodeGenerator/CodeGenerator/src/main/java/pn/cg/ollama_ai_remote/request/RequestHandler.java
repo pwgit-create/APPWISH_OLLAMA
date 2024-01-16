@@ -1,5 +1,4 @@
-package pn.cg.open_ai_remote.request;
-
+package pn.cg.ollama_ai_remote.request;
 
 
 

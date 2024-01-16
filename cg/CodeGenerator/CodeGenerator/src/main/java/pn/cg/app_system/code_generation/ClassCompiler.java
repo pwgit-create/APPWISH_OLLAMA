@@ -29,17 +29,15 @@ public class ClassCompiler {
 
         ExecutorService executor = ThreadPoolMaster.getInstance().getExecutor();
 
-        log.debug("Compiler path -> "+TaskUtil.addFilePathToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION));
+        log.debug("Compiler path -> " + TaskUtil.addFilePathToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION));
 
-        String scriptToUse =  ScriptConstants.JAVAC_SCRIPT_NAME;
-        log.debug("script used when compiling -> "+scriptToUse);
+        String scriptToUse = ScriptConstants.JAVAC_SCRIPT_NAME;
+        log.debug("script used when compiling -> " + scriptToUse);
 
         executor.execute(new CompileClassTask(scriptToUse, new String[]{TaskUtil.addFilePathToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION)}));
 
 
     }
-
-
 
 
 }
