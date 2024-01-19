@@ -1,11 +1,7 @@
 name: SCA Scan AppWish
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-  workflow_dispatch: 
+ workflow_dispatch: 
  
 
 jobs:
