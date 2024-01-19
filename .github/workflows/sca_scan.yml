@@ -10,14 +10,14 @@ on:
 
 jobs:
   security-code_generator:
-    uses: pwgit-create/APPWISH_OLLAMA/.github/workflows/sca_scan_base.yml@master
+    uses: pwgit-create/APPWISH_OLLAMA/.github/workflows/sca_scan_base.yml@workflow_improvment
     with:
        working-path: cg/CodeGenerator/CodeGenerator
        name-of-snyk-step: Check for vulnerabilities in code-generator-ollama
        is-appwish-gui-dependency-needed: false
 
   security-appwish:
-    uses: pwgit-create/APPWISH_OLLAMA/.github/workflows/sca_scan_base.yml@master
+    uses: pwgit-create/APPWISH_OLLAMA/.github/workflows/sca_scan_base.yml@workflow_improvment
     with:
        working-path: AppWish/AppWish
        name-of-snyk-step: Check for vulnerabilities in code-generator-ollama-gui
