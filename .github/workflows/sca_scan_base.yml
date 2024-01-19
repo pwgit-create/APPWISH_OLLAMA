@@ -49,5 +49,8 @@ jobs:
    if: ${{inputs.is-appwish-gui-dependency-needed}}
    runs-on: ubuntu-latest
    steps:
+     - name: checkout repo
+       uses: actions/checkout@main
+     
      - name: build appwish-gui # This depedency will be needed if the working path points to AppWish/AppWish
        run: make appwish
