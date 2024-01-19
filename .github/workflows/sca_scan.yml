@@ -1,0 +1,34 @@
+name: Makefile CI for the master branch (Security check)
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch: # Needed for testing this workflow. Will move upon succesfull tests
+ 
+
+jobs:
+  security-code_generator:
+    uses: pwgit-create/APPWISH_OLLAMA/.github/workflows/sca_scan_base.yml@main
+    with:
+       working-path: cg/CodeGenerator/CodeGenerator
+       name-of-snyk-step: Check for vulnerabilities in code-generator-ollama
+       is-appwish-gui-dependency-needed: false
+
+  security-appwish:
+    uses: pwgit-create/APPWISH_OLLAMA/.github/workflows/sca_scan_base.yml@main
+    with:
+       working-path: AppWish/AppWish
+       name-of-snyk-step: Check for vulnerabilities in code-generator-ollama-gui
+       is-appwish-gui-dependency-needed: true   
+     
+     
+
+        
+
+
+
+          
+
+          
