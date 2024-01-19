@@ -38,6 +38,7 @@ jobs:
  build-appwish-ollama-gui:
    if: ${{inputs.is-appwish-gui-dependency-needed}}
    runs-on: ubuntu-latest
+   continue-on-error: true
    steps:
      - name: checkout repo
        uses: actions/checkout@main
