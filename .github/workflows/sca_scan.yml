@@ -1,4 +1,4 @@
-name: Makefile CI for the master branch (Security check)
+name: SCA Scan AppWish
 
 on:
   push:
