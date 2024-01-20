@@ -1,0 +1,17 @@
+name: Verify that merges to Master come from develop
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch: # Needed for testing this workflow. Will move upon succesfull tests
+ 
+
+jobs:
+  veryify-that-origion-branch-is-develop:
+   runs-on: ubuntu-latest
+   steps:
+     - name: print job information
+       run: echo "Merges to master must have develop as the origin branch"
+  
