@@ -1,8 +1,10 @@
 name: Verify that merges to Master come from develop
 
 on:
-  push:
-    branches: [ "develop" ]
+  pull_request:
+    branches:
+      - develop
+      - 'master/**'
  
 
 jobs:
