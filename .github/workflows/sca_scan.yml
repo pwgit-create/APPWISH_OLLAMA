@@ -19,4 +19,6 @@ jobs:
     with:
        working-path: AppWish/AppWish
        name-of-snyk-step: Check for vulnerabilities in code-generator-ollama-gui
+    secrets:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         
