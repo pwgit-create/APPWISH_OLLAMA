@@ -1,0 +1,25 @@
+name: SCA Scan Appwish Ollama
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+ 
+jobs:
+  security-code_generator:
+    uses: pwgit-create/APPWISH_OLLAMA/.github/workflows/sca_scan_base.yml@workflow_improvment
+    with:
+       working-path: cg/CodeGenerator/CodeGenerator
+       name-of-snyk-step: Check for vulnerabilities in code-generator-ollama
+    secrets:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+  security-appwish:
+    uses: pwgit-create/APPWISH_OLLAMA/.github/workflows/sca_scan_base.yml@workflow_improvment
+    with:
+       working-path: AppWish/AppWish
+       name-of-snyk-step: Check for vulnerabilities in code-generator-ollama-gui
+    secrets:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        
