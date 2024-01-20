@@ -2,10 +2,7 @@ name: Verify that merges to Master come from develop
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-  workflow_dispatch: # Needed for testing this workflow. Will move upon succesfull tests
+    branches: [ "develop" ]
  
 
 jobs:
