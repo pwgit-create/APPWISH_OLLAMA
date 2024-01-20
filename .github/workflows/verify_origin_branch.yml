@@ -1,5 +1,6 @@
 name: Verify that merges to Master come from develop
 
+
 on:
   pull_request:
     branches:
