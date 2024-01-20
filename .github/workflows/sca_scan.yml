@@ -14,6 +14,8 @@ jobs:
     with:
        working-path: cg/CodeGenerator/CodeGenerator
        name-of-snyk-step: Check for vulnerabilities in code-generator-ollama
+    secrets:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
   security-appwish:
     uses: pwgit-create/APPWISH_OLLAMA/.github/workflows/sca_scan_base.yml@workflow_improvment
     with:
