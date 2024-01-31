@@ -2,7 +2,7 @@ name: Build AppWish Ollama with Make
 
 on:
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "develop" , "master" ]
   push:
     branches: [ "master" ]
     
