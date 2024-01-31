@@ -69,14 +69,38 @@ public class QuestionConstants {
 
 
     /*
-     * Add information regarding start and end delimiters chars for the java code to the LLM model
+     * Add information regarding the start char delimiter of the java code provided by the LLM model
      */
-    public final static String AND_MARK_START_AND_END_DELIMITER_CHARS = "Mark the start of the java code including the import statements with the text @START_HERE and the end of the the code portion of your answer by marking it with the text @END_HERE";
+    public final static String MARK_START_CHAR_DELIMITER = "Mark the start of the first lince of java code including the import statements with the text @START_HERE;";
+    
+     /*
+     * Add information regarding the end char delimiter of the java code provided by the LLM model
+     */
+    public final static String MARK_THE_END_CHAR_DELIMITER =" Mark the end at the last line of java code that I will compile by marking it with the text @END_HERE";
 
     /**
      * Add information to double-check that the correct number of brace brackets are used by the LLM Model
      */
     public final static String AND_MAKE_SURE_CORRECT_NUMBER_OF_BRACE_BRACKETS_ARE_USED_AT_THE_END_OF_THE_JAVA_CODE = "Make sure that the correct number of brace brackets are used at the end of the java code so it compiles without errors";
+    
+    /**
+     * A clarification text to the LLM model regarding the start delimiter
+     */
+    public final static String MAKE_SURE_THAT_START_DELIMITER_CHAR_IS_USED_ONCE ="It is very important that you only use @START_HERE once according to my previous instruction";
+
+    /**
+     * A clarification text to the LLM model regarding the end delimiter
+     */
+    public final static String MAKE_SURE_THAT_END_DELIMITER_CHAR_IS_USED_ONCE ="It is very important that you only use @END_HERE once according to my previous instruction";
+
+    // If instructions of a GUI app is provided , instruct model to not use the JavaFX library (It is not included in OpenJdk)
+    public final static String NO_JAVA_FX="If I provided instructions that states that I want a GUI app you may only use the Swing library when providing me with code that I will compile";
+
+    /**
+     * Do not include libraries that requries external librariesd that is not included in OpenJDK 19.
+     */
+    public final static String NO_SPECIAL_LIBRARIES ="Do not generate code that contains external libraries that is not included in OpenJDK 19";
+
     /**
      * Include details about the output's compatibility with Java 19
      */

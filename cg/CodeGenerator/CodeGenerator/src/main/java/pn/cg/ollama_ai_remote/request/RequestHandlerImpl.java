@@ -52,7 +52,12 @@ public class RequestHandlerImpl implements RequestHandler {
                         .addLine(QuestionConstants.AND_CORRECT_IMPORTS)
                         .addLine(QuestionConstants.INCLUDE_IN_ONE_FILE)
                         .addLine(QuestionConstants.AND_MAKE_SURE_CORRECT_NUMBER_OF_BRACE_BRACKETS_ARE_USED_AT_THE_END_OF_THE_JAVA_CODE)
-                        .addLine( QuestionConstants.AND_MARK_START_AND_END_DELIMITER_CHARS)
+                        .addLine(QuestionConstants.MARK_START_CHAR_DELIMITER)
+                        .addLine(QuestionConstants.MARK_THE_END_CHAR_DELIMITER)
+                        .addLine(QuestionConstants.MAKE_SURE_THAT_START_DELIMITER_CHAR_IS_USED_ONCE)
+                        .addLine(QuestionConstants.MAKE_SURE_THAT_END_DELIMITER_CHAR_IS_USED_ONCE)
+                        .addLine(QuestionConstants.NO_JAVA_FX)
+                        .addLine(QuestionConstants.NO_SPECIAL_LIBRARIES)
                         .addLine(QuestionConstants.AND_MAKE_SURE_IT_WORKS_ON_JAVA_19);
     api.setRequestTimeoutSeconds(100000);
        log.info("Is server alive? -> "+ api.ping());
