@@ -37,11 +37,11 @@ public class RequestHandlerImpl implements RequestHandler {
 
         Options options =
                 new OptionsBuilder()
-                        .setNumCtx(8000)
+                        .setNumCtx(8192)  //16384
                         .setNumGqa(8)
                         .setNumGpu(50)
-                        .setTemperature(1.2f)
-                        .setNumPredict(-1)
+                        .setTemperature(0.9f)
+                        .setNumPredict(-1) // -1
                         .setTopK(20)
                         .build();
 
@@ -58,9 +58,10 @@ public class RequestHandlerImpl implements RequestHandler {
                         .addLine(QuestionConstants.MAKE_SURE_THAT_END_DELIMITER_CHAR_IS_USED_ONCE)
                         .addLine(QuestionConstants.NO_JAVA_FX)
                         .addLine(QuestionConstants.NO_SPECIAL_LIBRARIES)
-                        .addLine(QuestionConstants.AND_MAKE_SURE_IT_WORKS_ON_JAVA_19);
+                        .addLine(QuestionConstants.MAKE_SURE_IT_WORKS_ON_JAVA_19)
+                        .addLine(QuestionConstants.IMPLEMENT_AS_MUCH_AS_POSSIBLE);
     api.setRequestTimeoutSeconds(100000);
-       log.info("Is server alive? -> "+ api.ping());
+       log.info("Is OLLAMA server alive? -> "+ api.ping()); // This is your local OLLAMA server running on localhost and is used for the LLM model
         CodeGeneratorConfig codeGeneratorConfig = new CodeGeneratorConfig();
         OllamaResult result = null;
         try {

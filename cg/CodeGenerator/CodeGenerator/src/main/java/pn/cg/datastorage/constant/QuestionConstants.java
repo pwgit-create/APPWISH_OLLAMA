@@ -104,12 +104,17 @@ public class QuestionConstants {
     /**
      * Include details about the output's compatibility with Java 19
      */
-    public final static String AND_MAKE_SURE_IT_WORKS_ON_JAVA_19 = "Ensure that it works with Java 19";
+    public final static String MAKE_SURE_IT_WORKS_ON_JAVA_19 = "Ensure that it works with Java 19";
+
+    /**
+     * Implement as much as possible (Good for game app generation)
+     */
+    public final static String IMPLEMENT_AS_MUCH_AS_POSSIBLE="Do not use placeholders with instructions to handle an event or to implement logic";
 
 
     /**
      * A greeting to the AI model
      */
-    public final static String GREETING_TO_MODEL="You are an expert coder and understand different programming languages.";
+    public final static String GREETING_TO_MODEL="You are an expert coder and understand different programming languages";
 
 }

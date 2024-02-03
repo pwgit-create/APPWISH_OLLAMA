@@ -44,9 +44,14 @@ public class AppHistoryController implements Initializable {
     @FXML
     private Button btnMainScene;
 
-
-
     private Process executingJavaAppProcess;
+
+    private final String BASH_PATH="/bin/bash";
+    private final String C_ARGUMENT = "-c";
+    private final String JAVA_TEXT="java ";
+
+    private final String R1 = ".class";
+    private final String R2 = ".java";
 
 
     @Override
@@ -66,17 +71,13 @@ public class AppHistoryController implements Initializable {
 
         btnStopApp.setVisible(true);
         File selectedFile = fileListView.getSelectionModel().selectedItemProperty().getValue();
-        System.out.println("Executing java app on path -> " + AppWishUtil.removeClassPrefixFromString(selectedFile.getAbsolutePath()));
-
-        System.out.println("File name:"+selectedFile.getName());
-        System.out.println("Executing path:"+selectedFile.getAbsolutePath());
-
-
+        
         try {
             ProcessBuilder processBuilder;
+
+            String executePath = selectedFile.getAbsolutePath().replace(R1,R2);
            
-            processBuilder = new ProcessBuilder("/bin/bash", "-c","java " +selectedFile.getAbsolutePath().replace(".class",".java"));
-            
+            processBuilder = new ProcessBuilder(BASH_PATH, C_ARGUMENT,JAVA_TEXT + executePath);
             executingJavaAppProcess = processBuilder.inheritIO().start();
 
         }
