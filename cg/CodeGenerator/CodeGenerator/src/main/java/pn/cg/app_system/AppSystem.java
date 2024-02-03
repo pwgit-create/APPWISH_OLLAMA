@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pn.cg.ollama_ai_remote.OllamaRemoteSystem;
+import java.util.List;
 
 public class AppSystem {
 
@@ -18,8 +19,9 @@ public class AppSystem {
      * @param isFirstRun           Flag that shows if this is the first request attempt to ollama
      * @param appWishCompileResult The method will call itself recursively unless this is true
      */
-    public static void StartCodeGenerator(String appWish, boolean isFirstRun, boolean appWishCompileResult) {
-        log.debug("AppSystem");
+    private static void StartCodeGenerator(String appWish, boolean isFirstRun, boolean appWishCompileResult,boolean isCreateAppGeneration, 
+                                            String javaClassName, List<String> javaFileContentInLines) {
+        log.info("Started the AppSystem");
 
         OllamaRemoteSystem ollamaRemoteSystem = new OllamaRemoteSystem();
 
@@ -36,7 +38,7 @@ public class AppSystem {
 
         if (appWishCompileResult) {
 
-            log.debug("App System has compiled your app successfully");
+            log.info("App System has compiled your app successfully");
         }
 
         if (!appWishCompileResult) {
@@ -55,10 +57,28 @@ public class AppSystem {
 
                 appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, false);
 
-                StartCodeGenerator(appWish, false, appWishCompileResult);
+                if(isCreateAppGeneration)
+                StartCodeGenerator(appWish, false, appWishCompileResult,isCreateAppGeneration,"",null);
+                else
+                StartCodeGenerator(appWish,false,appWishCompileResult,isCreateAppGeneration,javaClassName,javaFileContentInLines);
             }
         }
     }
+
+    /**
+     * Create a new App with Code Generation
+     */
+   public static void StartCodeGenerator(String appWish){
+                        StartCodeGenerator( appWish,true, false,true,"", null);
+   }
+
+    /**
+     * Continue with improvments for an existing app
+     */
+     public static void StartCodeGenerator(String continueWithImprovmentText,String javaClassName, List<String> javaFileContentInLines){
+    
+                            StartCodeGenerator(continueWithImprovmentText,true, false ,false ,javaClassName,javaFileContentInLines);
+   }
 
 }
 

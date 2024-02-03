@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.stage.FileChooser;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,6 +15,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+
+import java.io.File;
 import org.slf4j.simple.SimpleLogger;
 
 import pn.app_wish.constant.CodeEvent;
@@ -95,10 +98,18 @@ public class AppWish extends Application {
     private void onAppWish(CodeEvent codeEvent) {
         isCodeGenerationOnGoing = true;
 
+            if(codeEvent == CodeEvent.CONTINUE_ON_EXISTING_APPLICATION){
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("test");
+            File file =  fileChooser.showOpenDialog(getMainStage());
+            //TODO: Continue from here
+            }
+
+
         ThreadPoolMaster.getInstance().getExecutor().execute(() -> {
             startGuiThread(codeEvent);
 
-            startCodeGeneration();
+            startCodeGeneration(codeEvent);
 
             waitForCompilationResult();
 
@@ -196,19 +207,29 @@ public class AppWish extends Application {
      */
     @FXML
     private void continueOnExistingApplication(ActionEvent ae){
+        
         if(!isCodeGenerationOnGoing)
         onAppWish(CodeEvent.CONTINUE_ON_EXISTING_APPLICATION);
+
      }
 
 
     /**
      * Starts the AI Code-Generation if the text input field is not null
      */
-    private void startCodeGeneration() {
+    private void startCodeGeneration(CodeEvent codeEvent) {
 
         if (tf_input != null) {
             // Make a recursive call to AppSystem
-            AppSystem.StartCodeGenerator(tf_input.getText(), true, false);
+            switch(codeEvent){
+                case CREATE_APPLICATION:
+                    AppSystem.StartCodeGenerator(tf_input.getText());
+                break;
+                case CONTINUE_ON_EXISTING_APPLICATION:
+                    AppSystem.StartCodeGenerator(tf_input.getText(),"javaClassName",null);
+                break;
+            }
+          
         }
     }
 
