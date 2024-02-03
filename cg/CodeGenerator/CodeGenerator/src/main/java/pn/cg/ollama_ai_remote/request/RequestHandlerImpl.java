@@ -37,7 +37,7 @@ public class RequestHandlerImpl implements RequestHandler {
 
         Options options =
                 new OptionsBuilder()
-                        .setNumCtx(16384)
+                        .setNumCtx(8192)  //16384
                         .setNumGqa(8)
                         .setNumGpu(50)
                         .setTemperature(0.9f)
