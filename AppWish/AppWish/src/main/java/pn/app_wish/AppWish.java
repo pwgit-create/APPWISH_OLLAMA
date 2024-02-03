@@ -15,6 +15,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.slf4j.simple.SimpleLogger;
+
+import pn.app_wish.constant.CodeEvent;
 import pn.app_wish.constant.GUIConstants;
 import pn.cg.app_system.AppSystem;
 import pn.cg.app_system.code_generation.model.CompilationJob;
@@ -25,9 +27,9 @@ import java.io.IOException;
 
 import java.util.Objects;
 
-
 import static pn.app_wish.constant.GUIConstants.APP_HISTORY_STAGE_TILE;
 import static pn.app_wish.constant.GUIConstants.DEFAULT_FXML_FILE;
+
 
 
 public class AppWish extends Application {
@@ -43,13 +45,15 @@ public class AppWish extends Application {
     @FXML
     public Button btn_app_history;
     @FXML
+    public Button btn_continue_on_application;
+    @FXML
     public BorderPane bp_main;
     @FXML
     public Button btnStopGeneratedApp;
+    
     private String javaExecutablePath;
-
     private Process executingJavaAppProcess;
-
+    private boolean isCodeGenerationOnGoing =false;
 
     public static void main(String[] args) {
         launch(args);
@@ -84,16 +88,15 @@ public class AppWish extends Application {
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     }
 
+
     /**
      * Appwish GUI lifecycle
-     *
-     * @param ae
      */
-    @FXML
-    private void onAppWish(ActionEvent ae) {
+    private void onAppWish(CodeEvent codeEvent) {
+        isCodeGenerationOnGoing = true;
 
         ThreadPoolMaster.getInstance().getExecutor().execute(() -> {
-            startGuiThread();
+            startGuiThread(codeEvent);
 
             startCodeGeneration();
 
@@ -112,6 +115,8 @@ public class AppWish extends Application {
             Thread.currentThread().interrupt();
         }
     }
+
+    
 
     @FXML
     private void onRunJavaApp(ActionEvent ae) {
@@ -155,22 +160,46 @@ public class AppWish extends Application {
      * Starts a thread that handles GUI Updates and
      * sends a message to the shared singleton that a new compilation job is about to start
      */
-    private void startGuiThread() {
-
-
+    private void startGuiThread(CodeEvent codeEvent) {
         DataStorage.getInstance().setCompilationJob(new CompilationJob(GUIConstants.DEFAULT_STAGE_TITLE));
         Platform.runLater(() -> {
-            btn_create_application.setVisible(false);
+            setButtonGroupVisibilityForCodeGenerationBtns(false);
             output_label.setVisible(true);
-            output_label.setText("Generating code...");
-            btn_run_application.setVisible(false);
+            
+            switch(codeEvent){
+                    case CREATE_APPLICATION:
+                        output_label.setText("Generating code...");
+                        break;
+                    case CONTINUE_ON_EXISTING_APPLICATION:
+                        output_label.setText("Generating code...\nContiune with existing application");
+                        break;
+            }
+
+            setButtonGroupVisibilityForCodeGenerationBtns(false);
             btnStopGeneratedApp.setVisible(false);
-
-
         });
-
-
     }
+
+    /**
+     * Create application button event
+     */
+    @FXML
+    private void createApplication(ActionEvent ae){
+
+        if(!isCodeGenerationOnGoing)
+        onAppWish(CodeEvent.CREATE_APPLICATION);
+
+     }
+
+    /**
+     * Continue on existing application button event
+     */
+    @FXML
+    private void continueOnExistingApplication(ActionEvent ae){
+        if(!isCodeGenerationOnGoing)
+        onAppWish(CodeEvent.CONTINUE_ON_EXISTING_APPLICATION);
+     }
+
 
     /**
      * Starts the AI Code-Generation if the text input field is not null
@@ -211,14 +240,23 @@ public class AppWish extends Application {
                     }
                     output_label.setVisible(false);
                     btn_run_application.setVisible(true);
-                    btn_create_application.setVisible(true);
+                    setButtonGroupVisibilityForCodeGenerationBtns(true);
+                    isCodeGenerationOnGoing = false;
                 } else {
                     output_label.setText("Error");
-                    btn_create_application.setVisible(true);
+                    setButtonGroupVisibilityForCodeGenerationBtns(true);
+                    isCodeGenerationOnGoing = false;
                 }
             });
         }
 
+    }
+    /**
+     * A button group broken out for reduce of redundancy
+     */
+    private void setButtonGroupVisibilityForCodeGenerationBtns(boolean isVisible){
+            btn_create_application.setVisible(isVisible);
+            btn_continue_on_application.setVisible(isVisible);
     }
 
 }
