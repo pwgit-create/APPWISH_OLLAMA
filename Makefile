@@ -19,7 +19,7 @@ run:appwish
 
 clean-code-generator:
 	@echo "*** Cleaning Code Generator***"
-	cd $(CODE_GENERATOR_PATH) && mvn clean install
+	cd $(CODE_GENERATOR_PATH) && mvn clean
 clean-appwish:clean-code-generator
 	@echo "*** Cleaning AppWish ***"
 	cd $(APPWISH_OLLAMA_PATH) && mvn clean
