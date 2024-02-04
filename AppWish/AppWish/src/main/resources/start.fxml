@@ -24,7 +24,7 @@
                      <Font name="Century" size="18.0" />
                   </font>
                </Label>
-               <Button fx:id="btn_create_application" mnemonicParsing="false" onAction="#onAppWish" style="-fx-background-color: #00328c" text="Create application" textFill="WHITE" BorderPane.alignment="BOTTOM_LEFT" />
+               <Button fx:id="btn_create_application" mnemonicParsing="false" onAction="#createApplication" style="-fx-background-color: #00328c" text="Create application" textFill="WHITE" BorderPane.alignment="BOTTOM_LEFT" />
             </children>
          </VBox>
          </bottom>
@@ -40,7 +40,7 @@
             </StackPane>
          </top>
          <center>
-            <TextField fx:id="tf_input" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="150.0" scaleShape="false" style="-fx-border-color: blue; -fx-focus-traversable: true; -fx-padding: 3;" translateX="30" BorderPane.alignment="CENTER">
+            <TextField fx:id="tf_input" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="150.0" scaleShape="false" style="-fx-border-color: blue; -fx-focus-traversable: true; -fx-padding: 3;"  BorderPane.alignment="CENTER">
                <font>
                   <Font name="Aria" size="12.0" />
                </font>
@@ -59,6 +59,7 @@
                </padding>
             </TextField>
          </center>
+         <left>  <Button fx:id="btn_continue_on_application" mnemonicParsing="false" onAction="#continueOnExistingApplication" style="-fx-background-color: #00328c" text="Continue" textFill="ORANGE" BorderPane.alignment="BOTTOM_LEFT" /> </left>
          <right>
             <Button fx:id="btn_app_history" mnemonicParsing="false" onAction="#onViewAppHistory" style="-fx-background-color: #00328c" text="Apps" textFill="WHITE" BorderPane.alignment="CENTER_RIGHT" />
          </right>

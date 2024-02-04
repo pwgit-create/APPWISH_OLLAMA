@@ -35,4 +35,5 @@ public class AppWishUtil {
 
        return Objects.equals(File.separator, "/");
     }
+
 }

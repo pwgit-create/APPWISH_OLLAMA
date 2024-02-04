@@ -8,12 +8,14 @@ import pn.cg.app_wish.QuestionBuilder;
 import pn.cg.datastorage.DataStorage;
 import pn.cg.datastorage.constant.QuestionConstants;
 import pn.cg.ollama_ai_remote.request.*;
+import pn.cg.util.CodeGeneratorUtil;
 import pn.cg.util.FileUtil;
 import pn.cg.util.StringUtil;
 import pn.cg.util.TaskUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import static pn.cg.datastorage.constant.CommonStringConstants.ERROR;
 import static pn.cg.datastorage.constant.CommonStringConstants.JAVA_FILE_EXTENSION;
@@ -41,12 +43,14 @@ public class OllamaRemoteSystem {
      * @param firstRun (A flag that shows if the questions to OLLAMA is the first or a retry question
      * @Strategy Send only 1 question to OLLAMA and create only one .java file (if possible)
      */
-    public synchronized boolean CreateApp(String appWish, boolean firstRun) {
+    public synchronized boolean CreateApp(String appWish, boolean firstRun, String ifJavaAppShouldBeModifiedPath, List<String> contentOfJavaFileIfModifyRequest) {
 
         QuestionBuilder questionBuilder = new QuestionBuilder(appWish);
         String outputFromOLLMA = "";
         boolean isRetryCompilation;
         boolean tmpRetryCompilationValue;
+
+        boolean isCreateNewApp = CodeGeneratorUtil.isThisACreateNewAppRequest(ifJavaAppShouldBeModifiedPath,contentOfJavaFileIfModifyRequest);
 
         if (firstRun) {
             isRetryCompilation = false;
@@ -61,12 +65,21 @@ public class OllamaRemoteSystem {
                 log.error("Class did not compile\nSending new request... ");
             }
             if (DataStorage.getInstance().getCompilationJob() != null && !DataStorage.getInstance().getCompilationJob().isResult()) {
+                if(isCreateNewApp)
                 outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(QuestionConstants.CLASS_DID_NOT_COMPILE_PREFIX_2 + questionBuilder.createFeatureQuestion());
+           else{
+               outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(QuestionConstants.CLASS_DID_NOT_COMPILE_PREFIX_2 + appWish,ifJavaAppShouldBeModifiedPath,contentOfJavaFileIfModifyRequest);
+           }
             }
         }
 
         if (firstRun) {
+            if(isCreateNewApp)
             outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(questionBuilder.createFeatureQuestion());
+            else
+            outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(appWish,ifJavaAppShouldBeModifiedPath,
+                    contentOfJavaFileIfModifyRequest);
+
         }
 
         // Extract class name

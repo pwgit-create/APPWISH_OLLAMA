@@ -104,12 +104,33 @@ public class QuestionConstants {
     /**
      * Include details about the output's compatibility with Java 19
      */
-    public final static String AND_MAKE_SURE_IT_WORKS_ON_JAVA_19 = "Ensure that it works with Java 19";
+    public final static String MAKE_SURE_IT_WORKS_ON_JAVA_19 = "Ensure that it works with Java 19";
+
+    /**
+     * Implement as much as possible (Good for game app generation)
+     */
+    public final static String IMPLEMENT_AS_MUCH_AS_POSSIBLE="Do not use placeholders with instructions to handle an event or to implement logic";
 
 
     /**
      * A greeting to the AI model
      */
-    public final static String GREETING_TO_MODEL="You are an expert coder and understand different programming languages.";
+    public final static String GREETING_TO_MODEL="You are an expert coder and understand different programming languages";
 
+
+    /*
+    * Edit existing application specific questions
+     */
+    /// ***** ///
+    public final static String THANKS_FOR_ALL_GENERATED_APPS="You have previously created Java code that I have  compiled successfully";
+
+    public final static String FUNCTIONALITY_NEEDED ="I want to add more functionality to the java code I’m going to send you on the next coming lines";
+
+    public final static String LAST_LINE_OF_SOURCE_CODE ="That line above was the last line of Java code";
+    public final static String AFTER_LLM_MODEL_HAS_PARSED_THE_JAVA_CODE_THAT_WE_WANT_TO_MODIFY="Please add Java code that adds the following functionality to the code";
+
+    public final static String NOTE_TO_KEEP_AS_MUCH_ORIGINAL_STRUCTURE_AS_POSSIBLE="Make sure that your generated code keep the current functionality and only add functionality to the existing code";
+
+
+    /// ***** ///
 }

@@ -28,6 +28,7 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import static pn.app_wish.constant.GUIConstants.DEFAULT_STAGE_TITLE;
+import static pn.app_wish.constant.StaticAppWishConstants.*;
 
 
 public class AppHistoryController implements Initializable {
@@ -44,9 +45,12 @@ public class AppHistoryController implements Initializable {
     @FXML
     private Button btnMainScene;
 
-
-
     private Process executingJavaAppProcess;
+
+
+
+    private final String R1 = ".class";
+    private final String R2 = ".java";
 
 
     @Override
@@ -66,17 +70,13 @@ public class AppHistoryController implements Initializable {
 
         btnStopApp.setVisible(true);
         File selectedFile = fileListView.getSelectionModel().selectedItemProperty().getValue();
-        System.out.println("Executing java app on path -> " + AppWishUtil.removeClassPrefixFromString(selectedFile.getAbsolutePath()));
-
-        System.out.println("File name:"+selectedFile.getName());
-        System.out.println("Executing path:"+selectedFile.getAbsolutePath());
-
-
+        
         try {
             ProcessBuilder processBuilder;
+
+            String executePath = selectedFile.getAbsolutePath().replace(R1,R2);
            
-            processBuilder = new ProcessBuilder("/bin/bash", "-c","java " +selectedFile.getAbsolutePath().replace(".class",".java"));
-            
+            processBuilder = new ProcessBuilder(BASH_PATH, C_ARGUMENT,JAVA_TEXT + executePath);
             executingJavaAppProcess = processBuilder.inheritIO().start();
 
         }
