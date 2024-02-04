@@ -1,9 +1,3 @@
-# APPWISH OLLAMA
-AppWish OLLAMA Repository uses a local LLM running with OLLAMA. 
-For more info on how to set up OLLAMA see: https://ollama.ai
-
-
-
 # Turn Your App Ideas into Reality!
 
 Introducing App Wish, a groundbreaking platform that empowers you to transform your app concepts into fully functional applications. 
@@ -14,6 +8,10 @@ With App Wish, you can unleash your creativity without worrying about the comple
 
 ![Logo](https://github.com/pwgit-create/APPWISH_OLLAMA/blob/master/AppWish/AppWish/src/main/resources/shooting_star.png?raw=true)
 
+# APPWISH OLLAMA
+AppWish OLLAMA Repository uses a local LLM running with OLLAMA. 
+For more info on how to set up OLLAMA see: https://ollama.ai
+
 ## Start OLLAMA with the mistral model (before starting AppWish)
 ```ollama run mistral```
 
@@ -22,7 +20,7 @@ You can change the MODEL in the prop file located [here](https://github.com/pwgi
 
 ## AppWish Quick Start Guide(Release binary):
 
-Unzip the file from the latest release and follow the information provided in the [latest release notes](https://github.com/pwgit-create/APPWISH_OLLAMA/releases/tag/v1.5.1.2) 😃.
+Unzip the file from the latest release and follow the information provided in the [latest release notes](https://github.com/pwgit-create/APPWISH_OLLAMA/releases/tag/v1.6) 😃.
 
 
 ## AppWish Quick Start Guide(Dev):
