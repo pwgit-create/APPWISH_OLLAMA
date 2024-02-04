@@ -1,0 +1,2 @@
+package pn.app_wish.constant;
+public enum CodeEvent{CREATE_APPLICATION,CONTINUE_ON_EXISTING_APPLICATION}
