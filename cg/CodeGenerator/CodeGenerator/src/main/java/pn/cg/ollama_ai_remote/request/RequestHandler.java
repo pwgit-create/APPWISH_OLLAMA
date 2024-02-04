@@ -1,5 +1,6 @@
 package pn.cg.ollama_ai_remote.request;
 
+import java.util.List;
 
 
 /**
@@ -15,5 +16,14 @@ public interface RequestHandler {
      * @return String
      */
     String sendQuestionToOllamaInstance(String question);
+
+    /**
+     * Sends a question to OLLAMA api and gets a reply
+     * @param question
+     * @param pathToJavaFileToModify
+     * @param contentOfExistingJavaFile
+     * @return String
+     */
+    String sendQuestionToOllamaInstance(String question,String pathToJavaFileToModify,List<String> contentOfExistingJavaFile);
 
 }

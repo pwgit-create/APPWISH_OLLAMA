@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import pn.cg.ollama_ai_remote.OllamaRemoteSystem;
 import java.util.List;
 
+import static pn.cg.util.CodeGeneratorUtil.isThisACreateNewAppRequest;
+
 public class AppSystem {
 
     private static final Logger log = LoggerFactory.getLogger(AppSystem.class);
@@ -20,7 +22,7 @@ public class AppSystem {
      * @param appWishCompileResult The method will call itself recursively unless this is true
      */
     private static void StartCodeGenerator(String appWish, boolean isFirstRun, boolean appWishCompileResult,boolean isCreateAppGeneration, 
-                                            String javaClassName, List<String> javaFileContentInLines) {
+                                            String pathOfJavaFileIfModifyRequest, List<String> javaFileContentInLines) {
         log.info("Started the AppSystem");
 
         OllamaRemoteSystem ollamaRemoteSystem = new OllamaRemoteSystem();
@@ -33,7 +35,12 @@ public class AppSystem {
         if (isFirstRun) {
 
             retryCounter = 1;
-            appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, true);
+            if(isCreateAppGeneration){
+            appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, true,"",null);
+            }
+            else{
+                appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish,true,pathOfJavaFileIfModifyRequest,javaFileContentInLines);
+            }
         }
 
         if (appWishCompileResult) {
@@ -49,19 +56,18 @@ public class AppSystem {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-            if (!appWishCompileResult) {
+            retryCounter++;
+            log.debug("In CheckCompilationRetryCounter with counter -> " + retryCounter);
 
+            if(isCreateAppGeneration)
+            appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, false,"",null);
+            else
+                appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish,false,pathOfJavaFileIfModifyRequest,javaFileContentInLines);
 
-                retryCounter++;
-                log.debug("In CheckCompilationRetryCounter with counter -> " + retryCounter);
-
-                appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, false);
-
-                if(isCreateAppGeneration)
-                StartCodeGenerator(appWish, false, appWishCompileResult,isCreateAppGeneration,"",null);
-                else
-                StartCodeGenerator(appWish,false,appWishCompileResult,isCreateAppGeneration,javaClassName,javaFileContentInLines);
-            }
+            if(isCreateAppGeneration){
+            StartCodeGenerator(appWish, false, appWishCompileResult,isCreateAppGeneration,"",null);}
+            else{
+            StartCodeGenerator(appWish,false,appWishCompileResult,isCreateAppGeneration,pathOfJavaFileIfModifyRequest,javaFileContentInLines);}
         }
     }
 
@@ -73,11 +79,11 @@ public class AppSystem {
    }
 
     /**
-     * Continue with improvments for an existing app
+     * Continue with improvements for an existing app
      */
-     public static void StartCodeGenerator(String continueWithImprovmentText,String javaClassName, List<String> javaFileContentInLines){
+     public static void StartCodeGenerator(String continueWithImprovementText,String javaClassName, List<String> javaFileContentInLines){
     
-                            StartCodeGenerator(continueWithImprovmentText,true, false ,false ,javaClassName,javaFileContentInLines);
+                            StartCodeGenerator(continueWithImprovementText,true, false ,false ,javaClassName,javaFileContentInLines);
    }
 
 }
