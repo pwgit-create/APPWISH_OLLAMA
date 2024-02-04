@@ -6,5 +6,6 @@ public class HiPeterApp {
         PrintStream out = System.out; // Creating an output stream to print text
         out.println("hi peter"); // Printing the text "hi peter"
         out.println(" hi westin"); // Printing the text " hi westin" after "hi peter"
+        out.println(" This is cool!"); // Adding the new functionality to print "This is cool!" as well
     }
 } 

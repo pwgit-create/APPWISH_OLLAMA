@@ -22,6 +22,7 @@ import org.slf4j.simple.SimpleLogger;
 
 import pn.app_wish.constant.CodeEvent;
 import pn.app_wish.constant.GUIConstants;
+import pn.app_wish.constant.StaticAppWishConstants;
 import pn.cg.app_system.AppSystem;
 import pn.cg.app_system.code_generation.model.CompilationJob;
 import pn.cg.datastorage.DataStorage;
@@ -32,9 +33,9 @@ import java.io.IOException;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.SQLOutput;
+
 import java.util.List;
-import java.util.Objects;
+
 
 import static java.util.Objects.requireNonNull;
 import static pn.app_wish.constant.GUIConstants.APP_HISTORY_STAGE_TILE;
@@ -109,18 +110,28 @@ public class AppWish extends Application {
 
         List<String> contentOfExistingJavaFile;
 
+
         if (codeEvent == CodeEvent.CONTINUE_ON_EXISTING_APPLICATION) {
             file = showOpenFileDialog();
+            // Cancellation of dialog (no file selected)
+            if (file == null) {
+                isCodeGenerationOnGoing = false; // Set the flag for code generation running in the AppWish GUI to false
+                return; // Don´t proceed with method invocations to code-generator-ollama
+            }
             contentOfExistingJavaFile = readTextByLinesFromFile(file);
-            System.out.println("content length = " +contentOfExistingJavaFile.size());
-        } else {
+        }
+
+        //**codeEvent == CodeEvent.CREATE_APPLICATION**//
+        else {
             contentOfExistingJavaFile = null;
             file = null;
         }
+
+
         ThreadPoolMaster.getInstance().getExecutor().execute(() -> {
             startGuiThread(codeEvent);
 
-            // The two parameters after the codeEvent will be null on new app reuqest 
+            // The two parameters after the codeEvent will be null on new app request
             // and have values on modify existing apps requests
 
             String pathToJavaFileIfModify = "";
@@ -156,11 +167,10 @@ public class AppWish extends Application {
             try {
                 ProcessBuilder pb;
 
-                pb = new ProcessBuilder("/bin/bash", "-c", "java " + javaExecutablePath);
+                pb = new ProcessBuilder(StaticAppWishConstants.BASH_PATH, StaticAppWishConstants.C_ARGUMENT, StaticAppWishConstants.JAVA_TEXT + javaExecutablePath);
 
                 executingJavaAppProcess = pb.inheritIO().start();
             } catch (IOException e) {
-                System.out.println("RuntimeException while starting Java executable");
                 throw new RuntimeException(e);
             }
         }
@@ -199,7 +209,7 @@ public class AppWish extends Application {
                     output_label.setText("Generating code...");
                     break;
                 case CONTINUE_ON_EXISTING_APPLICATION:
-                    output_label.setText("Generating code...\nContiune with existing application");
+                    output_label.setText("Generating code...\nContinue with existing application");
                     break;
             }
 
@@ -303,9 +313,9 @@ public class AppWish extends Application {
 
         try {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Choose A Java file to add functionallity to");
+            fileChooser.setTitle("Choose A Java file to add functionality to");
             fileChooser.setInitialDirectory(new File(PathConstants.RESOURCE_PATH
-                    + "java_source_code_classes_tmp" + File.separator));
+                    + StaticAppWishConstants.FOLDER_NAME_OF_GENERATED_JAVA_APPLICATIONS + File.separator));
 
             return fileChooser.showOpenDialog(getMainStage());
         } catch (Exception e) {
