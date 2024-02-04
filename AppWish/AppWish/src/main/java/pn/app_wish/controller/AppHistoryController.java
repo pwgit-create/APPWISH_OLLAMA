@@ -28,6 +28,7 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import static pn.app_wish.constant.GUIConstants.DEFAULT_STAGE_TITLE;
+import static pn.app_wish.constant.StaticAppWishConstants.*;
 
 
 public class AppHistoryController implements Initializable {
@@ -46,9 +47,7 @@ public class AppHistoryController implements Initializable {
 
     private Process executingJavaAppProcess;
 
-    private final String BASH_PATH="/bin/bash";
-    private final String C_ARGUMENT = "-c";
-    private final String JAVA_TEXT="java ";
+
 
     private final String R1 = ".class";
     private final String R2 = ".java";
