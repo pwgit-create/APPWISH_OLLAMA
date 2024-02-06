@@ -1,6 +1,6 @@
 package pn.cg.datastorage.constant;
 
-public class QuestionConstants {
+public record QuestionConstants() {
 
     /**
      * A prefix for a question that asks the ollama model to code a whole feature/app
@@ -131,6 +131,7 @@ public class QuestionConstants {
 
     public final static String NOTE_TO_KEEP_AS_MUCH_ORIGINAL_STRUCTURE_AS_POSSIBLE="Make sure that your generated code keep the current functionality and only add functionality to the existing code";
 
+    public final static String NO_EXISTING_CODE_COMMENTS="Do not replace any code that i have sent with comment lines stating it is existing code. Keep all code that is needed for the application to compile";
 
     /// ***** ///
 }
