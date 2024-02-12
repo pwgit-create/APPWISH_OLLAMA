@@ -133,5 +133,7 @@ public record QuestionConstants() {
 
     public final static String NO_EXISTING_CODE_COMMENTS="Do not replace any code that i have sent with comment lines stating it is existing code. Keep all code that is needed for the application to compile";
 
+    public final static String NO_PLACEHOLDER_FOR_EXISTING_LOGIC="It is very important that you keep all the code that you receive from me and don´t modify in your response as is along with the code that you modified";
+
     /// ***** ///
 }
