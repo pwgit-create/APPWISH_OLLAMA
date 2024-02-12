@@ -47,7 +47,7 @@ public class RequestHandlerImpl implements RequestHandler {
 
         Options options =
                 new OptionsBuilder()
-                        .setNumCtx(8192)  //16384
+                        .setNumCtx(16384)
                         .setNumGqa(8)
                         .setNumGpu(50)
                         .setTemperature(0.9f)
@@ -95,7 +95,8 @@ public class RequestHandlerImpl implements RequestHandler {
                     .addLine(QuestionConstants.MAKE_SURE_THAT_END_DELIMITER_CHAR_IS_USED_ONCE)
                     .addLine(QuestionConstants.NO_JAVA_FX)
                     .addLine(QuestionConstants.NO_SPECIAL_LIBRARIES)
-                    .addLine(QuestionConstants.MAKE_SURE_IT_WORKS_ON_JAVA_19);
+                    .addLine(QuestionConstants.MAKE_SURE_IT_WORKS_ON_JAVA_19)
+                    .addLine(QuestionConstants.NO_PLACEHOLDER_FOR_EXISTING_LOGIC);
 
         }
         api.setRequestTimeoutSeconds(100000);
