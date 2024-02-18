@@ -20,7 +20,7 @@ You can change the MODEL in the prop file located [here](https://github.com/pwgi
 
 ## AppWish Quick Start Guide(Release binary):
 
-Unzip the file from the latest release and follow the information provided in the [latest release notes](https://github.com/pwgit-create/APPWISH_OLLAMA/releases/tag/v1.6.2) 😃.
+Unzip the file from the latest release and follow the information provided in the [latest release notes](https://github.com/pwgit-create/APPWISH_OLLAMA/releases/tag/v1.6.3) 😃.
 
 
 ## AppWish Quick Start Guide(Dev):
