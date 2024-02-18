@@ -135,5 +135,8 @@ public record QuestionConstants() {
 
     public final static String NO_PLACEHOLDER_FOR_EXISTING_LOGIC="It is very important that you keep all the code that you receive from me and don´t modify in your response as is along with the code that you modified";
 
+    public final static String THREAD_PACKAGE="If your code requires the Java Thread package use import java.lang.Thread";
+
+    public final static String ONLY_CODE ="Please provide only code in your and any explanations you wish to add are to be kept as code comments";
     /// ***** ///
 }
