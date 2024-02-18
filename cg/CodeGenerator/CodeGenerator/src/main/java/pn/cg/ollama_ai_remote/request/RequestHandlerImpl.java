@@ -47,9 +47,6 @@ public class RequestHandlerImpl implements RequestHandler {
 
         Options options =
                 new OptionsBuilder()
-                        .setNumCtx(16384)
-                        .setNumGqa(8)
-                        .setNumGpu(50)
                         .setTemperature(0.9f)
                         .setNumPredict(-1) // -1
                         .setTopK(20)
@@ -72,7 +69,9 @@ public class RequestHandlerImpl implements RequestHandler {
                     .addLine(QuestionConstants.NO_JAVA_FX)
                     .addLine(QuestionConstants.NO_SPECIAL_LIBRARIES)
                     .addLine(QuestionConstants.MAKE_SURE_IT_WORKS_ON_JAVA_19)
-                    .addLine(QuestionConstants.IMPLEMENT_AS_MUCH_AS_POSSIBLE);
+                    .addLine(QuestionConstants.IMPLEMENT_AS_MUCH_AS_POSSIBLE)
+                    .addLine(QuestionConstants.THREAD_PACKAGE)
+                    .addLine(QuestionConstants.ONLY_CODE);
         } else {
 
             promptBuilder = new PromptBuilder()
@@ -96,6 +95,8 @@ public class RequestHandlerImpl implements RequestHandler {
                     .addLine(QuestionConstants.NO_JAVA_FX)
                     .addLine(QuestionConstants.NO_SPECIAL_LIBRARIES)
                     .addLine(QuestionConstants.MAKE_SURE_IT_WORKS_ON_JAVA_19)
+                    .addLine(QuestionConstants.THREAD_PACKAGE)
+                    .addLine(QuestionConstants.ONLY_CODE)
                     .addLine(QuestionConstants.NO_PLACEHOLDER_FOR_EXISTING_LOGIC);
 
         }
