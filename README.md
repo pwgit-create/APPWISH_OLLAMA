@@ -12,15 +12,15 @@ With App Wish, you can unleash your creativity without worrying about the comple
 AppWish OLLAMA Repository uses a local LLM running with OLLAMA. 
 For more info on how to set up OLLAMA see: https://ollama.ai
 
-## Start OLLAMA with the dolphin-mistral model (before starting AppWish)
-```ollama run dolphin-mistral:latest```
+## Start OLLAMA with the llama3 model (before starting AppWish)
+```ollama run llama3:latest```
 
 
-You can change the MODEL in the prop file located [here](https://github.com/pwgit-create/APPWISH_OLLMA/blob/master/AppWish/AppWish/src/main/resources/ollama_model.props) if you don’t want to use the mistral model (set by default).
+You can change the MODEL in the prop file located [here](https://github.com/pwgit-create/APPWISH_OLLMA/blob/master/AppWish/AppWish/src/main/resources/ollama_model.props) if you don’t want to use the llama3 model (set by default).
 
 ## AppWish Quick Start Guide(Release binary):
 
-Unzip the file from the latest release and follow the information provided in the [latest release notes](https://github.com/pwgit-create/APPWISH_OLLAMA/releases/tag/v1.6.3) 😃.
+Unzip the file from the latest release and follow the information provided in the [latest release notes](https://github.com/pwgit-create/APPWISH_OLLAMA/releases/tag/v1.6.4) 😃.
 
 
 ## AppWish Quick Start Guide(Dev):
