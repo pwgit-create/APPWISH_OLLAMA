@@ -137,6 +137,6 @@ public record QuestionConstants() {
 
     public final static String THREAD_PACKAGE="If your code requires the Java Thread package use import java.lang.Thread";
 
-    public final static String ONLY_CODE ="Please provide only code in your and any explanations you wish to add are to be kept as code comments";
+    public final static String ONLY_CODE ="Your answer should only contain code, any further explanations should be kept as comments within the code";
     /// ***** ///
 }
