@@ -10,7 +10,7 @@ With App Wish, you can unleash your creativity without worrying about the comple
 
 ## AppWish Quick Start Guide(Release binary):
 
-Unzip the file from the latest release and follow the information provided in the [latest release notes](https://github.com/pwgit-create/APPWISH_OLLAMA/releases/tag/v1.6.4) 😃.
+Unzip the file from the latest release and follow the information provided in the [latest release notes](https://github.com/pwgit-create/APPWISH_OLLAMA/releases) 😃.
 
 
 ## AppWish Quick Start Guide(Dev):
