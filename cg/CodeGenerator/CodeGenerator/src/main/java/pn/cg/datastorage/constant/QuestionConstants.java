@@ -71,7 +71,7 @@ public record QuestionConstants() {
     /*
      * Add information regarding the start char delimiter of the java code provided by the LLM model
      */
-    public final static String MARK_START_CHAR_DELIMITER = "Mark the start of the first line of java code including the import statements with the text @START_HERE;";
+    public final static String MARK_START_CHAR_DELIMITER = "Mark the start of the first line of java code including the import statements with the text @START_HERE";
     
      /*
      * Add information regarding the end char delimiter of the java code provided by the LLM model
