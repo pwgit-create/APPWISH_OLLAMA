@@ -302,15 +302,17 @@ public class StringUtilTest {
     }
 
     @Test
-    public void AppendWithCorrectNumberOfBraceBucketsAtEndofTheString() {
+    public void RemoveCommonAdditionStringsFromAiModelsTest() {
 
 
-        final String text = "public class PN{ Public static void main(String[] args) {}  for(int i=0;i++;i<10){ }";
+        final String text = "```java\npublic class PN{ Public static void main(String[] args) {}  for(int i=0;i++;i<10){ }}\n```";
 
-        final String expected = "public class PN{ Public static void main(String[] args) {}  for(int i=0;i++;i<10){ }}";
+        final String expected = "\npublic class PN{ Public static void main(String[] args) {}  for(int i=0;i++;i<10){ }}\n";
 
-        final String actual = StringUtil.AppendBraceBucketsAtEndofTheString(text, StringUtil.GetUnbalancedBraceBracketsFromString(text));
+        final String actual = StringUtil.RemoveCommonAdditionStringsFromAiModels(text);
 
         Assertions.assertEquals(expected, actual);
     }
+
+
 }
