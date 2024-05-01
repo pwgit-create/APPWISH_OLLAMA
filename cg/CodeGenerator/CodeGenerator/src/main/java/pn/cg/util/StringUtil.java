@@ -178,7 +178,7 @@ public class StringUtil {
                 returnValue = RemoveAllExceptTheFirstOccurrenceOfaAWord(returnValue, delimiter);
             } else if (!isStartDelimiter) {
                 delimiter = CommonStringConstants.JAVA_CODE_GENERATION_END_DELMITER_STRING;
-                returnValue = RemoveAllExceptTheLastOccurrenceofAWord(returnValue, delimiter);
+                returnValue = RemoveAllExceptTheLastOccurrenceOfWord(returnValue, delimiter);
             }
         } catch (Exception e) {
             log.debug("Error on delimiter String removal process");
@@ -259,7 +259,7 @@ public class StringUtil {
      * @param input input String
      * @param delimiter String
      */
-    private static String RemoveAllExceptTheLastOccurrenceofAWord(String input, String delimiter) {
+    private static String RemoveAllExceptTheLastOccurrenceOfWord(String input, String delimiter) {
 
         final String S = " ";
 
