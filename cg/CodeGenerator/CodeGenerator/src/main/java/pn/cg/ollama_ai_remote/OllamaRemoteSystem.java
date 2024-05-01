@@ -100,6 +100,7 @@ public class OllamaRemoteSystem {
             javaSourceCode = StringUtil.RemoveEveryThingAfterEndChar(javaSourceCode);
 
             javaSourceCode = checkAndFixUnclosedBraceBuckets(javaSourceCode);
+            javaSourceCode = StringUtil.RemoveCommonAdditionStringsFromAiModels(javaSourceCode);
 
 
             log.info("Java source code after modification = " + javaSourceCode);
