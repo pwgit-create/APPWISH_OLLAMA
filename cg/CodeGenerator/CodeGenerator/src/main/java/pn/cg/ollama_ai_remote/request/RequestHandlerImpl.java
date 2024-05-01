@@ -43,13 +43,14 @@ public class RequestHandlerImpl implements RequestHandler {
         OllamaAPI api = new OllamaAPI(HOST);
 
         boolean isThisNewAppRequest = isThisACreateNewAppRequest(pathToJavaFileToModify, contentOfExistingJavaFile);
-
+        CodeGeneratorConfig codeGeneratorConfig = new CodeGeneratorConfig();
 
         Options options =
                 new OptionsBuilder()
                         .setTemperature(0.9f)
                         .setNumPredict(-1) // -1
                         .setTopK(20)
+                        .setNumCtx(codeGeneratorConfig.getNUM_CTX())
                         .build();
 
 
@@ -102,10 +103,10 @@ public class RequestHandlerImpl implements RequestHandler {
         }
         api.setRequestTimeoutSeconds(100000);
         log.info("Is OLLAMA server alive? -> " + api.ping()); // This is your local OLLAMA server running on localhost and is used for the LLM model
-        CodeGeneratorConfig codeGeneratorConfig = new CodeGeneratorConfig();
+
         OllamaResult result = null;
         try {
-            result = api.ask(codeGeneratorConfig.GetOllamaModelName(), promptBuilder.build(), options);
+            result = api.ask(codeGeneratorConfig.getOllamaModel(), promptBuilder.build(), options);
 
         } catch (OllamaBaseException e) {
             e.printStackTrace();
