@@ -3,8 +3,6 @@ package pn.cg.util;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import pn.cg.datastorage.constant.CommonStringConstants;
-
 public class StringUtilTest {
 
     private final String JAVA_CODE_WITH_EXTRA_DELIMITERS = "@START_HERE \\n" + //
@@ -302,7 +300,20 @@ public class StringUtilTest {
     }
 
     @Test
-    public void AppendWithCorrectNumberOfBraceBucketsAtEndofTheString() {
+    public void RemoveCommonAdditionStringsFromAiModelsTest() {
+
+
+        final String text = "```java\npublic class PN{ Public static void main(String[] args) {}  for(int i=0;i++;i<10){ }}\n```";
+
+        final String expected = "\npublic class PN{ Public static void main(String[] args) {}  for(int i=0;i++;i<10){ }}\n";
+
+        final String actual = StringUtil.RemoveCommonAdditionStringsFromAiModels(text);
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void AppendWithCorrectNumberOfBraceBucketsAtEndOfTheString() {
 
 
         final String text = "public class PN{ Public static void main(String[] args) {}  for(int i=0;i++;i<10){ }";
@@ -313,4 +324,5 @@ public class StringUtilTest {
 
         Assertions.assertEquals(expected, actual);
     }
+
 }
