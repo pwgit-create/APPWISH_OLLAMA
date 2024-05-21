@@ -47,9 +47,6 @@ public class RequestHandlerImpl implements RequestHandler {
 
         Options options =
                 new OptionsBuilder()
-                        .setTemperature(0.9f)
-                        .setNumPredict(-1) // -1
-                        .setTopK(20)
                         .setNumCtx(codeGeneratorConfig.getNUM_CTX())
                         .build();
 
