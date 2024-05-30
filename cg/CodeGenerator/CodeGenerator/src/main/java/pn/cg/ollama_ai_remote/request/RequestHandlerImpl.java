@@ -48,6 +48,9 @@ public class RequestHandlerImpl implements RequestHandler {
         Options options =
                 new OptionsBuilder()
                         .setNumCtx(codeGeneratorConfig.getNUM_CTX())
+                        .setTopK(codeGeneratorConfig.getTOP_K())
+                        .setNumPredict(codeGeneratorConfig.getNUM_PREDICT())
+                        .setTemperature(codeGeneratorConfig.getTEMPERATURE())
                         .build();
 
 
@@ -77,7 +80,7 @@ public class RequestHandlerImpl implements RequestHandler {
                     .addLine(QuestionConstants.THANKS_FOR_ALL_GENERATED_APPS)
                     .addLine(QuestionConstants.FUNCTIONALITY_NEEDED);
 
-            contentOfExistingJavaFile.stream().forEach(line -> promptBuilder.addLine(line));
+            contentOfExistingJavaFile.forEach(line -> promptBuilder.addLine(line));
 
             promptBuilder
                     .addLine(QuestionConstants.LAST_LINE_OF_SOURCE_CODE)
@@ -105,13 +108,10 @@ public class RequestHandlerImpl implements RequestHandler {
         try {
             result = api.ask(codeGeneratorConfig.getOllamaModel(), promptBuilder.build(), options);
 
-        } catch (OllamaBaseException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (OllamaBaseException | IOException | InterruptedException e) {
             e.printStackTrace();
         }
+        assert result != null;
         String outputFromOllamaAPI = (result.getResponse());
         log.debug(outputFromOllamaAPI);
         return outputFromOllamaAPI;
