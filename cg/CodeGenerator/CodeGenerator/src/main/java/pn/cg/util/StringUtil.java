@@ -6,9 +6,6 @@ import org.slf4j.LoggerFactory;
 import pn.cg.datastorage.constant.CommonStringConstants;
 
 
-import java.util.Arrays;
-
-
 public class StringUtil {
 
     private static final Logger log = LoggerFactory.getLogger(StringUtil.class);
@@ -78,27 +75,7 @@ public class StringUtil {
     }
 
     /**
-     * Get the first lines of a String (up to 5)
-     *
-     * @param input input String
-     * @return String
-     */
-    public static String getFirstFiveLines(String input) {
-
-
-        String[] fiveFirstLines = input.split("\n", 5);
-        StringBuilder builder = new StringBuilder();
-
-        Arrays.stream(fiveFirstLines).forEach(builder::append);
-
-        return builder.toString();
-
-
-    }
-
-    /**
      * Removes chars that might cause ollama´s api to send 400
-     *
      * @param input input String
      * @return String
      */
@@ -162,7 +139,6 @@ public class StringUtil {
         }
 
         return returnValue;
-
     }
 
 
@@ -201,7 +177,7 @@ public class StringUtil {
      *
      * @param input String Input
      * @param numberOfBraceBuckets int
-     * @return
+     * @return input string appended with the given amount of brace buckets
      */
     public static String AppendBraceBucketsAtEndofTheString(String input, int numberOfBraceBuckets) {
 
@@ -264,11 +240,10 @@ public class StringUtil {
         final String S = " ";
 
         String lastPart = input.substring(input.lastIndexOf(delimiter));
-        String beforerEndDelimiterStringUnmodified = input.substring(0, input.lastIndexOf(delimiter) - 1);
-        String cleanedBeforerEndDelimiterString = beforerEndDelimiterStringUnmodified.replaceAll(delimiter, "");
+        String beforeEndDelimiterStringUnmodified = input.substring(0, input.lastIndexOf(delimiter) - 1);
+        String cleanedBeforerEndDelimiterString = beforeEndDelimiterStringUnmodified.replaceAll(delimiter, "");
         cleanedBeforerEndDelimiterString = cleanedBeforerEndDelimiterString.concat(S);
-        String finalOutputString = cleanedBeforerEndDelimiterString.concat(lastPart);
 
-        return finalOutputString;
+        return cleanedBeforerEndDelimiterString.concat(lastPart);
     }
 }

@@ -31,8 +31,7 @@ public class PropUtil {
 
             ioException.printStackTrace();
         } finally {
-            if(fileInputStream != null)
-            fileInputStream.close();
+            if(fileInputStream != null) fileInputStream.close();
         }
 
         return properties;
