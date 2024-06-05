@@ -13,21 +13,14 @@ import pn.cg.util.PropUtil;
 public class CodeGeneratorConfig {
 
     /**
-     * File name of the file containing the model name
-     */
-    private final String PROPERTIES_FILE_NAME_FOR_MODEL = "ollama_model.props";
-    /**
-     * Name of the Ollama AI Model to use with appwish
+     * Name of the Ollama AI Model to use with AppWish
      */
     private final String OLLAMA_MODEL;
 
     /**
-     * File name of the file containing the ollama configs that you can modify in appwish
-     */
-    private final String PROPERTIES_FILE_NAME_FOR_CONFIG = "config.props";
-
-    /**
      * @OllamaDocs Size of context window (default 2048)
+     * @use-info  Remember that a high context window demands more compute resources
+     * @use-info  It is important to check the documentation of the AI-Model you are using regarding the supported context window sizes
      */
     private final int NUM_CTX;
 
@@ -47,12 +40,13 @@ public class CodeGeneratorConfig {
     private final float TEMPERATURE;
 
     public CodeGeneratorConfig() {
+        // This method should only be called once (when app is initializing) constructor
         this.OLLAMA_MODEL = GetOllamaModelNameFromPropFile();
 
-        // Placeholder record for the Ollama config options
-        final OllamaConfig ollamaConfig = GetOllamaConfigsFromPropFile();
+        // Options that derive from the config.props file (located in src/main/resources)
+        final OllamaConfig ollamaConfig = CreateOllamaConfigDTOFromPropFile();
 
-        // Making the Ollama config parameters variables immutable
+        // Designate immutable ollamaConfig variables as final variables to ensure that references remain unchangeable during hooking or debugging
         this.NUM_CTX = ollamaConfig.num_ctx();
         this.TOP_K = ollamaConfig.top_k();
         this.NUM_PREDICT = ollamaConfig.num_predict();
@@ -67,6 +61,11 @@ public class CodeGeneratorConfig {
 
         try {
 
+            /*
+              File name of the file containing the model name
+             */
+            final String PROPERTIES_FILE_NAME_FOR_MODEL = "ollama_model.props";
+
             final Properties properties = PropUtil.ReadPropertiesFile(PROPERTIES_FILE_NAME_FOR_MODEL);
             final String PROPERTY_NAME_MODEL = "MODEL_NAME";
             return properties.getProperty(PROPERTY_NAME_MODEL);
@@ -77,47 +76,77 @@ public class CodeGeneratorConfig {
     }
 
     /**
-     * Gets the values from the "config.props" file. If an error occurs , the record returned will only include default values.
-     *
+     * Creates an OllamaConfigDTO.
+     * @use-info In the event of an error, the record returned will only contain the default values
      * @return Record with Ollama config options that are editable in appwish
      */
-    private final OllamaConfig GetOllamaConfigsFromPropFile() {
-        OllamaConfig methodLocalConfig;
+    private final OllamaConfig CreateOllamaConfigDTOFromPropFile() {
+        OllamaConfig newOllamaConfigRecord;
         try {
-            final Properties properties = PropUtil.ReadPropertiesFile(PROPERTIES_FILE_NAME_FOR_CONFIG);
+
+            /*
+              The file that holds the Ollama configurations that AppWish allows you to modify
+             */
+            final String PROPERTIES_FILE_NAME_FOR_CONFIG = "config.props";
+
+            /*
+             The config.prop file's key values' names
+             */
             final String PROPERTY_NAME_NUM_CTX = "NUM_CTX";
             final String PROPERTY_NAME_TOP_K = "TOP_K";
             final String PROPERTY_NAME_NUM_PREDICT = "NUM_PREDICT";
             final String PROPERTY_NAME_TEMPERATURE = "TEMPERATURE";
 
-            methodLocalConfig = new OllamaConfig(Integer.parseInt(properties.getProperty(PROPERTY_NAME_NUM_CTX)),
+            final Properties properties = PropUtil.ReadPropertiesFile(PROPERTIES_FILE_NAME_FOR_CONFIG);
+
+            newOllamaConfigRecord = new OllamaConfig(Integer.parseInt(properties.getProperty(PROPERTY_NAME_NUM_CTX)),
                     Integer.parseInt(properties.getProperty(PROPERTY_NAME_TOP_K)),
                     Integer.parseInt(properties.getProperty(PROPERTY_NAME_NUM_PREDICT)),
                     Float.parseFloat(properties.getProperty(PROPERTY_NAME_TEMPERATURE)));
         } catch (IOException e) {
-            System.err.println("Error when fetching the ollama config file\nSetting default values on all configs..");
+            System.err.println("Error when fetching the ollama config file\nSetting default values for all config parameters..");
             // Default values should be returned if the ollama config file is corrupted
-            methodLocalConfig = new OllamaConfig(2048, 40, 128, 0.8f);
+            newOllamaConfigRecord = new OllamaConfig(2048, 40, 128, 0.8f);
         }
-        return methodLocalConfig;
+        return newOllamaConfigRecord;
     }
 
+    /**
+     * Retrieves the name of the AI model that is being used with AppWish
+     * @return String
+     */
     public final String getOllamaModel() {
         return this.OLLAMA_MODEL;
     }
 
+    /**
+     * Get the value of the context window
+     * @return int
+     */
     public final int getNUM_CTX() {
         return this.NUM_CTX;
     }
 
+    /**
+     * Get the TOP_K value
+     * @return int
+     */
     public final int getTOP_K() {
         return this.TOP_K;
     }
 
+    /**
+     * Get the number of tokens to predict
+     * @return int
+     */
     public final int getNUM_PREDICT() {
         return NUM_PREDICT;
     }
 
+    /**
+     * Get the temperature that the AI Model uses
+     * @return float
+     */
     public final float getTEMPERATURE() {
         return TEMPERATURE;
     }

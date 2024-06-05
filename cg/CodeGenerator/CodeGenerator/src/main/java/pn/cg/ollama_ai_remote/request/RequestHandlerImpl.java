@@ -97,21 +97,20 @@ public class RequestHandlerImpl implements RequestHandler {
                     .addLine(QuestionConstants.NO_SPECIAL_LIBRARIES)
                     .addLine(QuestionConstants.MAKE_SURE_IT_WORKS_ON_JAVA_19)
                     .addLine(QuestionConstants.THREAD_PACKAGE)
-                    .addLine(QuestionConstants.ONLY_CODE)
-                    .addLine(QuestionConstants.NO_PLACEHOLDER_FOR_EXISTING_LOGIC);
+                    .addLine(QuestionConstants.ONLY_CODE);
 
         }
         api.setRequestTimeoutSeconds(100000);
-        log.info("Is OLLAMA server alive? -> " + api.ping()); // This is your local OLLAMA server running on localhost and is used for the LLM model
+        log.info("Is OLLAMA server alive? -> {}", api.ping()); // This is your local OLLAMA server running on localhost and is used for the LLM model
 
         OllamaResult result = null;
         try {
-            result = api.ask(codeGeneratorConfig.getOllamaModel(), promptBuilder.build(), options);
+            result = api.generate(codeGeneratorConfig.getOllamaModel(), promptBuilder.build(), options);
 
         } catch (OllamaBaseException | IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        assert result != null;
+        if (result == null) throw new AssertionError();
         String outputFromOllamaAPI = (result.getResponse());
         log.debug(outputFromOllamaAPI);
         return outputFromOllamaAPI;
