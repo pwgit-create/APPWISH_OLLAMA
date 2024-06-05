@@ -22,17 +22,17 @@ public class ClassCompiler {
     /**
      * Tries to compile a file with java source code into byte code
      *
-     * @param className
+     * @param className Class name of the class that we will try to compile
      */
     public void compileClass(String className) {
 
 
         ExecutorService executor = ThreadPoolMaster.getInstance().getExecutor();
 
-        log.debug("Compiler path -> " + TaskUtil.addFilePathToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION));
+        log.debug("Compiler path -> {}", TaskUtil.addFilePathToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION));
 
         String scriptToUse = ScriptConstants.JAVAC_SCRIPT_NAME;
-        log.debug("script used when compiling -> " + scriptToUse);
+        log.debug("script used when compiling -> {}", scriptToUse);
 
         executor.execute(new CompileClassTask(scriptToUse, new String[]{TaskUtil.addFilePathToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION)}));
 

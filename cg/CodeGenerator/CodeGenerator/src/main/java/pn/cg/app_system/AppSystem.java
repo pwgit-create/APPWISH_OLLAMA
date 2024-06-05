@@ -57,7 +57,7 @@ public class AppSystem {
                 Thread.currentThread().interrupt();
             }
             retryCounter++;
-            log.debug("In CheckCompilationRetryCounter with counter -> " + retryCounter);
+            log.debug("In CheckCompilationRetryCounter with counter -> {}", retryCounter);
 
             if(isCreateAppGeneration)
             appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, false,"",null);
