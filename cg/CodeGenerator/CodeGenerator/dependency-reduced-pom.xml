@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>pn.dev</groupId>
   <artifactId>code-generator-ollama</artifactId>
-  <version>1.7.1</version>
+  <version>1.7.2</version>
   <description>The Java Application-Generator (pn.dev.code-generator-ollama) creates applications by giving a string of your desired features for a Java application, like this: AppSystem.StartCodeGenerator(String appWish)</description>
   <inceptionYear>2024</inceptionYear>
   <developers>
@@ -92,26 +92,6 @@
         <exclusion>
           <artifactId>maven-surefire-common</artifactId>
           <groupId>org.apache.maven.surefire</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>5.12.0</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>byte-buddy</artifactId>
-          <groupId>net.bytebuddy</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>byte-buddy-agent</artifactId>
-          <groupId>net.bytebuddy</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>objenesis</artifactId>
-          <groupId>org.objenesis</groupId>
         </exclusion>
       </exclusions>
     </dependency>
