@@ -25,9 +25,9 @@ public class QuestionBuilder {
     /**
      * Creates a questions for ollama model that should produce java code of a class (in a feature)
      *
-     * @param classForFeature
+     * @param classForFeature A class that is needed as a member in bigger feature / project
      * @return String
-     * @Respone-goal A single java class that is needed part for the feature
+     * @Response-goal A single java class that is needed part for the feature
      */
     public String createClassQuestion(final String classForFeature) {
         return QuestionConstants.APP_WISH_PREFIX_CLASS + classForFeature;
@@ -36,7 +36,7 @@ public class QuestionBuilder {
     /**
      * Creates a question for ollama model that should produce a correct implementation of class that did not compile
      *
-     * @param compileErrorMessage
+     * @param compileErrorMessage The compile error text
      * @return String
      * @Response-goal A class implementation that will compile successfully
      */

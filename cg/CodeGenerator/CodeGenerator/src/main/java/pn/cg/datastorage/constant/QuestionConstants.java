@@ -97,7 +97,7 @@ public record QuestionConstants() {
     public final static String NO_JAVA_FX="If I provided instructions that states that I want a GUI app you may only use the Swing library when providing me with code that I will compile";
 
     /**
-     * Do not include libraries that requries external librariesd that is not included in OpenJDK 19.
+     * Do not include libraries that requires external libraries that is not included in OpenJDK 19.
      */
     public final static String NO_SPECIAL_LIBRARIES ="Do not generate code that contains external libraries that is not included in OpenJDK 19";
 
@@ -131,9 +131,7 @@ public record QuestionConstants() {
 
     public final static String NOTE_TO_KEEP_AS_MUCH_ORIGINAL_STRUCTURE_AS_POSSIBLE="Make sure that your generated code keep the current functionality and only add functionality to the existing code";
 
-    public final static String NO_EXISTING_CODE_COMMENTS="Do not replace any code that i have sent with comment lines stating it is existing code. Keep all code that is needed for the application to compile";
-
-    public final static String NO_PLACEHOLDER_FOR_EXISTING_LOGIC="It is very important that you keep all the code that you receive from me and don´t modify in your response as is along with the code that you modified";
+    public final static String NO_EXISTING_CODE_COMMENTS="I need the actual code without any comments or placeholders referencing existing code";
 
     public final static String THREAD_PACKAGE="If your code requires the Java Thread package use import java.lang.Thread";
 
