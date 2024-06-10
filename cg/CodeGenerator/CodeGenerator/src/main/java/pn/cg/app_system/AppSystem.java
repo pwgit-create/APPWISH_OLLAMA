@@ -50,12 +50,6 @@ public class AppSystem {
 
         if (!appWishCompileResult) {
 
-            //Sleep thread to give time to check if another thread has a successful compile result
-            try {
-                Thread.sleep(3500);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
             retryCounter++;
             log.debug("In CheckCompilationRetryCounter with counter -> {}", retryCounter);
 

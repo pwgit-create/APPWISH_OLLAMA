@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 
 import javafx.scene.Parent;
@@ -18,11 +19,14 @@ import javafx.stage.Stage;
 
 import java.io.File;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.simple.SimpleLogger;
 
 import pn.app_wish.constant.CodeEvent;
 import pn.app_wish.constant.GUIConstants;
 import pn.app_wish.constant.StaticAppWishConstants;
+import pn.app_wish.util.AppWishUtil;
 import pn.cg.app_system.AppSystem;
 import pn.cg.app_system.code_generation.model.CompilationJob;
 import pn.cg.datastorage.DataStorage;
@@ -43,6 +47,7 @@ import static pn.app_wish.constant.GUIConstants.DEFAULT_FXML_FILE;
 
 
 public class AppWish extends Application {
+    private static final Logger log = LoggerFactory.getLogger(AppWish.class);
     private static Stage mainStage;
     @FXML
     public TextField tf_input;
@@ -59,7 +64,9 @@ public class AppWish extends Application {
     @FXML
     public BorderPane bp_main;
     @FXML
-    public Button btnStopGeneratedApp;
+    public Button btn_StopGeneratedApp;
+    @FXML
+    public ImageView logo;
 
     private String javaExecutablePath;
     private Process executingJavaAppProcess;
@@ -98,9 +105,8 @@ public class AppWish extends Application {
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     }
 
-
     /**
-     * Appwish GUI lifecycle
+     * AppWish GUI lifecycle
      */
     private void onAppWish(CodeEvent codeEvent) {
         isCodeGenerationOnGoing = true;
@@ -120,7 +126,6 @@ public class AppWish extends Application {
             }
             contentOfExistingJavaFile = readTextByLinesFromFile(file);
         }
-
         //**codeEvent == CodeEvent.CREATE_APPLICATION**//
         else {
             contentOfExistingJavaFile = null;
@@ -146,29 +151,18 @@ public class AppWish extends Application {
 
         });
 
-        //Wait for 1.5 sec 
-
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-
-            Thread.currentThread().interrupt();
-        }
     }
-
 
     @FXML
     private void onRunJavaApp(ActionEvent ae) {
         btn_run_application.setVisible(false);
-        btnStopGeneratedApp.setVisible(true);
+        btn_StopGeneratedApp.setVisible(true);
 
         if (javaExecutablePath != null) {
             System.out.println("Executing java app on path -> " + javaExecutablePath);
             try {
                 ProcessBuilder pb;
-
                 pb = new ProcessBuilder(StaticAppWishConstants.BASH_PATH, StaticAppWishConstants.C_ARGUMENT, StaticAppWishConstants.JAVA_TEXT + javaExecutablePath);
-
                 executingJavaAppProcess = pb.inheritIO().start();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -191,7 +185,9 @@ public class AppWish extends Application {
 
         this.executingJavaAppProcess.toHandle().destroy();
         btn_run_application.setVisible(true);
-        btnStopGeneratedApp.setVisible(false);
+        btn_StopGeneratedApp.setVisible(false);
+        setButtonGroupVisibilityForCodeGenerationButtons(true);
+
     }
 
     /**
@@ -201,7 +197,7 @@ public class AppWish extends Application {
     private void startGuiThread(CodeEvent codeEvent) {
         DataStorage.getInstance().setCompilationJob(new CompilationJob(GUIConstants.DEFAULT_STAGE_TITLE));
         Platform.runLater(() -> {
-            setButtonGroupVisibilityForCodeGenerationBtns(false);
+            setButtonGroupVisibilityForCodeGenerationButtons(false);
             output_label.setVisible(true);
 
             switch (codeEvent) {
@@ -213,8 +209,8 @@ public class AppWish extends Application {
                     break;
             }
 
-            setButtonGroupVisibilityForCodeGenerationBtns(false);
-            btnStopGeneratedApp.setVisible(false);
+            setButtonGroupVisibilityForCodeGenerationButtons(false);
+            btn_StopGeneratedApp.setVisible(false);
         });
     }
 
@@ -224,9 +220,10 @@ public class AppWish extends Application {
     @FXML
     private void createApplication(ActionEvent ae) {
 
-        if (!isCodeGenerationOnGoing)
+        if (!isCodeGenerationOnGoing) {
+            setButtonGroupVisibilityToFalseForStartAndStopApplicationsButtons();
             onAppWish(CodeEvent.CREATE_APPLICATION);
-
+        }
     }
 
     /**
@@ -235,9 +232,10 @@ public class AppWish extends Application {
     @FXML
     private void continueOnExistingApplication(ActionEvent ae) {
 
-        if (!isCodeGenerationOnGoing)
+        if (!isCodeGenerationOnGoing) {
+            setButtonGroupVisibilityToFalseForStartAndStopApplicationsButtons();
             onAppWish(CodeEvent.CONTINUE_ON_EXISTING_APPLICATION);
-
+        }
     }
 
 
@@ -247,6 +245,7 @@ public class AppWish extends Application {
     private void startCodeGeneration(CodeEvent codeEvent, String pathToJavaApp, List<String> contentOfExistingJavaFile) {
 
         if (tf_input != null) {
+            // Stop displaying start/stop application buttons
             // Make a recursive call to AppSystem
             switch (codeEvent) {
                 case CREATE_APPLICATION:
@@ -257,7 +256,6 @@ public class AppWish extends Application {
                             requireNonNull(contentOfExistingJavaFile));
                     break;
             }
-
         }
     }
 
@@ -271,55 +269,57 @@ public class AppWish extends Application {
     }
 
     /**
-     * If a compilation result exist , check if the singleton in code-generator-ollama contains a path for a executable Java file
+     * If a compilation result exist , check if the singleton in code-generator-ollama contains a path for an executable Java file
      * If the above is true , activate the "run application" button and remove the "generating code..." text
      */
     private void handleCompilationResult() {
-
         if (DataStorage.getInstance().getCompilationJob().isResult()) {
             javaExecutablePath = DataStorage.getInstance().getJavaExecutionPath();
             // Draw success or error texts, and show run app button
             Platform.runLater(() -> {
                 if (DataStorage.getInstance().getJavaExecutionPath() != null) {
-                    output_label.setText("Completed Successfully");
-                    try {
-                        Thread.sleep(2500);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
                     output_label.setVisible(false);
                     btn_run_application.setVisible(true);
-                    setButtonGroupVisibilityForCodeGenerationBtns(true);
+                    setButtonGroupVisibilityForCodeGenerationButtons(true);
                     isCodeGenerationOnGoing = false;
                 } else {
-                    output_label.setText("Error");
-                    setButtonGroupVisibilityForCodeGenerationBtns(true);
-                    isCodeGenerationOnGoing = false;
+                    output_label.setText("Something went wrong :(");
                 }
             });
-        }
 
+        }
     }
 
     /**
-     * A button group broken out for reduce of redundancy
+     * Set the visibility for the create and continue application buttons
      */
-    private void setButtonGroupVisibilityForCodeGenerationBtns(boolean isVisible) {
+    private void setButtonGroupVisibilityForCodeGenerationButtons(boolean isVisible) {
         btn_create_application.setVisible(isVisible);
         btn_continue_on_application.setVisible(isVisible);
     }
 
-    private File showOpenFileDialog() {
+    /**
+     * Set the visibility into false, for the start and stop application buttons (in the main gui)
+     */
+    private void setButtonGroupVisibilityToFalseForStartAndStopApplicationsButtons() {
+        btn_run_application.setVisible(false);
+        btn_StopGeneratedApp.setVisible(false);
+    }
 
+
+    private File showOpenFileDialog() {
         try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Choose A Java file to add functionality to");
             fileChooser.setInitialDirectory(new File(PathConstants.RESOURCE_PATH
                     + StaticAppWishConstants.FOLDER_NAME_OF_GENERATED_JAVA_APPLICATIONS + File.separator));
-
+            // Create an extension filter that filters out .class files
+            FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(StaticAppWishConstants.CONTINUE_ON_APPLICATION_FILTER_ON_JAVA_EXTENSION_DESCRIPTION
+                    , StaticAppWishConstants.CONTINUE_ON_APPLICATION_FILTER_ON_JAVA_EXTENSION);
+            fileChooser.getExtensionFilters().add(extensionFilter);
             return fileChooser.showOpenDialog(getMainStage());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Could not open the window for the file chooser");
             return null;
         }
     }
@@ -328,7 +328,7 @@ public class AppWish extends Application {
         try {
             return Files.readAllLines(Paths.get(file.getAbsolutePath()));
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Could not read the lines of the specified file");
             return null;
         }
     }
