@@ -30,11 +30,10 @@ public class CompileClassTask extends ScriptTask implements Runnable {
     /**
      * Handles the console output from the compile process (javac)
      *
-     * @param javacOutput String that contains an error message from a failed Java compilation
+     * @param javacOutput String that contains error message from a failed Java compilation (if any)
      */
     private void handleConsoleOutput(String javacOutput) {
         assert javacOutput != null;
-        log.info("javacOutput -> " +javacOutput);
         if (javacOutput.isEmpty()) {
             successFullCompilation();
         } else {
@@ -42,12 +41,10 @@ public class CompileClassTask extends ScriptTask implements Runnable {
         }
     }
 
-
     /**
      * Set compilation job to status successful,and add the value to the shared singleton
-     *
      */
-    private  void successFullCompilation() {
+    private void successFullCompilation() {
         log.debug("successFullCompilation");
         CompilationJob compilationJob = new CompilationJob(assumedClassName);
         compilationJob.setResult(true);
@@ -59,7 +56,7 @@ public class CompileClassTask extends ScriptTask implements Runnable {
     /**
      * Set compilation job to status error,and adds the sanitized error String to the shared singleton
      */
-    private  void compilationError(String javacOutput) {
+    private void compilationError(String javacOutput) {
         log.debug("compilationError");
         CompilationJob compilationJob = new CompilationJob(assumedClassName);
         compilationJob.setResult(false);

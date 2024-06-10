@@ -48,15 +48,10 @@ public class AppHistoryController implements Initializable {
     private Process executingJavaAppProcess;
 
 
-
-    private final String R1 = ".class";
-    private final String R2 = ".java";
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        AnchorPane.setRightAnchor(btnMainScene,0d);
-        AnchorPane.setRightAnchor(btnStopApp,80d);
+        AnchorPane.setRightAnchor(btnMainScene, 0d);
+        AnchorPane.setRightAnchor(btnStopApp, 80d);
         btnStopApp.setVisible(false);
         try {
             listHistoryApplications();
@@ -70,26 +65,30 @@ public class AppHistoryController implements Initializable {
 
         btnStopApp.setVisible(true);
         File selectedFile = fileListView.getSelectionModel().selectedItemProperty().getValue();
-        
+
         try {
             ProcessBuilder processBuilder;
 
-            String executePath = selectedFile.getAbsolutePath().replace(R1,R2);
-           
-            processBuilder = new ProcessBuilder(BASH_PATH, C_ARGUMENT,JAVA_TEXT + executePath);
-            executingJavaAppProcess = processBuilder.inheritIO().start();
+            final String r1 = ".class";
+            final String r2 = ".java";
+            final String executePath = selectedFile.getAbsolutePath().replace(r1, r2);
 
-        }
-        catch (IOException e) {
+            processBuilder = new ProcessBuilder(BASH_PATH, C_ARGUMENT, JAVA_TEXT + executePath);
+            executingJavaAppProcess = processBuilder.inheritIO().start();
+        } catch (IOException e) {
             System.out.println("RuntimeException while starting Java executable");
             throw new RuntimeException(e);
         }
     }
 
 
-
     private void listHistoryApplications() throws IOException {
-        File selectedDirectory = new File(PathConstants.RESOURCE_PATH + "java_source_code_classes_tmp"+File.separator);
+        File selectedDirectory = new File(PathConstants.RESOURCE_PATH + "java_source_code_classes_tmp" + File.separator);
+
+        // Removes duplicate files from the generated java apps folder
+        AppWishUtil.removeDuplicateFilesWithAnDollarSign(Arrays.stream(Objects.requireNonNull(selectedDirectory.listFiles()))
+                .collect(Collectors.toList()));
+
         List<File> files = AppWishUtil.filterOnClassPrefix(Arrays.stream(Objects.requireNonNull(selectedDirectory.listFiles()))
                 .collect(Collectors.toList()));
         fileListView.getItems().clear();
@@ -106,6 +105,7 @@ public class AppHistoryController implements Initializable {
             }
         });
     }
+
     @FXML
     private void goToMainScene(ActionEvent ae) {
 
@@ -124,8 +124,8 @@ public class AppHistoryController implements Initializable {
     }
 
     @FXML
-    private void stopExecutedJavaApp(ActionEvent ae){
-
+    private void stopExecutedJavaApp(ActionEvent ae) {
+        btnStopApp.setVisible(false);
         this.executingJavaAppProcess.toHandle().destroy();
     }
 }
