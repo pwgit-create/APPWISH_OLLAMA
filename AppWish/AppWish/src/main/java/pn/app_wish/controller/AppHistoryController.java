@@ -1,19 +1,21 @@
 package pn.app_wish.controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pn.app_wish.AppWish;
 import pn.app_wish.constant.GUIConstants;
+import pn.app_wish.constant.StaticAppWishConstants;
 import pn.app_wish.util.AppWishUtil;
 import pn.cg.datastorage.constant.PathConstants;
 
@@ -21,10 +23,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static pn.app_wish.constant.GUIConstants.DEFAULT_STAGE_TITLE;
@@ -32,6 +33,8 @@ import static pn.app_wish.constant.StaticAppWishConstants.*;
 
 
 public class AppHistoryController implements Initializable {
+
+    private static final Logger log = LoggerFactory.getLogger(AppHistoryController.class);
 
     @FXML
     private ListView<File> fileListView;
@@ -44,6 +47,9 @@ public class AppHistoryController implements Initializable {
 
     @FXML
     private Button btnMainScene;
+
+    @FXML
+    private Button btnDeleteApp;
 
     private Process executingJavaAppProcess;
 
@@ -108,7 +114,9 @@ public class AppHistoryController implements Initializable {
 
     @FXML
     private void goToMainScene(ActionEvent ae) {
-
+        if(this.executingJavaAppProcess != null) {
+            this.executingJavaAppProcess.toHandle().destroy();
+        }
         Pane pane;
         try {
             pane = FXMLLoader.load(
@@ -127,5 +135,43 @@ public class AppHistoryController implements Initializable {
     private void stopExecutedJavaApp(ActionEvent ae) {
         btnStopApp.setVisible(false);
         this.executingJavaAppProcess.toHandle().destroy();
+    }
+
+    @FXML private void showConfirmDialogForDeletionOfAnJavaApplication(ActionEvent ae) {
+
+        if (fileListView != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete an Java Application");
+            alert.setHeaderText("Are you sure?\nYou can´t regret this action later!");
+            alert.setContentText("Do you want to proceed with the action?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                deleteJavaApp(fileListView.getSelectionModel().selectedItemProperty().getValue());
+            } else {log.info("Action Canceled");}
+        }
+    }
+    private void deleteJavaApp(File classFileOfApplication){
+
+        Platform.runLater(() -> {
+
+            try {
+
+                // Delete the Class File of the chosen application
+                Files.delete(classFileOfApplication.toPath());
+                log.info("The class file of your selected application has been deleted");
+            } catch (IOException e) {
+
+                log.error("Could not delete the application");
+            }
+        });
+
+        Platform.runLater(() -> {
+            try {
+                listHistoryApplications();
+                fileListView.refresh();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

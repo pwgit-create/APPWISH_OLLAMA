@@ -83,6 +83,8 @@ public class AppWish extends Application {
     @Override
     public void init() throws Exception {
         super.init();
+
+
     }
 
     @Override
@@ -172,12 +174,15 @@ public class AppWish extends Application {
 
     @FXML
     private void onViewAppHistory(ActionEvent ae) throws IOException {
-        AnchorPane pane = FXMLLoader.load(
-                requireNonNull(getClass().getClassLoader().getResource(GUIConstants.APP_HISTORY_FXML_FILE)));
-        Scene scene = new Scene(pane);
-        mainStage.setScene(scene);
-        mainStage.setTitle(APP_HISTORY_STAGE_TILE);
-        mainStage.show();
+
+        if(!isCodeGenerationOnGoing) {
+            AnchorPane pane = FXMLLoader.load(
+                    requireNonNull(getClass().getClassLoader().getResource(GUIConstants.APP_HISTORY_FXML_FILE)));
+            Scene scene = new Scene(pane);
+            mainStage.setScene(scene);
+            mainStage.setTitle(APP_HISTORY_STAGE_TILE);
+            mainStage.show();
+        }
     }
 
     @FXML
@@ -202,17 +207,34 @@ public class AppWish extends Application {
 
             switch (codeEvent) {
                 case CREATE_APPLICATION:
-                    output_label.setText("Generating code...");
+                    codeEventCreateApplication();
                     break;
                 case CONTINUE_ON_EXISTING_APPLICATION:
-                    output_label.setText("Generating code...\nContinue with existing application");
+                    codeEventContinueAnApplication();
                     break;
             }
 
-            setButtonGroupVisibilityForCodeGenerationButtons(false);
-            btn_StopGeneratedApp.setVisible(false);
         });
     }
+
+    /**
+     * The method for the event CREATE_APPLICATION
+     */
+    private void codeEventCreateApplication(){
+        if(!btn_StopGeneratedApp.isVisible()){
+        setButtonGroupVisibilityForCodeGenerationButtons(false);
+        output_label.setText("Generating code...");
+         }
+    }
+    /**
+     * The method for the event CONTINUE_ON_EXISTING_APPLICATION
+     */
+    private void codeEventContinueAnApplication(){
+        if(!btn_StopGeneratedApp.isVisible()) {
+            setButtonGroupVisibilityForCodeGenerationButtons(false);
+            output_label.setText("Generating code...\nContinue with existing application");
+         }
+        }
 
     /**
      * Create application button event
