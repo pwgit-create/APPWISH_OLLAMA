@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pn.cg.ollama_ai_remote.OllamaRemoteSystem;
+
 import java.util.List;
 
 import static pn.cg.util.CodeGeneratorUtil.isThisACreateNewAppRequest;
@@ -21,25 +22,27 @@ public class AppSystem {
      * @param isFirstRun           Flag that shows if this is the first request attempt to ollama
      * @param appWishCompileResult The method will call itself recursively unless this is true
      */
-    private static void StartCodeGenerator(String appWish, boolean isFirstRun, boolean appWishCompileResult,boolean isCreateAppGeneration, 
-                                            String pathOfJavaFileIfModifyRequest, List<String> javaFileContentInLines) {
-        log.info("Started the AppSystem");
+    private static void StartCodeGenerator(String appWish, boolean isFirstRun, boolean appWishCompileResult, boolean isCreateAppGeneration,
+                                           String pathOfJavaFileIfModifyRequest, List<String> javaFileContentInLines) {
+
 
         OllamaRemoteSystem ollamaRemoteSystem = new OllamaRemoteSystem();
 
         try {
-            Thread.sleep(2500);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
 
+            Thread.currentThread().interrupt();
         }
-        if (isFirstRun) {
 
+
+        if (isFirstRun) {
+            log.info("Started the AppSystem");
             retryCounter = 1;
-            if(isCreateAppGeneration){
-            appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, true,"",null);
-            }
-            else{
-                appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish,true,pathOfJavaFileIfModifyRequest,javaFileContentInLines);
+            if (isCreateAppGeneration) {
+                appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, true, "", null);
+            } else {
+                appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, true, pathOfJavaFileIfModifyRequest, javaFileContentInLines);
             }
         }
 
@@ -53,32 +56,33 @@ public class AppSystem {
             retryCounter++;
             log.debug("In CheckCompilationRetryCounter with counter -> {}", retryCounter);
 
-            if(isCreateAppGeneration)
-            appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, false,"",null);
+            if (isCreateAppGeneration)
+                appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, false, "", null);
             else
-                appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish,false,pathOfJavaFileIfModifyRequest,javaFileContentInLines);
+                appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, false, pathOfJavaFileIfModifyRequest, javaFileContentInLines);
 
-            if(isCreateAppGeneration){
-            StartCodeGenerator(appWish, false, appWishCompileResult,isCreateAppGeneration,"",null);}
-            else{
-            StartCodeGenerator(appWish,false,appWishCompileResult,isCreateAppGeneration,pathOfJavaFileIfModifyRequest,javaFileContentInLines);}
+            if (isCreateAppGeneration) {
+                StartCodeGenerator(appWish, false, appWishCompileResult, isCreateAppGeneration, "", null);
+            } else {
+                StartCodeGenerator(appWish, false, appWishCompileResult, isCreateAppGeneration, pathOfJavaFileIfModifyRequest, javaFileContentInLines);
+            }
         }
     }
 
     /**
      * Create a new App with Code Generation
      */
-   public static void StartCodeGenerator(String appWish){
-                        StartCodeGenerator( appWish,true, false,true,"", null);
-   }
+    public static void StartCodeGenerator(String appWish) {
+        StartCodeGenerator(appWish, true, false, true, "", null);
+    }
 
     /**
      * Continue with improvements for an existing app
      */
-     public static void StartCodeGenerator(String continueWithImprovementText,String javaClassName, List<String> javaFileContentInLines){
-    
-                            StartCodeGenerator(continueWithImprovementText,true, false ,false ,javaClassName,javaFileContentInLines);
-   }
+    public static void StartCodeGenerator(String continueWithImprovementText, String javaClassName, List<String> javaFileContentInLines) {
+
+        StartCodeGenerator(continueWithImprovementText, true, false, false, javaClassName, javaFileContentInLines);
+    }
 
 }
 

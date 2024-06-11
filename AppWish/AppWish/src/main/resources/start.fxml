@@ -24,8 +24,8 @@
                         <Font name="Century" size="18.0"/>
                     </font>
                 </Label>
-                <Button fx:id="btn_create_application" mnemonicParsing="false" onAction="#createApplication"
-                        style="-fx-background-color: #00328c" text="Create application" textFill="WHITE"
+                <Button fx:id="btn_continue_on_application" mnemonicParsing="false" onAction="#continueOnExistingApplication"
+                        style="-fx-background-color: #00328c; -fx-padding:3" text="Continue an app" textFill="WHITE"
                         BorderPane.alignment="BOTTOM_LEFT"/>
             </VBox>
         </bottom>
@@ -62,9 +62,9 @@
             </TextField>
         </center>
         <left>
-            <Button fx:id="btn_continue_on_application" mnemonicParsing="false"
-                    onAction="#continueOnExistingApplication"
-                    style="-fx-background-color: #00328c" text="Continue" textFill="ORANGE"
+            <Button fx:id="btn_create_application" mnemonicParsing="false"
+                    onAction="#createApplication"
+                    style="-fx-background-color: #00328c" text="New App" textFill="WHITE"
                     BorderPane.alignment="BOTTOM_LEFT"/>
         </left>
         <right>
