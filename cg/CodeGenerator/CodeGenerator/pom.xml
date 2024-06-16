@@ -6,7 +6,7 @@
 
     <groupId>pn.dev</groupId>
     <artifactId>code-generator-ollama</artifactId>
-    <version>1.8</version>
+    <version>1.8.1</version>
 
 
     <description>The Java Application-Generator (pn.dev.code-generator-ollama) creates applications by giving a string of your desired features for a Java application, like this: AppSystem.StartCodeGenerator(String appWish)</description>
@@ -49,7 +49,7 @@
 <dependency>
     <groupId>io.github.amithkoujalgi</groupId>
     <artifactId>ollama4j</artifactId>
-    <version>1.0.72</version>
+    <version>1.0.73</version>
 </dependency>
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
         <dependency>
@@ -75,7 +75,7 @@
            <groupId>org.apache.maven.plugins</groupId>
            <artifactId>maven-surefire-plugin</artifactId>
            <scope>test</scope>
-           <version>3.1.2</version>
+           <version>3.3.0</version>
        </dependency>
     </dependencies>
     <build>

@@ -13,26 +13,19 @@ public class PropUtil {
     private static final Logger log = LoggerFactory.getLogger(PropUtil.class);
 
 
+    /**
+     * Extracts a properties file from the project's resource folder and transforms it into a Properties object
+     * @param fileName The name of the file that contains properties is in the resource folder.
+     * @return Properties
+     */
     public static Properties ReadPropertiesFile(String fileName) throws IOException {
-
         Properties properties = null;
-
-        FileInputStream fileInputStream = null;
-
-        try {
-
-            log.info(System.getProperty("user.dir"));
-
-            fileInputStream = new FileInputStream(PathConstants.RESOURCE_PATH + fileName);
+        try (FileInputStream fileInputStream = new FileInputStream(PathConstants.RESOURCE_PATH + fileName))  {
             properties = new Properties();
             properties.load(fileInputStream);
         } catch (IOException ioException) {
-
-            ioException.printStackTrace();
-        } finally {
-            if (fileInputStream != null) fileInputStream.close();
+            log.error("Error on reading props file!");
         }
-
         return properties;
     }
 }
