@@ -35,20 +35,44 @@ public record QuestionConstants() {
     /**
      * Prefix that should be sent to fetch a list of classes from the ollama model
      *
-     * @use-info The app wish should be concatenated at the tail of this String
+     * @use-info The (super) appWish should be concatenated at the tail of this String
      * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
-     * @chain-order 1/2
+     * @chain-order 1/5
+     * @SuperApp-Question
      */
-    public final static String WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX = "Which classes are needed for java code on ";
+    public final static String WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX = "Which classes do we need to implement ourself in java to make an application with the features that is provided in the next coming lines?";
 
     /**
-     * Suffix for WHICH_CLASS_ARE_NEEDED_FOR_APP
-     *
-     * @use-info This String should be concatenated at the tail of the appWish (Instance variable in QuestionBuilder)
+     * @use-info This is the string that will tell the AI-Model that the line above is the last line of the (super) appWish
      * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
-     * @chain-order 2/2
+     * @chain-order 2/5
+     * @SuperApp-Question
      */
-    public final static String WHICH_CLASS_ARE_NEEDED_FOR_APP_SUFFIX = "=? please provide me the java classes in a numbered list ";
+    public final static String LAST_LINE_OF_SUPER_APP="The line above was the last line that included features of the app I need";
+
+    /**
+     *
+     * @use-info Text that specifies the format of the response from the AI-model
+     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
+     * @chain-order 3/5
+     */
+    public final static String WHICH_CLASS_ARE_NEEDED_FOR_APP_RESPONSE_FORMAT_1 = "Please provide the name of the first java class and then make a new line for the second java class and then continue until you have listed all the class names of the application I need";
+
+
+    /**
+     * @use-info Additional guidelines regarding format in the response from the AI-model
+     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
+     * @chain-order 4/5
+     */
+    public final static String ONLY_CLASS_NAMES_IN_ANSWER="Your response should only contain the needed classes name for the application and there should be one class name per line, your reply must not contain anything else";
+
+    /**
+     * @use-info Clarify that no numbers or dots should be included in the response from the AI-model
+     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
+     * @chain-order 5/5
+     */
+    public final static String CLARIFY_THAT_NO_DOTS_OR_NUMBERS_SHOULD_BE_INCLUDED_IN_THE_RESPONSE="Your respone should not contain number and dots to state the order of the classes, there should only be one class name per line and nothing else";
+
 
     /**
      * Optional Suffix to APP_WISH

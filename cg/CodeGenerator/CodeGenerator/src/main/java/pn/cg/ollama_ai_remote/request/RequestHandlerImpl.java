@@ -13,8 +13,10 @@ import io.github.amithkoujalgi.ollama4j.core.models.OllamaResult;
 import io.github.amithkoujalgi.ollama4j.core.utils.Options;
 import io.github.amithkoujalgi.ollama4j.core.utils.OptionsBuilder;
 import io.github.amithkoujalgi.ollama4j.core.utils.PromptBuilder;
+import pn.cg.util.StringUtil;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 import static pn.cg.util.CodeGeneratorUtil.isThisACreateNewAppRequest;
@@ -22,13 +24,27 @@ import static pn.cg.util.CodeGeneratorUtil.isThisACreateNewAppRequest;
 
 public class RequestHandlerImpl implements RequestHandler {
 
-    private final String HOST = "http://localhost:11434/";
-
-
     private static final Logger log = LoggerFactory.getLogger(RequestHandlerImpl.class);
+
+    private final String HOST = "http://localhost:11434/";
+    private final OllamaAPI api;
+    private final Options options;
+    private final CodeGeneratorConfig codeGeneratorConfig;
+
 
     public RequestHandlerImpl() {
 
+        this.api =  new OllamaAPI(HOST);
+        this.codeGeneratorConfig = new CodeGeneratorConfig();
+        this.options = new OptionsBuilder()
+                .setNumCtx(codeGeneratorConfig.getNUM_CTX())
+                .setTopK(codeGeneratorConfig.getTOP_K())
+                .setNumPredict(codeGeneratorConfig.getNUM_PREDICT())
+                .setTemperature(codeGeneratorConfig.getTEMPERATURE())
+                .build();
+
+        api.setRequestTimeoutSeconds(100000);
+        log.info("Is OLLAMA server alive? -> {}", api.ping()); // This is your local OLLAMA server running on localhost and is used for the LLM model
     }
 
     @Override
@@ -40,18 +56,10 @@ public class RequestHandlerImpl implements RequestHandler {
 
     @Override
     public String sendQuestionToOllamaInstance(String question, String pathToJavaFileToModify, List<String> contentOfExistingJavaFile) {
-        OllamaAPI api = new OllamaAPI(HOST);
+
 
         boolean isThisNewAppRequest = isThisACreateNewAppRequest(pathToJavaFileToModify, contentOfExistingJavaFile);
-        CodeGeneratorConfig codeGeneratorConfig = new CodeGeneratorConfig();
 
-        Options options =
-                new OptionsBuilder()
-                        .setNumCtx(codeGeneratorConfig.getNUM_CTX())
-                        .setTopK(codeGeneratorConfig.getTOP_K())
-                        .setNumPredict(codeGeneratorConfig.getNUM_PREDICT())
-                        .setTemperature(codeGeneratorConfig.getTEMPERATURE())
-                        .build();
 
 
         PromptBuilder promptBuilder;
@@ -100,8 +108,7 @@ public class RequestHandlerImpl implements RequestHandler {
                     .addLine(QuestionConstants.ONLY_CODE);
 
         }
-        api.setRequestTimeoutSeconds(100000);
-        log.info("Is OLLAMA server alive? -> {}", api.ping()); // This is your local OLLAMA server running on localhost and is used for the LLM model
+
 
         OllamaResult result = null;
         try {
@@ -114,6 +121,48 @@ public class RequestHandlerImpl implements RequestHandler {
         String outputFromOllamaAPI = (result.getResponse());
         log.debug(outputFromOllamaAPI);
         return outputFromOllamaAPI;
+    }
+
+    @Override
+    public String sendSuperAppQuestionToOllamaInstance(String question) {
+
+
+        List<String> classNames = GetListOfClasses(question);
+
+        if(classNames.isEmpty())
+            sendSuperAppQuestionToOllamaInstance(question);
+
+
+
+
+        return "";
+    }
+
+    private List<String> GetListOfClasses(String question){
+
+        List<String> classNames = new LinkedList<>();
+
+
+        PromptBuilder initialPrompt = new PromptBuilder().addLine(QuestionConstants.WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX)
+                .addLine(question)
+                .addLine(QuestionConstants.LAST_LINE_OF_SUPER_APP)
+                .addLine(QuestionConstants.WHICH_CLASS_ARE_NEEDED_FOR_APP_RESPONSE_FORMAT_1)
+                .addLine(QuestionConstants.ONLY_CLASS_NAMES_IN_ANSWER)
+                .addLine(QuestionConstants.CLARIFY_THAT_NO_DOTS_OR_NUMBERS_SHOULD_BE_INCLUDED_IN_THE_RESPONSE);
+
+
+        OllamaResult result = null;
+        try {
+            result = api.generate(codeGeneratorConfig.getOllamaModel(), initialPrompt.build(), options);
+
+            classNames = StringUtil.GetListOfClassNamesInSuperAppGeneration(result.getResponse());
+
+        } catch (OllamaBaseException | IOException | InterruptedException e) {
+            log.error("Error when sending the request to the local ollama server");
+        }
+
+        return classNames;
+
     }
 
 }

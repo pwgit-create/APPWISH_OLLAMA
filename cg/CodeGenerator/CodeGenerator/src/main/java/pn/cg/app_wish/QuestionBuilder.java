@@ -54,7 +54,7 @@ public class QuestionBuilder {
      */
     public String createClassesNeededForAppWishQuestion() {
 
-        return QuestionConstants.WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX + appWish + QuestionConstants.WHICH_CLASS_ARE_NEEDED_FOR_APP_SUFFIX;
+        return QuestionConstants.WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX + appWish + QuestionConstants.WHICH_CLASS_ARE_NEEDED_FOR_APP_RESPONSE_FORMAT_1;
     }
 
 

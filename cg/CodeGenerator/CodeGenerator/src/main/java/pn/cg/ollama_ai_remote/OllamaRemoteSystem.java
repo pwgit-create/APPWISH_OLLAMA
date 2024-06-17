@@ -4,6 +4,7 @@ package pn.cg.ollama_ai_remote;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pn.cg.app_system.code_generation.ClassCompiler;
+import pn.cg.app_system.code_generation.model.SuperApp;
 import pn.cg.app_wish.QuestionBuilder;
 import pn.cg.datastorage.DataStorage;
 import pn.cg.datastorage.constant.QuestionConstants;
@@ -76,15 +77,14 @@ public class OllamaRemoteSystem {
         if (firstRun) {
             if(isCreateNewApp)
             outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(questionBuilder.createFeatureQuestion());
-            else
-            outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(appWish,ifJavaAppShouldBeModifiedPath,
+            else outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(appWish,ifJavaAppShouldBeModifiedPath,
                     contentOfJavaFileIfModifyRequest);
 
         }
 
         // Extract class name
         String className = StringUtil.extractClassNameFromTextWithJavaClasses(outputFromOLLMA);
-        log.debug("className -> " + className);
+        log.debug("className -> {}", className);
         if (className.equalsIgnoreCase(ERROR)) {
             //log.debug("Empty class name");
         } else {
@@ -125,6 +125,15 @@ public class OllamaRemoteSystem {
         }
         return DataStorage.getInstance().getCompilationJob().isResult();
     }
+
+    public synchronized boolean CreateSuperApp(String superAppWish, boolean firstRun, String ifJavaAppShouldBeModifiedPath, List<String> contentOfJavaFileIfModifyRequest) {
+
+        SuperApp superApp = new SuperApp();
+
+
+        return true;
+    }
+
 
 
     private String checkAndFixUnclosedBraceBuckets(String input) {

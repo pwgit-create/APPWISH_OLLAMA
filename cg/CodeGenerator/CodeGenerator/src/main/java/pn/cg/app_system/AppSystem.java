@@ -3,6 +3,7 @@ package pn.cg.app_system;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pn.cg.app_system.code_generation.model.SuperApp;
 import pn.cg.ollama_ai_remote.OllamaRemoteSystem;
 
 import java.util.List;
@@ -82,6 +83,43 @@ public class AppSystem {
     public static void StartCodeGenerator(String continueWithImprovementText, String javaClassName, List<String> javaFileContentInLines) {
 
         StartCodeGenerator(continueWithImprovementText, true, false, false, javaClassName, javaFileContentInLines);
+    }
+
+    /**
+     * Starts an app generation with the strategy to ask for each class that is needed and then compile each class in a new request until it compiles
+     * @param superAppWish The App Wish from the user
+     * @param isFirstRun Flag that shows if this is the first request attempt to ollama
+     * @param appWishCompileResult The method will call itself recursively unless this is true
+     * @param superApp The data holder for the current super app generation
+     */
+    public static void StartSuperAppGeneration(String superAppWish, boolean isFirstRun, boolean appWishCompileResult, SuperApp superApp){
+        OllamaRemoteSystem ollamaRemoteSystem = new OllamaRemoteSystem();
+
+
+
+        if (isFirstRun) {
+            log.info("Started the AppSystem");
+            retryCounter = 1;
+
+               // appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, true, "", null);
+            }
+
+
+        if (appWishCompileResult) {
+
+            log.info("App System has compiled your app successfully");
+        }
+
+        if (!appWishCompileResult) {
+
+            retryCounter++;
+            log.debug("In CheckCompilationRetryCounter with counter -> {}", retryCounter);
+
+
+                //appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, false, "", null);
+                StartSuperAppGeneration(superAppWish,isFirstRun,appWishCompileResult,superApp);
+            }
+
     }
 
 }

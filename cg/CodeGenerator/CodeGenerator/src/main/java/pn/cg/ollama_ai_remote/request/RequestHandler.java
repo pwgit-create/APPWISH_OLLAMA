@@ -26,4 +26,11 @@ public interface RequestHandler {
      */
     String sendQuestionToOllamaInstance(String question,String pathToJavaFileToModify,List<String> contentOfExistingJavaFile);
 
+    /**
+     *
+     * @param question Question that contains text that describes requirements and functionality of a new super app
+     * @return String
+     */
+    String sendSuperAppQuestionToOllamaInstance(String question);
+
 }

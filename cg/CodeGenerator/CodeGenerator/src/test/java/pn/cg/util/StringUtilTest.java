@@ -274,9 +274,7 @@ public class StringUtilTest {
     public void removeExtraEndDelimitersInResponseTest() {
 
         final String TEST_TEXT = "@START_HERE javacode1.. more java code2... @END_HERE more javacode3.... @END_HERE";
-
         final String expected = "@START_HERE javacode1.. more java code2...  more javacode3.... @END_HERE";
-
         final String actual = StringUtil.RemoveExtraEndDelimitersInResponse(TEST_TEXT);
 
         Assertions.assertEquals(expected, actual);
@@ -288,9 +286,7 @@ public class StringUtilTest {
     public void getUnbalancedBraceBracketsFromStringTest() {
 
         final int expected = 1;
-
         final String text = "public class PN{ Public static void main(String[] args) {}  for(int i=0;i++;i<10){ }";
-
         final int actual = StringUtil.GetUnbalancedBraceBracketsFromString(text);
 
         Assertions.assertEquals(expected, actual);
@@ -301,9 +297,7 @@ public class StringUtilTest {
 
 
         final String text = "```java\npublic class PN{ Public static void main(String[] args) {}  for(int i=0;i++;i<10){ }}\n```";
-
         final String expected = "\npublic class PN{ Public static void main(String[] args) {}  for(int i=0;i++;i<10){ }}\n";
-
         final String actual = StringUtil.RemoveCommonAdditionStringsFromAiModels(text);
 
         Assertions.assertEquals(expected, actual);
@@ -314,12 +308,20 @@ public class StringUtilTest {
 
 
         final String text = "public class PN{ Public static void main(String[] args) {}  for(int i=0;i++;i<10){ }";
-
         final String expected = "public class PN{ Public static void main(String[] args) {}  for(int i=0;i++;i<10){ }}";
-
         final String actual = StringUtil.AppendBraceBucketsAtEndofTheString(text, StringUtil.GetUnbalancedBraceBracketsFromString(text));
 
         Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void ConvertStringWithClassNamesIntoAListTest(){
+
+        final String text ="Jframe\nAccount\nMain";
+        final int expected=3;
+        final int actual = StringUtil.GetListOfClassNamesInSuperAppGeneration(text).size();
+
+        Assertions.assertEquals(expected,actual);
     }
 
 }
