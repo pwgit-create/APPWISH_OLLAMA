@@ -115,14 +115,7 @@ public class AppSystem {
         }
 
 
-
-
-        // Generate each class in the super app class list
-
-        // Invoke call to generate the selected class
-
-
-        // Continue with next class if any unimplemented classes remain, else end the super app creation successfully
+        // Continue with next class (on success) if any unimplemented classes remain, else end the super app creation successfully :)
         if (appWishCompileResult && !superAppCreationComplete) {
 
             log.info("Class Generated\nContinue...");
@@ -130,11 +123,10 @@ public class AppSystem {
             try {
                 // Select the next class to create (from the SuperApp list)
                 SuperApp selectedClassToCreate =  CodeGeneratorUtil.getARandomUnimplementedClass(classList);
-
                 DataStorage.getInstance().setCurrentSuperClass(selectedClassToCreate);
-
+                StartSuperAppGeneration(superAppWish,false,false,classList,false);
             }
-            // Success
+            // Success on the entire super generation!
             catch (NoSuchElementException noSuchElementException){
 
                 log.info("No more classes to implement in super app creation");
@@ -143,7 +135,7 @@ public class AppSystem {
                 if(CodeGeneratorUtil.areAllSuperClassesImplemented(classList))
                     superAppCreationComplete = true;
             }
-            StartSuperAppGeneration(superAppWish,false,false,classList,false);
+
         }
 
         // Retry compilation for a selected class
@@ -153,8 +145,8 @@ public class AppSystem {
 
             // Make a call to
 
-                //appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, false, "", null);
-                //StartSuperAppGeneration(superAppWish,isFirstRun,appWishCompileResult,superApp);
+                appWishCompileResult = ollamaRemoteSystem.CreateSuperApp(DataStorage.getInstance().getCurrentSuperClass(), false);
+                StartSuperAppGeneration(superAppWish,isFirstRun,appWishCompileResult,classList,false);
             }
 
     }

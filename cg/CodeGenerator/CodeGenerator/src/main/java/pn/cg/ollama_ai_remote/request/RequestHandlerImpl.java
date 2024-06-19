@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import static pn.cg.datastorage.constant.QuestionConstants.*;
 import static pn.cg.util.CodeGeneratorUtil.isThisACreateNewAppRequest;
 
 
@@ -67,7 +68,7 @@ public class RequestHandlerImpl implements RequestHandler {
         PromptBuilder promptBuilder;
         if (isThisNewAppRequest) {
             promptBuilder = new PromptBuilder()
-                    .addLine(QuestionConstants.GREETING_TO_MODEL)
+                    .addLine(GREETING_TO_MODEL)
                     .addLine(question)
                     .addLine(QuestionConstants.WITH_MAIN_METHOD)
                     .addLine(QuestionConstants.AND_CORRECT_IMPORTS)
@@ -86,7 +87,7 @@ public class RequestHandlerImpl implements RequestHandler {
         } else {
 
             promptBuilder = new PromptBuilder()
-                    .addLine(QuestionConstants.GREETING_TO_MODEL)
+                    .addLine(GREETING_TO_MODEL)
                     .addLine(QuestionConstants.THANKS_FOR_ALL_GENERATED_APPS)
                     .addLine(QuestionConstants.FUNCTIONALITY_NEEDED);
 
@@ -117,7 +118,7 @@ public class RequestHandlerImpl implements RequestHandler {
             result = api.generate(codeGeneratorConfig.getOllamaModel(), promptBuilder.build(), options);
 
         } catch (OllamaBaseException | IOException | InterruptedException e) {
-            e.printStackTrace();
+           log.error("Error while sending a request to the local Ollama Server");
         }
         if (result == null) throw new AssertionError();
         String outputFromOllamaAPI = (result.getResponse());
@@ -136,6 +137,66 @@ public class RequestHandlerImpl implements RequestHandler {
         return CodeGeneratorUtil.convertListOfStringClassNamesIntoAnListOfUnimplementedSuperAppClasses(classNames);
     }
 
+    @Override
+    public String sendSuperAppQuestionToOllamaInstance(SuperApp superAppClass) {
+
+        PromptBuilder promptBuilder;
+
+        if(!superAppClass.getClassName().equalsIgnoreCase("main")){
+
+            promptBuilder=new PromptBuilder()
+                    .addLine(GREETING_TO_MODEL)
+                    .addLine(IMPLEMENT_MAIN_CLASS_IN_SUPER_APP_CREATION)
+                    .addLine(CORRECT_IMPORTS_SUPER_APP_SPECIFIC)
+                    .addLine(QuestionConstants.INCLUDE_IN_ONE_FILE)
+                    .addLine(QuestionConstants.AND_MAKE_SURE_CORRECT_NUMBER_OF_BRACE_BRACKETS_ARE_USED_AT_THE_END_OF_THE_JAVA_CODE)
+                    .addLine(QuestionConstants.MARK_START_CHAR_DELIMITER)
+                    .addLine(QuestionConstants.MARK_THE_END_CHAR_DELIMITER)
+                    .addLine(QuestionConstants.MAKE_SURE_THAT_START_DELIMITER_CHAR_IS_USED_ONCE)
+                    .addLine(QuestionConstants.MAKE_SURE_THAT_END_DELIMITER_CHAR_IS_USED_ONCE)
+                    .addLine(QuestionConstants.NO_JAVA_FX)
+                    .addLine(QuestionConstants.NO_SPECIAL_LIBRARIES)
+                    .addLine(QuestionConstants.MAKE_SURE_IT_WORKS_ON_JAVA_19)
+                    .addLine(QuestionConstants.IMPLEMENT_AS_MUCH_AS_POSSIBLE)
+                    .addLine(QuestionConstants.THREAD_PACKAGE)
+                    .addLine(QuestionConstants.ONLY_CODE);
+
+            // Instruct in prompt that the main method should be included in this class
+        }
+        else {
+
+            promptBuilder = new PromptBuilder()
+                    .addLine(GREETING_TO_MODEL)
+                    .addLine(PROVIDE_ME_JAVA_CODE_SUPER_APP_SPECIFIC + superAppClass.getClassName())
+                    .addLine(QuestionConstants.CORRECT_IMPORTS_SUPER_APP_SPECIFIC)
+                    .addLine(QuestionConstants.INCLUDE_IN_ONE_FILE)
+                    .addLine(QuestionConstants.AND_MAKE_SURE_CORRECT_NUMBER_OF_BRACE_BRACKETS_ARE_USED_AT_THE_END_OF_THE_JAVA_CODE)
+                    .addLine(QuestionConstants.MARK_START_CHAR_DELIMITER)
+                    .addLine(QuestionConstants.MARK_THE_END_CHAR_DELIMITER)
+                    .addLine(QuestionConstants.MAKE_SURE_THAT_START_DELIMITER_CHAR_IS_USED_ONCE)
+                    .addLine(QuestionConstants.MAKE_SURE_THAT_END_DELIMITER_CHAR_IS_USED_ONCE)
+                    .addLine(QuestionConstants.NO_JAVA_FX)
+                    .addLine(QuestionConstants.NO_SPECIAL_LIBRARIES)
+                    .addLine(QuestionConstants.MAKE_SURE_IT_WORKS_ON_JAVA_19)
+                    .addLine(QuestionConstants.IMPLEMENT_AS_MUCH_AS_POSSIBLE)
+                    .addLine(QuestionConstants.THREAD_PACKAGE)
+                    .addLine(QuestionConstants.ONLY_CODE);
+        }
+
+        OllamaResult result = null;
+        try {
+            result = api.generate(codeGeneratorConfig.getOllamaModel(), promptBuilder.build(), options);
+
+        } catch (OllamaBaseException | IOException | InterruptedException e) {
+            log.error("Error while sending a request to the local Ollama Server");
+        }
+        if (result == null) throw new AssertionError();
+        String outputFromOllamaAPI = (result.getResponse());
+        log.debug(outputFromOllamaAPI);
+        return outputFromOllamaAPI;
+
+    }
+
     private List<String> GetListOfClasses(String question){
 
         List<String> classNames = new LinkedList<>();
@@ -146,8 +207,8 @@ public class RequestHandlerImpl implements RequestHandler {
                 .addLine(QuestionConstants.LAST_LINE_OF_SUPER_APP)
                 .addLine(QuestionConstants.WHICH_CLASS_ARE_NEEDED_FOR_APP_RESPONSE_FORMAT_1)
                 .addLine(QuestionConstants.ONLY_CLASS_NAMES_IN_ANSWER)
-                .addLine(QuestionConstants.CLARIFY_THAT_NO_DOTS_OR_NUMBERS_SHOULD_BE_INCLUDED_IN_THE_RESPONSE);
-
+                .addLine(QuestionConstants.CLARIFY_THAT_NO_DOTS_OR_NUMBERS_SHOULD_BE_INCLUDED_IN_THE_RESPONSE)
+                .addLine(QuestionConstants.MAIN_CLASS_SHOULD_ALWAYS_BE_ADDED_TO_THE_CLASS_LIST);
 
         OllamaResult result = null;
         try {

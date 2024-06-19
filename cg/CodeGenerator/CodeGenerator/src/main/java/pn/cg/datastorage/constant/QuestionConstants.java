@@ -180,10 +180,26 @@ public record QuestionConstants() {
     public final static String PROVIDE_ME_JAVA_CODE_SUPER_APP_SPECIFIC=APP_WISH_PREFIX_FEATURE+"the class with name ";
 
     /***
-     * Clarify the rules for the superapp java class generation to the AI-model
+     * Clarify the rules for the super app java class generation to the AI-model
      */
     public final static String  CLARIFY_JAVA_CODE_IN_SUPER_APP_RULES="Make sure that the generated code for the java class is compatible with the other classes that you stated was needed for the application , that includes correct variable names and correct imports and class names";
+
+    /**
+     * Share information to the AI-Model that it always should include a Main class that contains the Main Method
+     */
+    public final static String MAIN_CLASS_SHOULD_ALWAYS_BE_ADDED_TO_THE_CLASS_LIST="The last entry in the class list that you will provide , please add a class called Main";
+
+    /**
+     * Super App specific variant on the original "AND_CORRECT_IMPORTS" question
+     */
+    public final static String CORRECT_IMPORTS_SUPER_APP_SPECIFIC=AND_CORRECT_IMPORTS + "so that it corresponds with the classes that you stated was needed for this application";
+
+    /**
+     * Share information to the AI-Model about the requirements for the implementation of the Main class ( In a super app generation process)
+     */
+    public final static String IMPLEMENT_MAIN_CLASS_IN_SUPER_APP_CREATION=WITH_MAIN_METHOD +" and that the body of that main method invokes a method in a suiting entry point in on of the other classes that this super app creation includes";
     /// ***** ///
+
 
 
 }

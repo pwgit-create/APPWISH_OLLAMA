@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>pn.dev</groupId>
   <artifactId>code-generator-ollama</artifactId>
-  <version>1.7.2</version>
+  <version>1.8.1</version>
   <description>The Java Application-Generator (pn.dev.code-generator-ollama) creates applications by giving a string of your desired features for a Java application, like this: AppSystem.StartCodeGenerator(String appWish)</description>
   <inceptionYear>2024</inceptionYear>
   <developers>
@@ -86,9 +86,17 @@
     <dependency>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-surefire-plugin</artifactId>
-      <version>3.1.2</version>
+      <version>3.3.0</version>
       <scope>test</scope>
       <exclusions>
+        <exclusion>
+          <artifactId>surefire-api</artifactId>
+          <groupId>org.apache.maven.surefire</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>surefire-extensions-api</artifactId>
+          <groupId>org.apache.maven.surefire</groupId>
+        </exclusion>
         <exclusion>
           <artifactId>maven-surefire-common</artifactId>
           <groupId>org.apache.maven.surefire</groupId>

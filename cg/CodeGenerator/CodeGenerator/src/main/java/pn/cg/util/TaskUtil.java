@@ -8,11 +8,11 @@ public class TaskUtil {
 
     /**
      * Adds the file path to the Java source code folder
-     * @param classname
-     * @return
+     * @param className Name of the class
+     * @return String
      */
-    public static String addFilePathToClassName(String classname){
+    public static String addFilePathToClassName(String className){
 
-        return ScriptConstants.COMPILE_CLASS_STORAGE+ File.separator+classname;
+        return ScriptConstants.COMPILE_CLASS_STORAGE+ File.separator+className;
     }
 }

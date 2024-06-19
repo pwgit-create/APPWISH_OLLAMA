@@ -126,13 +126,93 @@ public class OllamaRemoteSystem {
         return DataStorage.getInstance().getCompilationJob().isResult();
     }
 
+    /**
+     * Get a list of classes needed for the creation of the super app
+     * @param superAppWish The requirements for the super app in text format
+     * @return List<SuperApp>
+     */
     public synchronized List<SuperApp> GetClassListForSuperAppCreation(String superAppWish) {
 
         return requestHandler.sendClassesNeededForSuperAppQuestionToOllamaInstance(superAppWish);
     }
 
+    public synchronized boolean CreateSuperApp(SuperApp classInSuperAppDesign,boolean firstRun){
+
+        QuestionBuilder questionBuilder = new QuestionBuilder(classInSuperAppDesign.getClassName());
+        String outputFromOLLMA = "";
+        boolean isRetryCompilation;
+        boolean tmpRetryCompilationValue;
 
 
+
+        if (firstRun) {
+            isRetryCompilation = false;
+        } else {
+            tmpRetryCompilationValue = DataStorage.getInstance().getCompilationJob().isResult();
+            isRetryCompilation = !tmpRetryCompilationValue;
+        }
+        // Fetch response from OllAMA remote api
+
+        if (isRetryCompilation) {
+            if (DataStorage.getInstance().getCompilationJob() != null && DataStorage.getInstance().getCompilationJob().getErrorMessage() != null) {
+                log.error("Class did not compile\nSending new request... ");
+            }
+            if (DataStorage.getInstance().getCompilationJob() != null && !DataStorage.getInstance().getCompilationJob().isResult()) {
+
+                    outputFromOLLMA = requestHandler.sendSuperAppQuestionToOllamaInstance(classInSuperAppDesign);
+            }
+        }
+
+        // Extract class name
+        String className = StringUtil.extractClassNameFromTextWithJavaClasses(outputFromOLLMA);
+        log.debug("className -> {}", className);
+        if (className.equalsIgnoreCase(ERROR)) {
+            //log.debug("Empty class name");
+        } else {
+
+            String javaSourceCode = outputFromOLLMA;
+
+            javaSourceCode = StringUtil.RemoveExtraStartDelimitersInResponse(javaSourceCode);
+
+            javaSourceCode = StringUtil.RemoveExtraEndDelimitersInResponse(javaSourceCode);
+
+            javaSourceCode = StringUtil.IncludeEveryThingAfterStartChar(javaSourceCode);
+
+            javaSourceCode = StringUtil.RemoveEveryThingAfterEndChar(javaSourceCode);
+
+            javaSourceCode = checkAndFixUnclosedBraceBuckets(javaSourceCode);
+            javaSourceCode = StringUtil.RemoveCommonAdditionStringsFromAiModels(javaSourceCode);
+
+
+            log.info("Java source code after modification = {}", javaSourceCode);
+            // Create file instance with class name and file extension
+            File file = new File(TaskUtil.addFilePathToClassName(className + JAVA_FILE_EXTENSION));
+
+
+
+            // Write the Java code provided from OLLAMA to file
+            try {
+                FileUtil.writeDataToFile(file, javaSourceCode);
+            } catch (IOException e) {
+                log.error(e.toString());
+                throw new RuntimeException(e);
+            }
+
+            classCompiler.compileClass(className);
+
+            while (DataStorage.getInstance().getCompilationJob().isResult() == null) {
+            }
+        }
+        return DataStorage.getInstance().getCompilationJob().isResult();
+
+    }
+
+
+    /**
+     * Checks if the current brace buckets pairs are even and if they are not , Append brace buckets until they are
+     * @param input java code
+     * @return String
+     */
     private String checkAndFixUnclosedBraceBuckets(String input) {
 
 
