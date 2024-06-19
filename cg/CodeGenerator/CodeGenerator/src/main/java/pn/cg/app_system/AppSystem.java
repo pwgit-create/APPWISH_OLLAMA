@@ -4,9 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pn.cg.app_system.code_generation.model.SuperApp;
+import pn.cg.datastorage.DataStorage;
 import pn.cg.ollama_ai_remote.OllamaRemoteSystem;
+import pn.cg.util.CodeGeneratorUtil;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static pn.cg.util.CodeGeneratorUtil.isThisACreateNewAppRequest;
 
@@ -90,34 +93,68 @@ public class AppSystem {
      * @param superAppWish The App Wish from the user
      * @param isFirstRun Flag that shows if this is the first request attempt to ollama
      * @param appWishCompileResult The method will call itself recursively unless this is true
-     * @param superApp The data holder for the current super app generation
+     * @param classList The data holder for the current super app generation implementation status
+     * @param superAppCreationComplete A flag that shows if the entire super app creation is complete or not
      */
-    public static void StartSuperAppGeneration(String superAppWish, boolean isFirstRun, boolean appWishCompileResult, SuperApp superApp){
+    public static void StartSuperAppGeneration(String superAppWish, boolean isFirstRun, boolean appWishCompileResult, List<SuperApp> classList,
+                                               boolean superAppCreationComplete){
         OllamaRemoteSystem ollamaRemoteSystem = new OllamaRemoteSystem();
 
-
-
+        // Get Class names for the super app generation
         if (isFirstRun) {
-            log.info("Started the AppSystem");
+            log.info("Started the Super AppSystem (Long-time code base generation");
             retryCounter = 1;
+            classList = ollamaRemoteSystem.GetClassListForSuperAppCreation(superAppWish);
+            superAppCreationComplete = false;
+            isFirstRun = false;
 
-               // appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, true, "", null);
-            }
+            // Generate the first class in the super app class list
+            SuperApp selectedClassToCreate =  CodeGeneratorUtil.getARandomUnimplementedClass(classList);
+            DataStorage.getInstance().setCurrentSuperClass(selectedClassToCreate);
 
-
-        if (appWishCompileResult) {
-
-            log.info("App System has compiled your app successfully");
         }
 
-        if (!appWishCompileResult) {
+
+
+
+        // Generate each class in the super app class list
+
+        // Invoke call to generate the selected class
+
+
+        // Continue with next class if any unimplemented classes remain, else end the super app creation successfully
+        if (appWishCompileResult && !superAppCreationComplete) {
+
+            log.info("Class Generated\nContinue...");
+
+            try {
+                // Select the next class to create (from the SuperApp list)
+                SuperApp selectedClassToCreate =  CodeGeneratorUtil.getARandomUnimplementedClass(classList);
+
+                DataStorage.getInstance().setCurrentSuperClass(selectedClassToCreate);
+
+            }
+            // Success
+            catch (NoSuchElementException noSuchElementException){
+
+                log.info("No more classes to implement in super app creation");
+
+                // Validate
+                if(CodeGeneratorUtil.areAllSuperClassesImplemented(classList))
+                    superAppCreationComplete = true;
+            }
+            StartSuperAppGeneration(superAppWish,false,false,classList,false);
+        }
+
+        // Retry compilation for a selected class
+        if (!appWishCompileResult && !superAppCreationComplete) {
 
             retryCounter++;
-            log.debug("In CheckCompilationRetryCounter with counter -> {}", retryCounter);
 
+            // Make a call to
 
                 //appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, false, "", null);
-                StartSuperAppGeneration(superAppWish,isFirstRun,appWishCompileResult,superApp);
+                //StartSuperAppGeneration(superAppWish,isFirstRun,appWishCompileResult,superApp);
             }
 
     }

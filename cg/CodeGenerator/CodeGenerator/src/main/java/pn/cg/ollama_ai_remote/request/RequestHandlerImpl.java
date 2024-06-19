@@ -1,6 +1,7 @@
 package pn.cg.ollama_ai_remote.request;
 
 
+import pn.cg.app_system.code_generation.model.SuperApp;
 import pn.cg.datastorage.CodeGeneratorConfig;
 import pn.cg.datastorage.constant.QuestionConstants;
 
@@ -13,6 +14,7 @@ import io.github.amithkoujalgi.ollama4j.core.models.OllamaResult;
 import io.github.amithkoujalgi.ollama4j.core.utils.Options;
 import io.github.amithkoujalgi.ollama4j.core.utils.OptionsBuilder;
 import io.github.amithkoujalgi.ollama4j.core.utils.PromptBuilder;
+import pn.cg.util.CodeGeneratorUtil;
 import pn.cg.util.StringUtil;
 
 import java.io.IOException;
@@ -124,18 +126,14 @@ public class RequestHandlerImpl implements RequestHandler {
     }
 
     @Override
-    public String sendSuperAppQuestionToOllamaInstance(String question) {
-
+    public List<SuperApp> sendClassesNeededForSuperAppQuestionToOllamaInstance(String question) {
 
         List<String> classNames = GetListOfClasses(question);
 
         if(classNames.isEmpty())
-            sendSuperAppQuestionToOllamaInstance(question);
+            sendClassesNeededForSuperAppQuestionToOllamaInstance(question);
 
-
-
-
-        return "";
+        return CodeGeneratorUtil.convertListOfStringClassNamesIntoAnListOfUnimplementedSuperAppClasses(classNames);
     }
 
     private List<String> GetListOfClasses(String question){

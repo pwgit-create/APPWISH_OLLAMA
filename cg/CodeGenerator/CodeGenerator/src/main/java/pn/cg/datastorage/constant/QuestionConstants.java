@@ -32,47 +32,6 @@ public record QuestionConstants() {
     public final static String CLASS_DID_NOT_COMPILE_PREFIX_2 = "The java code you’ve sent me did not compile ";
 
 
-    /**
-     * Prefix that should be sent to fetch a list of classes from the ollama model
-     *
-     * @use-info The (super) appWish should be concatenated at the tail of this String
-     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
-     * @chain-order 1/5
-     * @SuperApp-Question
-     */
-    public final static String WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX = "Which classes do we need to implement ourself in java to make an application with the features that is provided in the next coming lines?";
-
-    /**
-     * @use-info This is the string that will tell the AI-Model that the line above is the last line of the (super) appWish
-     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
-     * @chain-order 2/5
-     * @SuperApp-Question
-     */
-    public final static String LAST_LINE_OF_SUPER_APP="The line above was the last line that included features of the app I need";
-
-    /**
-     *
-     * @use-info Text that specifies the format of the response from the AI-model
-     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
-     * @chain-order 3/5
-     */
-    public final static String WHICH_CLASS_ARE_NEEDED_FOR_APP_RESPONSE_FORMAT_1 = "Please provide the name of the first java class and then make a new line for the second java class and then continue until you have listed all the class names of the application I need";
-
-
-    /**
-     * @use-info Additional guidelines regarding format in the response from the AI-model
-     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
-     * @chain-order 4/5
-     */
-    public final static String ONLY_CLASS_NAMES_IN_ANSWER="Your response should only contain the needed classes name for the application and there should be one class name per line, your reply must not contain anything else";
-
-    /**
-     * @use-info Clarify that no numbers or dots should be included in the response from the AI-model
-     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
-     * @chain-order 5/5
-     */
-    public final static String CLARIFY_THAT_NO_DOTS_OR_NUMBERS_SHOULD_BE_INCLUDED_IN_THE_RESPONSE="Your respone should not contain number and dots to state the order of the classes, there should only be one class name per line and nothing else";
-
 
     /**
      * Optional Suffix to APP_WISH
@@ -161,4 +120,70 @@ public record QuestionConstants() {
 
     public final static String ONLY_CODE ="Your answer should only contain code, any further explanations should be kept as comments within the code";
     /// ***** ///
+
+    /*
+     * Super app - specific questions
+     */
+    /// ***** ///
+
+    /**
+     * Prefix that should be sent to fetch a list of classes from the ollama model
+     *
+     * @use-info The (super) appWish should be concatenated at the tail of this String
+     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
+     * @chain-order 1/5
+     * @SuperApp-Question
+     */
+    public final static String WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX = "Which classes do we need to implement ourself in java to make an application with the features that is provided in the next coming lines?";
+
+    /**
+     * @use-info This is the string that will tell the AI-Model that the line above is the last line of the (super) appWish
+     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
+     * @chain-order 2/5
+     * @SuperApp-Question
+     */
+    public final static String LAST_LINE_OF_SUPER_APP="The line above was the last line that included features of the app I need";
+
+    /**
+     *
+     * @use-info Text that specifies the format of the response from the AI-model
+     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
+     * @chain-order 3/5
+     */
+    public final static String WHICH_CLASS_ARE_NEEDED_FOR_APP_RESPONSE_FORMAT_1 = "Please provide the name of the first java class and then make a new line for the second java class and then continue until you have listed all the class names of the application I need";
+
+
+    /**
+     * @use-info Additional guidelines regarding format in the response from the AI-model
+     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
+     * @chain-order 4/5
+     */
+    public final static String ONLY_CLASS_NAMES_IN_ANSWER="Your response should only contain the needed classes name for the application and there should be one class name per line, your reply must not contain anything else";
+
+    /**
+     * @use-info Clarify that no numbers or dots should be included in the response from the AI-model
+     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
+     * @chain-order 5/5
+     */
+    public final static String CLARIFY_THAT_NO_DOTS_OR_NUMBERS_SHOULD_BE_INCLUDED_IN_THE_RESPONSE="Your response should not contain number and dots to state the order of the classes, there should only be one class name per line and nothing else";
+
+    /**
+     * This is the line that initiates the phase that happens after the classes for the super app has been stated
+     * @use-info Use this when the classes for the super app has been decided as the first line to the AI-model
+     */
+    public final static String FIRST_LINE_AFTER_CLASSES_HAS_BEEN_STATED_BY_MODEL="You have previously stated several classes that is needed to make my application";
+
+    /**
+     * Provide java code for a class
+     * @use-info Append the appWish at the tail of this question
+     */
+    public final static String PROVIDE_ME_JAVA_CODE_SUPER_APP_SPECIFIC=APP_WISH_PREFIX_FEATURE+"the class with name ";
+
+    /***
+     * Clarify the rules for the superapp java class generation to the AI-model
+     */
+    public final static String  CLARIFY_JAVA_CODE_IN_SUPER_APP_RULES="Make sure that the generated code for the java class is compatible with the other classes that you stated was needed for the application , that includes correct variable names and correct imports and class names";
+    /// ***** ///
+
+
 }

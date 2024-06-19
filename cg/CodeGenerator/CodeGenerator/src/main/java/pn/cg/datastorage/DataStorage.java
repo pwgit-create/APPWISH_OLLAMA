@@ -1,6 +1,7 @@
 package pn.cg.datastorage;
 
 import pn.cg.app_system.code_generation.model.CompilationJob;
+import pn.cg.app_system.code_generation.model.SuperApp;
 
 public class DataStorage {
 
@@ -12,6 +13,11 @@ public class DataStorage {
     private volatile CompilationJob compilationJob;
 
     private String javaExecutionPath;
+
+    /**
+     * The class that is selected for implementation tries in a super app creation proccess
+     */
+    private volatile SuperApp currentSuperClass;
 
     private static DataStorage instance;
 
@@ -44,6 +50,14 @@ public class DataStorage {
 
     public void setJavaExecutionPath(String javaExecutionPath) {
         this.javaExecutionPath = javaExecutionPath;
+    }
+
+    public SuperApp getCurrentSuperClass() {
+        return currentSuperClass;
+    }
+
+    public void setCurrentSuperClass(SuperApp currentSuperClass) {
+        this.currentSuperClass = currentSuperClass;
     }
 }
 

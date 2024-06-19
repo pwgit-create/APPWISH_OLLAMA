@@ -126,12 +126,9 @@ public class OllamaRemoteSystem {
         return DataStorage.getInstance().getCompilationJob().isResult();
     }
 
-    public synchronized boolean CreateSuperApp(String superAppWish, boolean firstRun, String ifJavaAppShouldBeModifiedPath, List<String> contentOfJavaFileIfModifyRequest) {
+    public synchronized List<SuperApp> GetClassListForSuperAppCreation(String superAppWish) {
 
-        SuperApp superApp = new SuperApp();
-
-
-        return true;
+        return requestHandler.sendClassesNeededForSuperAppQuestionToOllamaInstance(superAppWish);
     }
 
 

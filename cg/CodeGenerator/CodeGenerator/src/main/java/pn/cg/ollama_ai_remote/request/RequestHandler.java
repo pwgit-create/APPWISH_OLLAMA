@@ -1,5 +1,7 @@
 package pn.cg.ollama_ai_remote.request;
 
+import pn.cg.app_system.code_generation.model.SuperApp;
+
 import java.util.List;
 
 
@@ -29,8 +31,8 @@ public interface RequestHandler {
     /**
      *
      * @param question Question that contains text that describes requirements and functionality of a new super app
-     * @return String
+     * @return List<SuperApp> that contains the class names for the super app (decided by the AI-model) and their implementation status
      */
-    String sendSuperAppQuestionToOllamaInstance(String question);
+    List<SuperApp> sendClassesNeededForSuperAppQuestionToOllamaInstance(String question);
 
 }

@@ -9,19 +9,23 @@ import java.util.List;
  * This class serves as a data holder for the classes needed for an application and their implementation status*/
 public class SuperApp
 {
-    // The first parameter is the class name in text and the second parameter is for its implementation status
-    private final Dictionary<String,Boolean> classesNeededForApplicationDict;
+    private final String className;
+    private boolean isImplemented;
 
-
-    public SuperApp() {
-        this.classesNeededForApplicationDict = new Hashtable<String,Boolean>();
-
+    public SuperApp(String className, boolean isImplemented) {
+        this.className = className;
+        this.isImplemented = isImplemented;
     }
 
+    public String getClassName() {
+        return className;
+    }
 
+    public boolean isImplemented() {
+        return isImplemented;
+    }
 
-    public void AddSuccessfulImplementationToClass(String nameOfClass){
-        this.classesNeededForApplicationDict.put(nameOfClass,true);
-
+    public void setImplemented(boolean implemented) {
+        isImplemented = implemented;
     }
 }
