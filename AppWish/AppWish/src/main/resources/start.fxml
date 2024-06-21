@@ -24,7 +24,7 @@
                 <ImageView fx:id="logo" pickOnBounds="true" preserveRatio="true">
                     <Image url="@shooting_star.png" />
                 </ImageView>
-            <Button fx:id="tmpfortest" onAction="#tmpTestButton" mnemonicParsing="false" text="Temp for test" />
+            <Button fx:id="tmpfortest" mnemonicParsing="false" onAction="#tmpTestButton" style="-fx-background-color: white;" text="Super App (Code Base)" />
             </StackPane>
         </top>
         <center>

@@ -17,6 +17,11 @@ public class DataStorage {
     private String javaExecutionPath;
 
     /**
+     * Data holder for the current Super App Directory name
+     */
+    private String SuperAppDirectoryName;
+
+    /**
      * The class that is selected for implementation tries in a super app creation process
      */
     private volatile SuperApp currentSuperClass;
@@ -69,6 +74,14 @@ public class DataStorage {
 
     public void setSuperAppCreated(boolean superAppCreated) {
         isSuperAppCreated = superAppCreated;
+    }
+
+    public String getSuperAppDirectoryName() {
+        return SuperAppDirectoryName;
+    }
+
+    public void setSuperAppDirectoryName(String superAppDirectoryName) {
+        SuperAppDirectoryName = superAppDirectoryName;
     }
 }
 

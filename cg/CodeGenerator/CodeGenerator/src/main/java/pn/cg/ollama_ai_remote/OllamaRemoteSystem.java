@@ -185,7 +185,7 @@ public class OllamaRemoteSystem {
 
             log.info("Java source code after modification = {}", javaSourceCode);
             // Create file instance with class name and file extension
-            File file = new File(TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION,"Hardcoded_for_test"));
+            File file = new File(TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION,DataStorage.getInstance().getSuperAppDirectoryName()));
 
 
 
@@ -198,7 +198,7 @@ public class OllamaRemoteSystem {
             }
 
             DataStorage.getInstance().getCompilationJob().setResult(null);
-            classCompiler.compileSuperClass(className,"Hardcoded_for_test");
+            classCompiler.compileSuperClass(className,DataStorage.getInstance().getSuperAppDirectoryName());
 
 
         while (DataStorage.getInstance().getCompilationJob().isResult() == null) {

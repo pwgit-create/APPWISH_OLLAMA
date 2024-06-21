@@ -3,6 +3,7 @@ package pn.cg.app_system.code_generation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pn.cg.datastorage.DataStorage;
 import pn.cg.datastorage.ThreadPoolMaster;
 import pn.cg.datastorage.constant.CommonStringConstants;
 import pn.cg.datastorage.constant.ScriptConstants;
@@ -35,7 +36,7 @@ public class ClassCompiler {
         ExecutorService executor = ThreadPoolMaster.getInstance().getExecutor();
 
         if(isSuperAppGeneration)
-            log.info("Compiler path -> {}", TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION,"Hardcoded_for_test"));
+            log.info("Compiler path -> {}", TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION, DataStorage.getInstance().getSuperAppDirectoryName()));
             else
         log.info("Compiler path -> {}", TaskUtil.addFilePathToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION));
 
@@ -43,7 +44,7 @@ public class ClassCompiler {
         log.debug("script used when compiling -> {}", scriptToUse);
 
         if(isSuperAppGeneration)
-           executor.execute(new CompileClassTask(scriptToUse,new String[]{TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION,"Hardcoded_for_test")}));
+           executor.execute(new CompileClassTask(scriptToUse,new String[]{TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION,DataStorage.getInstance().getSuperAppDirectoryName())}));
             else
         executor.execute(new CompileClassTask(scriptToUse, new String[]{TaskUtil.addFilePathToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION)}));
 
