@@ -192,12 +192,18 @@ public record QuestionConstants() {
     /**
      * Super App specific variant on the original "AND_CORRECT_IMPORTS" question
      */
-    public final static String CORRECT_IMPORTS_SUPER_APP_SPECIFIC=AND_CORRECT_IMPORTS + "so that it corresponds with the classes that you stated was needed for this application";
+    public final static String CORRECT_IMPORTS_SUPER_APP_SPECIFIC=AND_CORRECT_IMPORTS + " so that it corresponds with the classes that you stated was needed for this application";
 
     /**
      * Share information to the AI-Model about the requirements for the implementation of the Main class ( In a super app generation process)
      */
     public final static String IMPLEMENT_MAIN_CLASS_IN_SUPER_APP_CREATION=WITH_MAIN_METHOD +" and that the body of that main method invokes a method in a suiting entry point in on of the other classes that this super app creation includes";
+
+    /**
+     * Instruct the AI-Model to not include a main method unless the class name is main
+     */
+    public final static String NO_MAIN_CLASS_UNLESS_THE_CLASS_NAME_IS_MAIN="Do not include a main method unless the class name is Main or main";
+
     /// ***** ///
 
 

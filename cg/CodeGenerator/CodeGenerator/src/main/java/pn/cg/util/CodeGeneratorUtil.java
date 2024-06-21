@@ -49,6 +49,6 @@ public record CodeGeneratorUtil() {
      */
     public static SuperApp getARandomUnimplementedClass(List<SuperApp> classList) throws NoSuchElementException {
 
-        return classList.stream().filter(SuperApp::isImplemented).findAny().orElseThrow();
+        return classList.stream().filter(e -> !e.isImplemented()).findAny().orElseThrow();
     }
 }

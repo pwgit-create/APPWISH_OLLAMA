@@ -4,9 +4,11 @@ package pn.cg.ollama_ai_remote;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pn.cg.app_system.code_generation.ClassCompiler;
+import pn.cg.app_system.code_generation.model.CompilationJob;
 import pn.cg.app_system.code_generation.model.SuperApp;
 import pn.cg.app_wish.QuestionBuilder;
 import pn.cg.datastorage.DataStorage;
+import pn.cg.datastorage.constant.CommonStringConstants;
 import pn.cg.datastorage.constant.QuestionConstants;
 import pn.cg.ollama_ai_remote.request.*;
 import pn.cg.util.CodeGeneratorUtil;
@@ -138,37 +140,34 @@ public class OllamaRemoteSystem {
 
     public synchronized boolean CreateSuperApp(SuperApp classInSuperAppDesign,boolean firstRun){
 
-        QuestionBuilder questionBuilder = new QuestionBuilder(classInSuperAppDesign.getClassName());
         String outputFromOLLMA = "";
-        boolean isRetryCompilation;
-        boolean tmpRetryCompilationValue;
 
 
 
-        if (firstRun) {
-            isRetryCompilation = false;
-        } else {
-            tmpRetryCompilationValue = DataStorage.getInstance().getCompilationJob().isResult();
-            isRetryCompilation = !tmpRetryCompilationValue;
+
+        if (firstRun) {log.info("First run in super app creation+\nNo compile result is yet to exist!");
+
+            outputFromOLLMA = requestHandler.sendSuperAppQuestionToOllamaInstance(classInSuperAppDesign);
+
         }
-        // Fetch response from OllAMA remote api
+        else{
 
-        if (isRetryCompilation) {
-            if (DataStorage.getInstance().getCompilationJob() != null && DataStorage.getInstance().getCompilationJob().getErrorMessage() != null) {
-                log.error("Class did not compile\nSending new request... ");
-            }
             if (DataStorage.getInstance().getCompilationJob() != null && !DataStorage.getInstance().getCompilationJob().isResult()) {
-
-                    outputFromOLLMA = requestHandler.sendSuperAppQuestionToOllamaInstance(classInSuperAppDesign);
+                log.error("Class did not compile\nSending new request... ");
+                outputFromOLLMA = requestHandler.sendSuperAppQuestionToOllamaInstance(classInSuperAppDesign);
             }
+
+            else if (DataStorage.getInstance().getCompilationJob() != null && DataStorage.getInstance().getCompilationJob().isResult()) {
+                log.error("Previous class compiled successfully\nSending new request for the next class in the list... ");
+                outputFromOLLMA = requestHandler.sendSuperAppQuestionToOllamaInstance(classInSuperAppDesign);
+            }
+
         }
 
         // Extract class name
         String className = StringUtil.extractClassNameFromTextWithJavaClasses(outputFromOLLMA);
         log.debug("className -> {}", className);
-        if (className.equalsIgnoreCase(ERROR)) {
-            //log.debug("Empty class name");
-        } else {
+
 
             String javaSourceCode = outputFromOLLMA;
 
@@ -186,7 +185,7 @@ public class OllamaRemoteSystem {
 
             log.info("Java source code after modification = {}", javaSourceCode);
             // Create file instance with class name and file extension
-            File file = new File(TaskUtil.addFilePathToClassName(className + JAVA_FILE_EXTENSION));
+            File file = new File(TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION,"Hardcoded_for_test"));
 
 
 
@@ -198,11 +197,20 @@ public class OllamaRemoteSystem {
                 throw new RuntimeException(e);
             }
 
-            classCompiler.compileClass(className);
+            DataStorage.getInstance().getCompilationJob().setResult(null);
+            classCompiler.compileSuperClass(className,"Hardcoded_for_test");
 
-            while (DataStorage.getInstance().getCompilationJob().isResult() == null) {
-            }
+
+        while (DataStorage.getInstance().getCompilationJob().isResult() == null) {
         }
+
+        if(DataStorage.getInstance().getCompilationJob().isResult()){
+
+            log.info("Successful compilation of class, continue with next class");
+        }
+
+        else{log.info("Class did not compile , try again!");}
+
         return DataStorage.getInstance().getCompilationJob().isResult();
 
     }

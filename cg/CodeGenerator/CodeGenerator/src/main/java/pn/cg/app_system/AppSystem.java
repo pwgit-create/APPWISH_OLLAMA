@@ -7,10 +7,16 @@ import pn.cg.app_system.code_generation.model.SuperApp;
 import pn.cg.datastorage.DataStorage;
 import pn.cg.ollama_ai_remote.OllamaRemoteSystem;
 import pn.cg.util.CodeGeneratorUtil;
+import pn.cg.util.TaskUtil;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static pn.cg.datastorage.constant.ScriptConstants.COMPILE_CLASS_STORAGE;
 import static pn.cg.util.CodeGeneratorUtil.isThisACreateNewAppRequest;
 
 public class AppSystem {
@@ -18,6 +24,7 @@ public class AppSystem {
     private static final Logger log = LoggerFactory.getLogger(AppSystem.class);
 
     private static int retryCounter = 1;
+
 
     /**
      * Makes a request to ollama and retries with a recursive strategy upon failure
@@ -90,26 +97,33 @@ public class AppSystem {
 
     /**
      * Starts an app generation with the strategy to ask for each class that is needed and then compile each class in a new request until it compiles
-     * @param superAppWish The App Wish from the user
-     * @param isFirstRun Flag that shows if this is the first request attempt to ollama
-     * @param appWishCompileResult The method will call itself recursively unless this is true
-     * @param classList The data holder for the current super app generation implementation status
+     *
+     * @param superAppWish             The App Wish from the user
+     * @param isFirstRun               Flag that shows if this is the first request attempt to ollama
+     * @param appWishCompileResult     The method will call itself recursively unless this is true
+     * @param classList                The data holder for the current super app generation implementation status
      * @param superAppCreationComplete A flag that shows if the entire super app creation is complete or not
      */
     public static void StartSuperAppGeneration(String superAppWish, boolean isFirstRun, boolean appWishCompileResult, List<SuperApp> classList,
-                                               boolean superAppCreationComplete){
-        OllamaRemoteSystem ollamaRemoteSystem = new OllamaRemoteSystem();
+                                               boolean superAppCreationComplete, OllamaRemoteSystem ollamaRemoteSystem) {
 
         // Get Class names for the super app generation
         if (isFirstRun) {
-            log.info("Started the Super AppSystem (Long-time code base generation");
+            log.info("Started the Super AppSystem (Long-time code base generation)");
+            ollamaRemoteSystem = new OllamaRemoteSystem();
+
+            try {
+                Files.createDirectory(new File(COMPILE_CLASS_STORAGE + File.separator + "Hardcoded_for_test").toPath());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
             retryCounter = 1;
             classList = ollamaRemoteSystem.GetClassListForSuperAppCreation(superAppWish);
             superAppCreationComplete = false;
-            isFirstRun = false;
 
             // Generate the first class in the super app class list
-            SuperApp selectedClassToCreate =  CodeGeneratorUtil.getARandomUnimplementedClass(classList);
+            SuperApp selectedClassToCreate = CodeGeneratorUtil.getARandomUnimplementedClass(classList);
             DataStorage.getInstance().setCurrentSuperClass(selectedClassToCreate);
 
         }
@@ -120,34 +134,52 @@ public class AppSystem {
 
             log.info("Class Generated\nContinue...");
 
+
             try {
+                log.info("In try block on positive appwishCompileResult");
                 // Select the next class to create (from the SuperApp list)
-                SuperApp selectedClassToCreate =  CodeGeneratorUtil.getARandomUnimplementedClass(classList);
+                SuperApp currentPointerClass = classList.stream().filter(e -> e.getClassName().equalsIgnoreCase(DataStorage.getInstance().getCurrentSuperClass().getClassName())).findAny().get();
+                // Set the successfully compiled class to status implemented
+                currentPointerClass.setImplemented(true);
+                SuperApp selectedClassToCreate = CodeGeneratorUtil.getARandomUnimplementedClass(classList);
                 DataStorage.getInstance().setCurrentSuperClass(selectedClassToCreate);
-                StartSuperAppGeneration(superAppWish,false,false,classList,false);
+
+                // Generate the next class in the list of the super app
+                appWishCompileResult = ollamaRemoteSystem.CreateSuperApp(DataStorage.getInstance().getCurrentSuperClass(), false);
+                StartSuperAppGeneration(superAppWish, false, false, classList, false, ollamaRemoteSystem);
             }
             // Success on the entire super generation!
-            catch (NoSuchElementException noSuchElementException){
+            catch (NoSuchElementException noSuchElementException) {
 
                 log.info("No more classes to implement in super app creation");
 
                 // Validate
-                if(CodeGeneratorUtil.areAllSuperClassesImplemented(classList))
+                if (CodeGeneratorUtil.areAllSuperClassesImplemented(classList))
                     superAppCreationComplete = true;
             }
 
         }
 
+
+        if (isFirstRun) {
+            log.info("In second first run");
+            isFirstRun = false;
+            appWishCompileResult = ollamaRemoteSystem.CreateSuperApp(DataStorage.getInstance().getCurrentSuperClass(), true);
+            StartSuperAppGeneration(superAppWish, isFirstRun, appWishCompileResult, classList, false, ollamaRemoteSystem);
+        }
+
+
         // Retry compilation for a selected class
         if (!appWishCompileResult && !superAppCreationComplete) {
 
+            log.info("In !appwishCompileResult");
             retryCounter++;
 
-            // Make a call to
 
-                appWishCompileResult = ollamaRemoteSystem.CreateSuperApp(DataStorage.getInstance().getCurrentSuperClass(), false);
-                StartSuperAppGeneration(superAppWish,isFirstRun,appWishCompileResult,classList,false);
-            }
+            appWishCompileResult = ollamaRemoteSystem.CreateSuperApp(DataStorage.getInstance().getCurrentSuperClass(), isFirstRun);
+            StartSuperAppGeneration(superAppWish, false, appWishCompileResult, classList, false, ollamaRemoteSystem);
+        }
+
 
     }
 

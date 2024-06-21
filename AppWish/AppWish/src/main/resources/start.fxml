@@ -1,81 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-
-<?import javafx.scene.layout.VBox?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #213c9c;"
-            xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pn.app_wish.AppWish">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #213c9c;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pn.app_wish.AppWish">
     <BorderPane fx:id="bp_main" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #00277c;">
         <bottom>
             <VBox styleClass="sidebar-section">
                 <Label fx:id="output_label" textFill="WHITE" BorderPane.alignment="BOTTOM_RIGHT">
                     <font>
-                        <Font name="Century" size="18.0"/>
+                        <Font name="Century" size="18.0" />
                     </font>
                 </Label>
-                <Button fx:id="btn_continue_on_application" mnemonicParsing="false" onAction="#continueOnExistingApplication"
-                        style="-fx-background-color: #00328c; -fx-padding:3" text="Continue an app" textFill="WHITE"
-                        BorderPane.alignment="BOTTOM_LEFT"/>
+                <Button fx:id="btn_continue_on_application" mnemonicParsing="false" onAction="#continueOnExistingApplication" style="-fx-background-color: #00328c; -fx-padding:3" text="Continue an app" textFill="WHITE" BorderPane.alignment="BOTTOM_LEFT" />
             </VBox>
         </bottom>
         <top>
-            <StackPane maxHeight="-Infinity" maxWidth="-Infinity"
-                       style="-fx-border-style: solid; -fx-background-radius: 2px; -fx-border-color: #00328c; -fx-border-width: 1px;"
-                       BorderPane.alignment="CENTER">
-                <ImageView fx:id="logo" pickOnBounds="true" preserveRatio="true"
-               >
-                    <Image url="@shooting_star.png"/>
+            <StackPane maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-border-style: solid; -fx-background-radius: 2px; -fx-border-color: #00328c; -fx-border-width: 1px;" BorderPane.alignment="CENTER">
+                <ImageView fx:id="logo" pickOnBounds="true" preserveRatio="true">
+                    <Image url="@shooting_star.png" />
                 </ImageView>
+            <Button fx:id="tmpfortest" onAction="#tmpTestButton" mnemonicParsing="false" text="Temp for test" />
             </StackPane>
         </top>
         <center>
-            <TextField fx:id="tf_input" alignment="CENTER"
-                       style="-fx-border-color: blue; -fx-focus-traversable: true; -fx-padding: 3; position:center"
-                       BorderPane.alignment="CENTER">
+            <TextField fx:id="tf_input" alignment="CENTER" style="-fx-border-color: blue; -fx-focus-traversable: true; -fx-padding: 3; position:center" BorderPane.alignment="CENTER">
                 <font>
-                    <Font name="Aria" size="12.0"/>
+                    <Font name="Aria" size="12.0" />
                 </font>
 
                 <BorderPane.margin>
-                    <Insets/>
+                    <Insets />
                 </BorderPane.margin>
                 <cursor>
-                    <Cursor fx:constant="TEXT"/>
+                    <Cursor fx:constant="TEXT" />
                 </cursor>
                 <opaqueInsets>
-                    <Insets/>
+                    <Insets />
                 </opaqueInsets>
                 <padding>
-                    <Insets top="50.0"/>
+                    <Insets top="50.0" />
                 </padding>
             </TextField>
         </center>
         <left>
-            <Button fx:id="btn_create_application" mnemonicParsing="false"
-                    onAction="#createApplication"
-                    style="-fx-background-color: #00328c" text="New App" textFill="WHITE"
-                    BorderPane.alignment="BOTTOM_LEFT"/>
+            <Button fx:id="btn_create_application" mnemonicParsing="false" onAction="#createApplication" style="-fx-background-color: #00328c" text="New App" textFill="WHITE" BorderPane.alignment="BOTTOM_LEFT" />
         </left>
         <right>
-            <Button fx:id="btn_app_history" mnemonicParsing="false" onAction="#onViewAppHistory"
-                    style="-fx-background-color: #00328c" text="Apps" textFill="WHITE"
-                    BorderPane.alignment="CENTER_RIGHT"/>
+            <Button fx:id="btn_app_history" mnemonicParsing="false" onAction="#onViewAppHistory" style="-fx-background-color: #00328c" text="Apps" textFill="WHITE" BorderPane.alignment="CENTER_RIGHT" />
         </right>
     </BorderPane>
-    <Button fx:id="btn_run_application" visible="false" onAction="#onRunJavaApp" mnemonicParsing="false"
-            style="-fx-background-color: green;" text="Run application" textFill="WHITE"/>
-    <Button fx:id="btn_StopGeneratedApp" visible="false" mnemonicParsing="false"
-            onAction="#stopExecutedGeneratedJavaApp" style="-fx-background-color: red" text="Stop app"
-            textFill="WHITE"/>
+    <Button fx:id="btn_run_application" mnemonicParsing="false" onAction="#onRunJavaApp" style="-fx-background-color: green;" text="Run application" textFill="WHITE" visible="false" />
+    <Button fx:id="btn_StopGeneratedApp" mnemonicParsing="false" onAction="#stopExecutedGeneratedJavaApp" style="-fx-background-color: red" text="Stop app" textFill="WHITE" visible="false" />
 </AnchorPane>

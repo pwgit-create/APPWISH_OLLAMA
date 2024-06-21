@@ -142,10 +142,11 @@ public class RequestHandlerImpl implements RequestHandler {
 
         PromptBuilder promptBuilder;
 
-        if(!superAppClass.getClassName().equalsIgnoreCase("main")){
+        if(superAppClass.getClassName().equalsIgnoreCase("main")){
 
             promptBuilder=new PromptBuilder()
                     .addLine(GREETING_TO_MODEL)
+                    .addLine(PROVIDE_ME_JAVA_CODE_SUPER_APP_SPECIFIC + superAppClass.getClassName())
                     .addLine(IMPLEMENT_MAIN_CLASS_IN_SUPER_APP_CREATION)
                     .addLine(CORRECT_IMPORTS_SUPER_APP_SPECIFIC)
                     .addLine(QuestionConstants.INCLUDE_IN_ONE_FILE)
@@ -164,12 +165,12 @@ public class RequestHandlerImpl implements RequestHandler {
             // Instruct in prompt that the main method should be included in this class
         }
         else {
-
+            log.info("In else promptbuilder");
             promptBuilder = new PromptBuilder()
                     .addLine(GREETING_TO_MODEL)
                     .addLine(PROVIDE_ME_JAVA_CODE_SUPER_APP_SPECIFIC + superAppClass.getClassName())
                     .addLine(QuestionConstants.CORRECT_IMPORTS_SUPER_APP_SPECIFIC)
-                    .addLine(QuestionConstants.INCLUDE_IN_ONE_FILE)
+                    .addLine(NO_MAIN_CLASS_UNLESS_THE_CLASS_NAME_IS_MAIN)
                     .addLine(QuestionConstants.AND_MAKE_SURE_CORRECT_NUMBER_OF_BRACE_BRACKETS_ARE_USED_AT_THE_END_OF_THE_JAVA_CODE)
                     .addLine(QuestionConstants.MARK_START_CHAR_DELIMITER)
                     .addLine(QuestionConstants.MARK_THE_END_CHAR_DELIMITER)
@@ -192,7 +193,7 @@ public class RequestHandlerImpl implements RequestHandler {
         }
         if (result == null) throw new AssertionError();
         String outputFromOllamaAPI = (result.getResponse());
-        log.debug(outputFromOllamaAPI);
+        log.info(outputFromOllamaAPI);
         return outputFromOllamaAPI;
 
     }

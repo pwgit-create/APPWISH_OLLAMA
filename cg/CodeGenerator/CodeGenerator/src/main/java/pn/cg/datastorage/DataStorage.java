@@ -12,10 +12,12 @@ public class DataStorage {
      */
     private volatile CompilationJob compilationJob;
 
+    private boolean isSuperAppCreated;
+
     private String javaExecutionPath;
 
     /**
-     * The class that is selected for implementation tries in a super app creation proccess
+     * The class that is selected for implementation tries in a super app creation process
      */
     private volatile SuperApp currentSuperClass;
 
@@ -24,6 +26,7 @@ public class DataStorage {
     private DataStorage() {
 
         this.compilationJob = getCompilationJob();
+        this.isSuperAppCreated = false;
     }
 
 
@@ -58,6 +61,14 @@ public class DataStorage {
 
     public void setCurrentSuperClass(SuperApp currentSuperClass) {
         this.currentSuperClass = currentSuperClass;
+    }
+
+    public boolean isSuperAppCreated() {
+        return isSuperAppCreated;
+    }
+
+    public void setSuperAppCreated(boolean superAppCreated) {
+        isSuperAppCreated = superAppCreated;
     }
 }
 

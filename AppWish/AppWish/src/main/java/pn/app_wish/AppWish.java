@@ -29,6 +29,7 @@ import pn.app_wish.constant.StaticAppWishConstants;
 import pn.app_wish.util.AppWishUtil;
 import pn.cg.app_system.AppSystem;
 import pn.cg.app_system.code_generation.model.CompilationJob;
+import pn.cg.app_system.code_generation.model.SuperApp;
 import pn.cg.datastorage.DataStorage;
 import pn.cg.datastorage.ThreadPoolMaster;
 import pn.cg.datastorage.constant.PathConstants;
@@ -38,6 +39,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -67,6 +69,8 @@ public class AppWish extends Application {
     public Button btn_StopGeneratedApp;
     @FXML
     public ImageView logo;
+    @FXML
+    public Button tmpfortest;
 
     private String javaExecutablePath;
     private Process executingJavaAppProcess;
@@ -290,6 +294,11 @@ public class AppWish extends Application {
         }
     }
 
+    private void waitUntilAllClassesOfTheSuperAppCreationHasBeenImplemented(){
+
+        while(!DataStorage.getInstance().isSuperAppCreated()){}
+    }
+
     /**
      * If a compilation result exist , check if the singleton in code-generator-ollama contains a path for an executable Java file
      * If the above is true , activate the "run application" button and remove the "generating code..." text
@@ -354,4 +363,19 @@ public class AppWish extends Application {
             return null;
         }
     }
+
+    @FXML
+    public void tmpTestButton(ActionEvent ae) {
+
+        isCodeGenerationOnGoing = true;
+
+        DataStorage.getInstance().setCompilationJob(new CompilationJob(GUIConstants.DEFAULT_STAGE_TITLE));
+        ThreadPoolMaster.getInstance().getExecutor().execute(() -> {
+            AppSystem.StartSuperAppGeneration(tf_input.getText(), true, false, new LinkedList<>(), false, null);
+
+
+        });
+
+    }
+
 }
