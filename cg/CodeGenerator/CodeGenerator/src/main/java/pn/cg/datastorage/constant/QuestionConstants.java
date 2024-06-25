@@ -197,7 +197,7 @@ public record QuestionConstants() {
     /**
      * Share information to the AI-Model about the requirements for the implementation of the Main class ( In a super app generation process)
      */
-    public final static String IMPLEMENT_MAIN_CLASS_IN_SUPER_APP_CREATION=WITH_MAIN_METHOD +" and that the body of that main method invokes a method in a suiting entry point in on of the other classes that this super app creation includes";
+    public final static String IMPLEMENT_MAIN_CLASS_IN_SUPER_APP_CREATION=WITH_MAIN_METHOD +" and that the body of that main method is empty or invokes a method in one of the other classes that we generated before";
 
     /**
      * Instruct the AI-Model to not include a main method unless the class name is main

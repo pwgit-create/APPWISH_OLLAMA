@@ -53,7 +53,7 @@ public class OllamaRemoteSystem {
         boolean isRetryCompilation;
         boolean tmpRetryCompilationValue;
 
-        boolean isCreateNewApp = CodeGeneratorUtil.isThisACreateNewAppRequest(ifJavaAppShouldBeModifiedPath,contentOfJavaFileIfModifyRequest);
+        boolean isCreateNewApp = CodeGeneratorUtil.isThisACreateNewAppRequest(ifJavaAppShouldBeModifiedPath, contentOfJavaFileIfModifyRequest);
 
         if (firstRun) {
             isRetryCompilation = false;
@@ -68,18 +68,18 @@ public class OllamaRemoteSystem {
                 log.error("Class did not compile\nSending new request... ");
             }
             if (DataStorage.getInstance().getCompilationJob() != null && !DataStorage.getInstance().getCompilationJob().isResult()) {
-                if(isCreateNewApp)
-                outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(QuestionConstants.CLASS_DID_NOT_COMPILE_PREFIX_2 + questionBuilder.createFeatureQuestion());
-           else{
-               outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(QuestionConstants.CLASS_DID_NOT_COMPILE_PREFIX_2 + appWish,ifJavaAppShouldBeModifiedPath,contentOfJavaFileIfModifyRequest);
-           }
+                if (isCreateNewApp)
+                    outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(QuestionConstants.CLASS_DID_NOT_COMPILE_PREFIX_2 + questionBuilder.createFeatureQuestion());
+                else {
+                    outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(QuestionConstants.CLASS_DID_NOT_COMPILE_PREFIX_2 + appWish, ifJavaAppShouldBeModifiedPath, contentOfJavaFileIfModifyRequest);
+                }
             }
         }
 
         if (firstRun) {
-            if(isCreateNewApp)
-            outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(questionBuilder.createFeatureQuestion());
-            else outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(appWish,ifJavaAppShouldBeModifiedPath,
+            if (isCreateNewApp)
+                outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(questionBuilder.createFeatureQuestion());
+            else outputFromOLLMA = requestHandler.sendQuestionToOllamaInstance(appWish, ifJavaAppShouldBeModifiedPath,
                     contentOfJavaFileIfModifyRequest);
 
         }
@@ -130,6 +130,7 @@ public class OllamaRemoteSystem {
 
     /**
      * Get a list of classes needed for the creation of the super app
+     *
      * @param superAppWish The requirements for the super app in text format
      * @return List<SuperApp>
      */
@@ -138,26 +139,22 @@ public class OllamaRemoteSystem {
         return requestHandler.sendClassesNeededForSuperAppQuestionToOllamaInstance(superAppWish);
     }
 
-    public synchronized boolean CreateSuperApp(SuperApp classInSuperAppDesign,boolean firstRun){
+    public synchronized boolean CreateSuperApp(SuperApp classInSuperAppDesign, boolean firstRun) {
 
         String outputFromOLLMA = "";
 
 
-
-
-        if (firstRun) {log.info("First run in super app creation+\nNo compile result is yet to exist!");
+        if (firstRun) {
+            log.info("First run in super app creation+\nNo compile result is yet to exist!");
 
             outputFromOLLMA = requestHandler.sendSuperAppQuestionToOllamaInstance(classInSuperAppDesign);
 
-        }
-        else{
+        } else {
 
             if (DataStorage.getInstance().getCompilationJob() != null && !DataStorage.getInstance().getCompilationJob().isResult()) {
                 log.error("Class did not compile\nSending new request... ");
                 outputFromOLLMA = requestHandler.sendSuperAppQuestionToOllamaInstance(classInSuperAppDesign);
-            }
-
-            else if (DataStorage.getInstance().getCompilationJob() != null && DataStorage.getInstance().getCompilationJob().isResult()) {
+            } else if (DataStorage.getInstance().getCompilationJob() != null && DataStorage.getInstance().getCompilationJob().isResult()) {
                 log.error("Previous class compiled successfully\nSending new request for the next class in the list... ");
                 outputFromOLLMA = requestHandler.sendSuperAppQuestionToOllamaInstance(classInSuperAppDesign);
             }
@@ -169,47 +166,46 @@ public class OllamaRemoteSystem {
         log.debug("className -> {}", className);
 
 
-            String javaSourceCode = outputFromOLLMA;
+        String javaSourceCode = outputFromOLLMA;
 
-            javaSourceCode = StringUtil.RemoveExtraStartDelimitersInResponse(javaSourceCode);
+        javaSourceCode = StringUtil.RemoveExtraStartDelimitersInResponse(javaSourceCode);
 
-            javaSourceCode = StringUtil.RemoveExtraEndDelimitersInResponse(javaSourceCode);
+        javaSourceCode = StringUtil.RemoveExtraEndDelimitersInResponse(javaSourceCode);
 
-            javaSourceCode = StringUtil.IncludeEveryThingAfterStartChar(javaSourceCode);
+        javaSourceCode = StringUtil.IncludeEveryThingAfterStartChar(javaSourceCode);
 
-            javaSourceCode = StringUtil.RemoveEveryThingAfterEndChar(javaSourceCode);
+        javaSourceCode = StringUtil.RemoveEveryThingAfterEndChar(javaSourceCode);
 
-            javaSourceCode = checkAndFixUnclosedBraceBuckets(javaSourceCode);
-            javaSourceCode = StringUtil.RemoveCommonAdditionStringsFromAiModels(javaSourceCode);
-
-
-            log.info("Java source code after modification = {}", javaSourceCode);
-            // Create file instance with class name and file extension
-            File file = new File(TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION,DataStorage.getInstance().getSuperAppDirectoryName()));
+        javaSourceCode = checkAndFixUnclosedBraceBuckets(javaSourceCode);
+        javaSourceCode = StringUtil.RemoveCommonAdditionStringsFromAiModels(javaSourceCode);
 
 
+        log.info("Java source code after modification = {}", javaSourceCode);
+        // Create file instance with class name and file extension
+        File file = new File(TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION, DataStorage.getInstance().getSuperAppDirectoryName()));
 
-            // Write the Java code provided from OLLAMA to file
-            try {
-                FileUtil.writeDataToFile(file, javaSourceCode);
-            } catch (IOException e) {
-                log.error(e.toString());
-                throw new RuntimeException(e);
-            }
 
-            DataStorage.getInstance().getCompilationJob().setResult(null);
-            classCompiler.compileSuperClass(className,DataStorage.getInstance().getSuperAppDirectoryName());
+        // Write the Java code provided from OLLAMA to file
+        try {
+            FileUtil.writeDataToFile(file, javaSourceCode);
+        } catch (IOException e) {
+            log.error(e.toString());
+            throw new RuntimeException(e);
+        }
+
+        DataStorage.getInstance().getCompilationJob().setResult(null);
+        classCompiler.compileSuperClass(className, DataStorage.getInstance().getSuperAppDirectoryName());
 
 
         while (DataStorage.getInstance().getCompilationJob().isResult() == null) {
         }
 
-        if(DataStorage.getInstance().getCompilationJob().isResult()){
+        if (DataStorage.getInstance().getCompilationJob().isResult()) {
 
             log.info("Successful compilation of class, continue with next class");
+        } else {
+            log.info("Class did not compile , try again!");
         }
-
-        else{log.info("Class did not compile , try again!");}
 
         return DataStorage.getInstance().getCompilationJob().isResult();
 
@@ -218,6 +214,7 @@ public class OllamaRemoteSystem {
 
     /**
      * Checks if the current brace buckets pairs are even and if they are not , Append brace buckets until they are
+     *
      * @param input java code
      * @return String
      */

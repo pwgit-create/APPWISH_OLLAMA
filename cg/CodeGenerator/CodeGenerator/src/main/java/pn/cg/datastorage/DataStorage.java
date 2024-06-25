@@ -3,6 +3,8 @@ package pn.cg.datastorage;
 import pn.cg.app_system.code_generation.model.CompilationJob;
 import pn.cg.app_system.code_generation.model.SuperApp;
 
+import java.util.List;
+
 public class DataStorage {
 
     /**
@@ -15,6 +17,7 @@ public class DataStorage {
     private boolean isSuperAppCreated;
 
     private String javaExecutionPath;
+
 
     /**
      * Data holder for the current Super App Directory name
@@ -83,6 +86,7 @@ public class DataStorage {
     public void setSuperAppDirectoryName(String superAppDirectoryName) {
         SuperAppDirectoryName = superAppDirectoryName;
     }
+
 }
 
 

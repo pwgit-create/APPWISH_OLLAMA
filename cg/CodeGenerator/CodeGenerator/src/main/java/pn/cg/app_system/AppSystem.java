@@ -162,10 +162,7 @@ public class AppSystem {
             catch (NoSuchElementException noSuchElementException) {
 
                 log.info("No more classes to implement in super app creation");
-
-                // Validate
-                if (CodeGeneratorUtil.areAllSuperClassesImplemented(classList))
-                    superAppCreationComplete = true;
+                superAppCreationComplete = true;
             }
 
         }

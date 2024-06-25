@@ -165,7 +165,7 @@ public class RequestHandlerImpl implements RequestHandler {
             // Instruct in prompt that the main method should be included in this class
         }
         else {
-            log.info("In else promptbuilder");
+
             promptBuilder = new PromptBuilder()
                     .addLine(GREETING_TO_MODEL)
                     .addLine(PROVIDE_ME_JAVA_CODE_SUPER_APP_SPECIFIC + superAppClass.getClassName())
