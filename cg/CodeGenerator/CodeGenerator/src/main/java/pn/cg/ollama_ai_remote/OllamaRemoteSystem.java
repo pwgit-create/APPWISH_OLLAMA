@@ -30,6 +30,8 @@ public class OllamaRemoteSystem {
 
     private final ClassCompiler classCompiler;
 
+
+
     private final RequestHandler requestHandler;
     private static final Logger log = LoggerFactory.getLogger(OllamaRemoteSystem.class);
 
@@ -129,14 +131,15 @@ public class OllamaRemoteSystem {
     }
 
     /**
-     * Get a list of classes needed for the creation of the super app
+     * Get a list of classes needed for the creation of the super app and sets the output list as reference in the shared singleton
      *
      * @param superAppWish The requirements for the super app in text format
      * @return List<SuperApp>
      */
     public synchronized List<SuperApp> GetClassListForSuperAppCreation(String superAppWish) {
-
-        return requestHandler.sendClassesNeededForSuperAppQuestionToOllamaInstance(superAppWish);
+        List<SuperApp> superAppList = requestHandler.sendClassesNeededForSuperAppQuestionToOllamaInstance(superAppWish);
+        DataStorage.getInstance().setListOfCurrentSuperAppClasses(superAppList);
+        return superAppList;
     }
 
     public synchronized boolean CreateSuperApp(SuperApp classInSuperAppDesign, boolean firstRun) {
@@ -201,6 +204,9 @@ public class OllamaRemoteSystem {
         }
 
         if (DataStorage.getInstance().getCompilationJob().isResult()) {
+
+            // Set methods for the implemented class SuperApp Class representation
+            CodeGeneratorUtil.SetMethodListForImplementedClass(className,outputFromOLLMA);
 
             log.info("Successful compilation of class, continue with next class");
         } else {

@@ -124,14 +124,21 @@ public class AppSystem {
             superAppCreationComplete = false;
 
             // Set pointer class in singleton into one of the classes in the class list
-            SuperApp selectedClassToCreate = CodeGeneratorUtil.getARandomUnimplementedClass(classList);
+            SuperApp selectedClassToCreate = CodeGeneratorUtil.getARandomUnimplementedClass();
             DataStorage.getInstance().setCurrentSuperClass(selectedClassToCreate);
 
             // Generate the first class in the super app class list
             appWishCompileResult = ollamaRemoteSystem.CreateSuperApp(selectedClassToCreate, true);
 
             if (appWishCompileResult) {
-                DataStorage.getInstance().getCurrentSuperClass().setImplemented(true);
+              SuperApp currentWorkingClass =DataStorage.getInstance().getCurrentSuperClass();
+                DataStorage.getInstance().getListOfCurrentSuperAppClasses()
+                        .stream()
+                        .filter(e -> e.getClassName()
+                                .equalsIgnoreCase(currentWorkingClass.getClassName()))
+                        .findFirst()
+                        .get()
+                        .setImplemented(true);
             }
             StartSuperAppGeneration(superAppWish, false, appWishCompileResult, classList, false, ollamaRemoteSystem);
         }
@@ -144,7 +151,7 @@ public class AppSystem {
 
             try {
                 // Select the next class to create (from the super app list) or complete the super app creation if no unimplemented elements exist
-                SuperApp selectedClassToCreate = CodeGeneratorUtil.getARandomUnimplementedClass(classList);
+                SuperApp selectedClassToCreate = CodeGeneratorUtil.getARandomUnimplementedClass();
                 DataStorage.getInstance().setCurrentSuperClass(selectedClassToCreate);
 
                 // Generate the next class in the list of the super app
@@ -152,7 +159,16 @@ public class AppSystem {
 
                 if (appWishCompileResult) {
                     // Set the successfully compiled class to status implemented
-                    DataStorage.getInstance().getCurrentSuperClass().setImplemented(true);
+                    SuperApp currentWorkingClass =DataStorage.getInstance().getCurrentSuperClass();
+
+                    DataStorage.getInstance().getListOfCurrentSuperAppClasses()
+                            .stream()
+                            .filter(e -> e.getClassName()
+                                    .equalsIgnoreCase(currentWorkingClass.getClassName()))
+                            .findFirst()
+                            .get()
+                            .setImplemented(true);
+
                 }
                 StartSuperAppGeneration(superAppWish, false, appWishCompileResult, classList, false, ollamaRemoteSystem);
             }
@@ -175,9 +191,28 @@ public class AppSystem {
             appWishCompileResult = ollamaRemoteSystem.CreateSuperApp(DataStorage.getInstance().getCurrentSuperClass(), false);
 
             if (appWishCompileResult) {
-                DataStorage.getInstance().getCurrentSuperClass().setImplemented(true);
+                SuperApp currentWorkingClass =DataStorage.getInstance().getCurrentSuperClass();
+
+                DataStorage.getInstance().getListOfCurrentSuperAppClasses()
+                        .stream()
+                        .filter(e -> e.getClassName()
+                                .equalsIgnoreCase(currentWorkingClass.getClassName()))
+                        .findFirst()
+                        .get()
+                        .setImplemented(true);
+
+                try{
+                SuperApp selectedClassToCreate = CodeGeneratorUtil.getARandomUnimplementedClass();
+                DataStorage.getInstance().setCurrentSuperClass(selectedClassToCreate);}
+
+                catch (NoSuchElementException e){
+
+                    log.info("No more classes to implement in super app creation");
+                    superAppCreationComplete = true;
+                }
             }
-            StartSuperAppGeneration(superAppWish, false, appWishCompileResult, classList, false, ollamaRemoteSystem);
+            if(!superAppCreationComplete){
+            StartSuperAppGeneration(superAppWish, false, appWishCompileResult, classList, false, ollamaRemoteSystem);}
         }
     }
 

@@ -1,5 +1,7 @@
 package pn.cg.datastorage.constant;
 
+import javax.print.DocFlavor;
+
 public record QuestionConstants() {
 
     /**
@@ -203,6 +205,22 @@ public record QuestionConstants() {
      * Instruct the AI-Model to not include a main method unless the class name is main
      */
     public final static String NO_MAIN_CLASS_UNLESS_THE_CLASS_NAME_IS_MAIN="Do not include a main method unless the class name is Main or main";
+
+    /**
+     * Remind the AI-Model that the current class generation should consider the other classes (of the entire super app)
+     */
+    public final static String MAKE_SURE_IT_ALIGNS_WITH_OTHER_CLASSES="Please make sure that the class you are generating now will work with the following classes that we generated previously and implemented and if you forgot their names they will be provided for you in the next lines along with the methods that it contains";
+
+    /**
+     * Just a line stating that for the AI-Model that the line above was the last line of the list of classes and their method members
+     */
+    public final static String THAT_WAS_THE_LAST_LINE_OF_REMEMBER_CLASSES="The line above was the last line of class names to consider when creating the class";
+
+
+    /**
+     * Instruct the AI Model to consider the import statements for the classes that are part of the entire super app and is used in the current class
+     */
+    public final static String IF_YOU_USE_CLASSES_OF_YOURS_REMEMBER_TO_ADD_THOSE_AS_IMPORTS_IN_THE_CODE="If you use references to any of the classes you created previously , please remember to add those classes as imports in the code of the current class";
 
     /// ***** ///
 

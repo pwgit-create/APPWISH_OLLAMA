@@ -3,6 +3,7 @@ package pn.cg.ollama_ai_remote.request;
 
 import pn.cg.app_system.code_generation.model.SuperApp;
 import pn.cg.datastorage.CodeGeneratorConfig;
+import pn.cg.datastorage.DataStorage;
 import pn.cg.datastorage.constant.QuestionConstants;
 
 import org.slf4j.Logger;
@@ -37,7 +38,7 @@ public class RequestHandlerImpl implements RequestHandler {
 
     public RequestHandlerImpl() {
 
-        this.api =  new OllamaAPI(HOST);
+        this.api = new OllamaAPI(HOST);
         this.codeGeneratorConfig = new CodeGeneratorConfig();
         this.options = new OptionsBuilder()
                 .setNumCtx(codeGeneratorConfig.getNUM_CTX())
@@ -62,7 +63,6 @@ public class RequestHandlerImpl implements RequestHandler {
 
 
         boolean isThisNewAppRequest = isThisACreateNewAppRequest(pathToJavaFileToModify, contentOfExistingJavaFile);
-
 
 
         PromptBuilder promptBuilder;
@@ -118,7 +118,7 @@ public class RequestHandlerImpl implements RequestHandler {
             result = api.generate(codeGeneratorConfig.getOllamaModel(), promptBuilder.build(), options);
 
         } catch (OllamaBaseException | IOException | InterruptedException e) {
-           log.error("Error while sending a request to the local Ollama Server");
+            log.error("Error while sending a request to the local Ollama Server");
         }
         if (result == null) throw new AssertionError();
         String outputFromOllamaAPI = (result.getResponse());
@@ -131,7 +131,7 @@ public class RequestHandlerImpl implements RequestHandler {
 
         List<String> classNames = GetListOfClasses(question);
 
-        if(classNames.isEmpty())
+        if (classNames.isEmpty())
             sendClassesNeededForSuperAppQuestionToOllamaInstance(question);
 
         return CodeGeneratorUtil.convertListOfStringClassNamesIntoAnListOfUnimplementedSuperAppClasses(classNames);
@@ -141,15 +141,24 @@ public class RequestHandlerImpl implements RequestHandler {
     public String sendSuperAppQuestionToOllamaInstance(SuperApp superAppClass) {
 
         PromptBuilder promptBuilder;
+        List<SuperApp> superAppList = DataStorage.getInstance().getListOfCurrentSuperAppClasses();
 
-        if(superAppClass.getClassName().equalsIgnoreCase("main")){
+        if (superAppClass.getClassName().equalsIgnoreCase("main")) {
 
-            promptBuilder=new PromptBuilder()
+            promptBuilder = new PromptBuilder()
                     .addLine(GREETING_TO_MODEL)
                     .addLine(PROVIDE_ME_JAVA_CODE_SUPER_APP_SPECIFIC + superAppClass.getClassName())
                     .addLine(IMPLEMENT_MAIN_CLASS_IN_SUPER_APP_CREATION)
-                    .addLine(CORRECT_IMPORTS_SUPER_APP_SPECIFIC)
-                    .addLine(QuestionConstants.INCLUDE_IN_ONE_FILE)
+                    .addLine(CORRECT_IMPORTS_SUPER_APP_SPECIFIC);
+
+            if (superAppList.stream().anyMatch(SuperApp::isImplemented)) {
+                promptBuilder.addLine(MAKE_SURE_IT_ALIGNS_WITH_OTHER_CLASSES);
+                superAppList.stream().filter(SuperApp::isImplemented).forEach(s -> promptBuilder
+                        .addLine("Class name: "+s.getClassName() + "with methods:" + s.toStringForMethods()));
+                promptBuilder.addLine(THAT_WAS_THE_LAST_LINE_OF_REMEMBER_CLASSES);
+            }
+            promptBuilder.addLine(QuestionConstants.INCLUDE_IN_ONE_FILE)
+                    .addLine(IF_YOU_USE_CLASSES_OF_YOURS_REMEMBER_TO_ADD_THOSE_AS_IMPORTS_IN_THE_CODE)
                     .addLine(QuestionConstants.AND_MAKE_SURE_CORRECT_NUMBER_OF_BRACE_BRACKETS_ARE_USED_AT_THE_END_OF_THE_JAVA_CODE)
                     .addLine(QuestionConstants.MARK_START_CHAR_DELIMITER)
                     .addLine(QuestionConstants.MARK_THE_END_CHAR_DELIMITER)
@@ -163,8 +172,7 @@ public class RequestHandlerImpl implements RequestHandler {
                     .addLine(QuestionConstants.ONLY_CODE);
 
             // Instruct in prompt that the main method should be included in this class
-        }
-        else {
+        } else {
 
             promptBuilder = new PromptBuilder()
                     .addLine(GREETING_TO_MODEL)
@@ -175,7 +183,15 @@ public class RequestHandlerImpl implements RequestHandler {
                     .addLine(QuestionConstants.MARK_START_CHAR_DELIMITER)
                     .addLine(QuestionConstants.MARK_THE_END_CHAR_DELIMITER)
                     .addLine(QuestionConstants.MAKE_SURE_THAT_START_DELIMITER_CHAR_IS_USED_ONCE)
-                    .addLine(QuestionConstants.MAKE_SURE_THAT_END_DELIMITER_CHAR_IS_USED_ONCE)
+                    .addLine(QuestionConstants.MAKE_SURE_THAT_END_DELIMITER_CHAR_IS_USED_ONCE);
+
+            if (superAppList.stream().anyMatch(SuperApp::isImplemented)) {
+                promptBuilder.addLine(MAKE_SURE_IT_ALIGNS_WITH_OTHER_CLASSES);
+                superAppList.stream().filter(SuperApp::isImplemented).forEach(s -> promptBuilder   .addLine("Class name: "+s.getClassName() + "with methods:" + s.toStringForMethods()));
+                promptBuilder.addLine(IF_YOU_USE_CLASSES_OF_YOURS_REMEMBER_TO_ADD_THOSE_AS_IMPORTS_IN_THE_CODE)
+                        .addLine(THAT_WAS_THE_LAST_LINE_OF_REMEMBER_CLASSES);
+            }
+            promptBuilder.addLine(QuestionConstants.INCLUDE_IN_ONE_FILE)
                     .addLine(QuestionConstants.NO_JAVA_FX)
                     .addLine(QuestionConstants.NO_SPECIAL_LIBRARIES)
                     .addLine(QuestionConstants.MAKE_SURE_IT_WORKS_ON_JAVA_19)
@@ -198,7 +214,7 @@ public class RequestHandlerImpl implements RequestHandler {
 
     }
 
-    private List<String> GetListOfClasses(String question){
+    private List<String> GetListOfClasses(String question) {
 
         List<String> classNames = new LinkedList<>();
 

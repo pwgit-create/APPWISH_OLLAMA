@@ -14,7 +14,9 @@ public class DataStorage {
      */
     private volatile CompilationJob compilationJob;
 
-    private boolean isSuperAppCreated;
+    private volatile boolean isSuperAppCreated;
+
+    private List<SuperApp> listOfCurrentSuperAppClasses;
 
     private String javaExecutionPath;
 
@@ -87,6 +89,13 @@ public class DataStorage {
         SuperAppDirectoryName = superAppDirectoryName;
     }
 
+    public List<SuperApp> getListOfCurrentSuperAppClasses() {
+        return listOfCurrentSuperAppClasses;
+    }
+
+    public void setListOfCurrentSuperAppClasses(List<SuperApp> listOfCurrentSuperAppClasses) {
+        this.listOfCurrentSuperAppClasses = listOfCurrentSuperAppClasses;
+    }
 }
 
 
