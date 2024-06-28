@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import java.nio.file.Path;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -109,6 +111,7 @@ public class AppSystem {
         // Get Class names for the super app generation
         if (isFirstRun) {
             log.info("Started the Super AppSystem (Long-time code base generation)");
+            DataStorage.getInstance().setListOfPathsToTmpFiles(new LinkedList<Path>());
             ollamaRemoteSystem = new OllamaRemoteSystem();
 
             try {
@@ -170,7 +173,7 @@ public class AppSystem {
                             .setImplemented(true);
 
                 }
-                StartSuperAppGeneration(superAppWish, false, appWishCompileResult, classList, false, ollamaRemoteSystem);
+                StartSuperAppGeneration(superAppWish, false, appWishCompileResult, classList, DataStorage.getInstance().isSuperAppCreated(), ollamaRemoteSystem);
             }
 
 
@@ -179,14 +182,25 @@ public class AppSystem {
 
                 log.info("No more classes to implement in super app creation");
                 superAppCreationComplete = true;
+                DataStorage.getInstance().setSuperAppCreated(superAppCreationComplete);
+                // Delete tmp files that where added to the class path when compiling
+                List<Path> pathOfTmpFilesInSuperAppCreation = DataStorage.getInstance().getListOfPathsToTmpFiles();
+
+                pathOfTmpFilesInSuperAppCreation.forEach(p -> {
+                    try {
+                        Files.delete(p);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
             }
 
         }
 
         // Retry compilation for a selected class
-        if (!appWishCompileResult && !superAppCreationComplete) {
+        if (!appWishCompileResult && !DataStorage.getInstance().isSuperAppCreated()) {
 
-            log.info("In !appwishCompileResult");
+            log.info("Class did not compile, try again....");
 
             appWishCompileResult = ollamaRemoteSystem.CreateSuperApp(DataStorage.getInstance().getCurrentSuperClass(), false);
 
@@ -205,14 +219,26 @@ public class AppSystem {
                 SuperApp selectedClassToCreate = CodeGeneratorUtil.getARandomUnimplementedClass();
                 DataStorage.getInstance().setCurrentSuperClass(selectedClassToCreate);}
 
+                // Success on the entire super generation!
                 catch (NoSuchElementException e){
 
                     log.info("No more classes to implement in super app creation");
                     superAppCreationComplete = true;
+                    DataStorage.getInstance().setSuperAppCreated(superAppCreationComplete);
+                    // Delete tmp files that where added to the class path when compiling
+                    List<Path> pathOfTmpFilesInSuperAppCreation = DataStorage.getInstance().getListOfPathsToTmpFiles();
+
+                    pathOfTmpFilesInSuperAppCreation.forEach(p -> {
+                        try {
+                            Files.delete(p);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    });
                 }
             }
-            if(!superAppCreationComplete){
-            StartSuperAppGeneration(superAppWish, false, appWishCompileResult, classList, false, ollamaRemoteSystem);}
+            if(!DataStorage.getInstance().isSuperAppCreated()){
+            StartSuperAppGeneration(superAppWish, false, appWishCompileResult, classList, DataStorage.getInstance().isSuperAppCreated(), ollamaRemoteSystem);}
         }
     }
 

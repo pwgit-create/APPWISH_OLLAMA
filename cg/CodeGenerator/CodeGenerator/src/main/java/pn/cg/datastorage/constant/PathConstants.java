@@ -2,7 +2,7 @@ package pn.cg.datastorage.constant;
 
 import java.io.File;
 
-public class PathConstants {
+public record PathConstants() {
 
 
     public static final String RESOURCE_PATH = "src"+File.separator+"main"+File.separator+"resources"+File.separator;

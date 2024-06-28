@@ -26,10 +26,8 @@ import org.slf4j.simple.SimpleLogger;
 import pn.app_wish.constant.CodeEvent;
 import pn.app_wish.constant.GUIConstants;
 import pn.app_wish.constant.StaticAppWishConstants;
-import pn.app_wish.util.AppWishUtil;
 import pn.cg.app_system.AppSystem;
 import pn.cg.app_system.code_generation.model.CompilationJob;
-import pn.cg.app_system.code_generation.model.SuperApp;
 import pn.cg.datastorage.DataStorage;
 import pn.cg.datastorage.ThreadPoolMaster;
 import pn.cg.datastorage.constant.PathConstants;
@@ -44,8 +42,7 @@ import java.util.List;
 
 
 import static java.util.Objects.requireNonNull;
-import static pn.app_wish.constant.GUIConstants.APP_HISTORY_STAGE_TILE;
-import static pn.app_wish.constant.GUIConstants.DEFAULT_FXML_FILE;
+import static pn.app_wish.constant.GUIConstants.*;
 
 
 public class AppWish extends Application {
@@ -70,7 +67,7 @@ public class AppWish extends Application {
     @FXML
     public ImageView logo;
     @FXML
-    public Button tmpfortest;
+    public Button btn_super_app_creation;
 
     private String javaExecutablePath;
     private Process executingJavaAppProcess;
@@ -104,11 +101,13 @@ public class AppWish extends Application {
         System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "DEBUG");
         Parent root = FXMLLoader.load(requireNonNull(getClass().getClassLoader().getResource(DEFAULT_FXML_FILE)));
         mainStage = primaryStage;
+        mainStage.setResizable(false);
         primaryStage.setTitle(GUIConstants.DEFAULT_STAGE_TITLE);
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+
     }
 
     /**
@@ -227,7 +226,7 @@ public class AppWish extends Application {
     private void codeEventCreateApplication(){
         if(!btn_StopGeneratedApp.isVisible()){
         setButtonGroupVisibilityForCodeGenerationButtons(false);
-        output_label.setText("Generating code...");
+        output_label.setText(GUIConstants.GENERATING_CODE_DEFAULT_TEXT);
          }
     }
     /**
@@ -236,7 +235,7 @@ public class AppWish extends Application {
     private void codeEventContinueAnApplication(){
         if(!btn_StopGeneratedApp.isVisible()) {
             setButtonGroupVisibilityForCodeGenerationButtons(false);
-            output_label.setText("Generating code...\nContinue with existing application");
+            output_label.setText(GUIConstants.CONTINUING_CODE_TEXT);
          }
         }
 
@@ -327,6 +326,7 @@ public class AppWish extends Application {
     private void setButtonGroupVisibilityForCodeGenerationButtons(boolean isVisible) {
         btn_create_application.setVisible(isVisible);
         btn_continue_on_application.setVisible(isVisible);
+        btn_super_app_creation.setVisible(isVisible);
     }
 
     /**
@@ -365,17 +365,24 @@ public class AppWish extends Application {
     }
 
     @FXML
-    public void tmpTestButton(ActionEvent ae) {
+    public void OnSuperAppCreationButton(ActionEvent ae) {
 
         isCodeGenerationOnGoing = true;
-
         DataStorage.getInstance().setCompilationJob(new CompilationJob(GUIConstants.DEFAULT_STAGE_TITLE));
         ThreadPoolMaster.getInstance().getExecutor().execute(() -> {
-            AppSystem.StartSuperAppGeneration(tf_input.getText(), true, false, new LinkedList<>(), false, null);
+
+            Platform.runLater(() -> {
+                setButtonGroupVisibilityForCodeGenerationButtons(false);
+                setButtonGroupVisibilityToFalseForStartAndStopApplicationsButtons();
+                output_label.setText(GENERATING_CODE_BASE_TEXT);
+                output_label.setVisible(true);
 
 
+                AppSystem.StartSuperAppGeneration(tf_input.getText(), true, false, new LinkedList<>(), false, null);
+
+
+            });
         });
-
     }
 
 }

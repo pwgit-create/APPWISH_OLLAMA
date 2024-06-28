@@ -192,11 +192,6 @@ public record QuestionConstants() {
     public final static String MAIN_CLASS_SHOULD_ALWAYS_BE_ADDED_TO_THE_CLASS_LIST="The last entry in the class list that you will provide , please add a class called Main";
 
     /**
-     * Super App specific variant on the original "AND_CORRECT_IMPORTS" question
-     */
-    public final static String CORRECT_IMPORTS_SUPER_APP_SPECIFIC=AND_CORRECT_IMPORTS + " so that it corresponds with the classes that you stated was needed for this application";
-
-    /**
      * Share information to the AI-Model about the requirements for the implementation of the Main class ( In a super app generation process)
      */
     public final static String IMPLEMENT_MAIN_CLASS_IN_SUPER_APP_CREATION=WITH_MAIN_METHOD +" and that the body of that main method is empty or invokes a method in one of the other classes that we generated before";
@@ -216,11 +211,30 @@ public record QuestionConstants() {
      */
     public final static String THAT_WAS_THE_LAST_LINE_OF_REMEMBER_CLASSES="The line above was the last line of class names to consider when creating the class";
 
+    /**
+     * A line that only should be included if it is the first class of N in a super app generation
+     * @chain-order 1/4
+     */
+    public final static String CONSIDER_ALL_CLASSES_IN_THIS_SUPER_APP_CREATION="Please note that the class that you will create is one of many in this application and you need to consider that when creating this class";
 
     /**
-     * Instruct the AI Model to consider the import statements for the classes that are part of the entire super app and is used in the current class
+     * Clarify that the other classes are not implemented yet and can´t be referenced in the code yet
+     * @chain-order 2/4
      */
-    public final static String IF_YOU_USE_CLASSES_OF_YOURS_REMEMBER_TO_ADD_THOSE_AS_IMPORTS_IN_THE_CODE="If you use references to any of the classes you created previously , please remember to add those classes as imports in the code of the current class";
+    public final static String CLASSES_THAT_ARE_INCLUDED_IN_THE_SUPER_APP="The classes that you need to consider are not yet implemented so you cant use them in your code yet but you can still consider what methods those classes might need from this class";
+
+    /**
+     * Start line before unimplemented classes are listed
+     * @chain-order 3/4
+     */
+    public final static String THE_UNIMPLEMENTED_CLASSES_OF_THE_SUPER_APP="These unimplemented classes are provided for you in the next coming lines";
+
+    /**
+     * End line after all unimplemented classes has been listed
+     * @chain-order 4/4
+     */
+    public final static String LAST_LINE_OF_UNIMPLEMENTED_CLASSES_OF_THE_SUPER_APP="The line above was the last line that included unimplemented classes that will be included in this application in the future";
+
 
     /// ***** ///
 

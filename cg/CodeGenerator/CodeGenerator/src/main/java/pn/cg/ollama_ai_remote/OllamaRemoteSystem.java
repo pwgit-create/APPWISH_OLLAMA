@@ -4,12 +4,13 @@ package pn.cg.ollama_ai_remote;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pn.cg.app_system.code_generation.ClassCompiler;
-import pn.cg.app_system.code_generation.model.CompilationJob;
 import pn.cg.app_system.code_generation.model.SuperApp;
 import pn.cg.app_wish.QuestionBuilder;
 import pn.cg.datastorage.DataStorage;
 import pn.cg.datastorage.constant.CommonStringConstants;
+import pn.cg.datastorage.constant.PathConstants;
 import pn.cg.datastorage.constant.QuestionConstants;
+import pn.cg.datastorage.constant.ScriptConstants;
 import pn.cg.ollama_ai_remote.request.*;
 import pn.cg.util.CodeGeneratorUtil;
 import pn.cg.util.FileUtil;
@@ -18,10 +19,15 @@ import pn.cg.util.TaskUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.LinkedList;
 import java.util.List;
 
-import static pn.cg.datastorage.constant.CommonStringConstants.ERROR;
-import static pn.cg.datastorage.constant.CommonStringConstants.JAVA_FILE_EXTENSION;
+import static pn.cg.datastorage.constant.CommonStringConstants.*;
+import static pn.cg.datastorage.constant.PathConstants.RESOURCE_PATH;
+import static pn.cg.datastorage.constant.PathConstants.SHELL_SCRIPT_PATH;
 
 /**
  * This class holds the logic for the requests and responses to the OLLAMA AI API
@@ -29,7 +35,6 @@ import static pn.cg.datastorage.constant.CommonStringConstants.JAVA_FILE_EXTENSI
 public class OllamaRemoteSystem {
 
     private final ClassCompiler classCompiler;
-
 
 
     private final RequestHandler requestHandler;
@@ -142,27 +147,29 @@ public class OllamaRemoteSystem {
         return superAppList;
     }
 
-    public synchronized boolean CreateSuperApp(SuperApp classInSuperAppDesign, boolean firstRun) {
+    public synchronized boolean CreateSuperApp(SuperApp classInSuperAppDesign, boolean isFirstRun) {
 
         String outputFromOLLMA = "";
 
+        if (!isFirstRun) {
 
-        if (firstRun) {
-            log.info("First run in super app creation+\nNo compile result is yet to exist!");
+            if (DataStorage.getInstance().getCompilationJob() != null) {
 
-            outputFromOLLMA = requestHandler.sendSuperAppQuestionToOllamaInstance(classInSuperAppDesign);
-
-        } else {
-
-            if (DataStorage.getInstance().getCompilationJob() != null && !DataStorage.getInstance().getCompilationJob().isResult()) {
-                log.error("Class did not compile\nSending new request... ");
-                outputFromOLLMA = requestHandler.sendSuperAppQuestionToOllamaInstance(classInSuperAppDesign);
-            } else if (DataStorage.getInstance().getCompilationJob() != null && DataStorage.getInstance().getCompilationJob().isResult()) {
-                log.error("Previous class compiled successfully\nSending new request for the next class in the list... ");
-                outputFromOLLMA = requestHandler.sendSuperAppQuestionToOllamaInstance(classInSuperAppDesign);
+                if (!DataStorage.getInstance().getCompilationJob().isResult()) {
+                    log.error("Class did not compile\nSending new request... ");
+                    outputFromOLLMA = requestHandler.sendSuperAppQuestionToOllamaInstance(classInSuperAppDesign);
+                } else {
+                    log.info("Previous class compiled successfully\nSending new request for the next class in the list... ");
+                    outputFromOLLMA = requestHandler.sendSuperAppQuestionToOllamaInstance(classInSuperAppDesign);
+                }
             }
-
         }
+
+        if (isFirstRun) {
+            log.info("First run in super app creation\nNo compile result is yet to exist!");
+            outputFromOLLMA = requestHandler.sendSuperAppQuestionToOllamaInstance(classInSuperAppDesign);
+        }
+
 
         // Extract class name
         String className = StringUtil.extractClassNameFromTextWithJavaClasses(outputFromOLLMA);
@@ -205,8 +212,33 @@ public class OllamaRemoteSystem {
 
         if (DataStorage.getInstance().getCompilationJob().isResult()) {
 
-            // Set methods for the implemented class SuperApp Class representation
-            CodeGeneratorUtil.SetMethodListForImplementedClass(className,outputFromOLLMA);
+            // Wait for AppSystem to report that the compiled class is set to implemented
+            while(!(DataStorage.getInstance().getListOfCurrentSuperAppClasses().stream()
+                    .filter(e -> e.getClassName()
+                            .equalsIgnoreCase(classInSuperAppDesign.getClassName()))
+                    .findFirst().get().isImplemented())){
+                // Wait for it... 
+            }
+
+
+            // Set methods and constructors for the implemented class SuperApp Class representation
+            try {
+                CodeGeneratorUtil.SetMethodAndConstructorListForImplementedClass(className, Path.of(TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.CLASS_FILE_EXTENSION, DataStorage.getInstance().getSuperAppDirectoryName())));
+            } catch (MalformedURLException | ClassNotFoundException e) {
+              log.error("Could not set Methods or/ and constructors");
+              classInSuperAppDesign.setConstructors(new LinkedList<String>());
+              classInSuperAppDesign.setMethods(new LinkedList<String>());
+            }
+
+            // Copy class file to the script directory for the javac script, so it will be included in the class path
+            try {
+                Path destinationPathForTempFile= Path.of(DataStorage.getInstance().getPROJECT_ROOT_WORKING_DIR().toString()+File.separator+className+CLASS_FILE_EXTENSION);
+                DataStorage.getInstance().addPathToTmpFileList(destinationPathForTempFile);
+                Files.copy(Path.of(TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.CLASS_FILE_EXTENSION, DataStorage.getInstance().getSuperAppDirectoryName())),destinationPathForTempFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
 
             log.info("Successful compilation of class, continue with next class");
         } else {
@@ -214,9 +246,7 @@ public class OllamaRemoteSystem {
         }
 
         return DataStorage.getInstance().getCompilationJob().isResult();
-
     }
-
 
     /**
      * Checks if the current brace buckets pairs are even and if they are not , Append brace buckets until they are

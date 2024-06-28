@@ -3,6 +3,7 @@ package pn.cg.datastorage;
 import pn.cg.app_system.code_generation.model.CompilationJob;
 import pn.cg.app_system.code_generation.model.SuperApp;
 
+import java.nio.file.Path;
 import java.util.List;
 
 public class DataStorage {
@@ -14,10 +15,19 @@ public class DataStorage {
      */
     private volatile CompilationJob compilationJob;
 
+    /**
+     * Flag that tells if the entire super app creation is complete or not
+     */
     private volatile boolean isSuperAppCreated;
 
+    /**
+     * List of super classes that are part of the super app creation
+     */
     private List<SuperApp> listOfCurrentSuperAppClasses;
 
+    /**
+     * The execution path for regular apps creation apps
+     */
     private String javaExecutionPath;
 
 
@@ -31,12 +41,22 @@ public class DataStorage {
      */
     private volatile SuperApp currentSuperClass;
 
+    /**
+     * This is the list of tmp files that is scheduled for deletion when the entire super app generation is complete
+     */
+    private List<Path> listOfPathsToTmpFiles;
+
     private static DataStorage instance;
 
+    /**
+     * The path for the project root directory
+     */
+    private final Path PROJECT_ROOT_WORKING_DIR;
     private DataStorage() {
 
         this.compilationJob = getCompilationJob();
         this.isSuperAppCreated = false;
+        this.PROJECT_ROOT_WORKING_DIR = Path.of(System.getProperty("user.dir"));
     }
 
 
@@ -95,6 +115,23 @@ public class DataStorage {
 
     public void setListOfCurrentSuperAppClasses(List<SuperApp> listOfCurrentSuperAppClasses) {
         this.listOfCurrentSuperAppClasses = listOfCurrentSuperAppClasses;
+    }
+
+    public List<Path> getListOfPathsToTmpFiles() {
+        return listOfPathsToTmpFiles;
+    }
+
+    public void setListOfPathsToTmpFiles(List<Path> listOfPathsToTmpFiles) {
+        this.listOfPathsToTmpFiles = listOfPathsToTmpFiles;
+    }
+
+    public void addPathToTmpFileList(Path path){
+
+        this.listOfPathsToTmpFiles.add(path);
+    }
+
+    public Path getPROJECT_ROOT_WORKING_DIR() {
+        return PROJECT_ROOT_WORKING_DIR;
     }
 }
 

@@ -1,21 +1,30 @@
 package pn.cg.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pn.cg.app_system.code_generation.model.SuperApp;
+import pn.cg.app_system.code_generation.model.enum_.OPTION_METHOD_CONSTRUCTOR;
 import pn.cg.datastorage.DataStorage;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static pn.cg.datastorage.constant.ScriptConstants.COMPILE_CLASS_STORAGE;
 
 public record CodeGeneratorUtil() {
+
+    private static final Logger log = LoggerFactory.getLogger(CodeGeneratorUtil.class);
 
     /**
      * Boolean method that checks if it's a new request or a continues app generation
@@ -52,6 +61,7 @@ public record CodeGeneratorUtil() {
 
     /**
      * Get a random unimplemented class from the input list
+     *
      * @return A random SuperApp from the input list with a status of unimplemented (if any)
      */
     public static SuperApp getARandomUnimplementedClass() throws NoSuchElementException {
@@ -61,6 +71,7 @@ public record CodeGeneratorUtil() {
 
     /**
      * Read the files in the COMPILE_CLASS_STORAGE folder and filter the current super apps directories and increment the number by one
+     *
      * @return String
      */
     public static String getIncrementedSuperAppDirectoryName() {
@@ -102,68 +113,126 @@ public record CodeGeneratorUtil() {
         }
     }
 
-    /**
-     * Extract methods from java source code text
-     * @param javaSourceCode The input for the java source code
-     * @return List<String>
-     */
-    public static List<String> ExtractMethodsFromJavaSourceCodeString(String javaSourceCode) {
-
-        List<String> methods = new LinkedList<>();
-
-        final String MAIN_METHOD="public static void main(String args[])";
-        final String MAIN_METHOD_2= "public static void main(String...args)";
-
-        // Check if the java source code contains a main method
-        if(javaSourceCode.contains(MAIN_METHOD))
-            methods.add(MAIN_METHOD);
-
-        if(javaSourceCode.contains(MAIN_METHOD_2))
-            methods.add(MAIN_METHOD_2);
-
-        // Remove all occurrences of new instances from the local method java source code
-        // so the regex pattern won´t catch them as methods
-        String methodLocalParsedJavaSourceCode = javaSourceCode.replaceAll("new.*(?:\r\n)?","");
-
-        Pattern inputParamPattern = Pattern.compile("\\b[a-zA-Z_$][a-zA-Z0-9_$]*\\s*\\([^)]*input.*?\\)");
-        Matcher inputParamMatcher = inputParamPattern.matcher(methodLocalParsedJavaSourceCode);
-
-
-        while (inputParamMatcher.find()) {
-            // Method with input parameter
-            if(!methods.contains(inputParamMatcher.group())) methods.add(inputParamMatcher.group());
-        }
-
-
-        Pattern noInputParamPattern = Pattern.compile("\\b[a-zA-Z_$][a-zA-Z0-9_$]*\\s*\\(\\s*\\)");
-        Matcher noInputParamMatcher = noInputParamPattern.matcher(methodLocalParsedJavaSourceCode);
-
-        while (noInputParamMatcher.find()) {
-            // Method without input parameter
-            if(!methods.contains(noInputParamMatcher.group())) methods.add(noInputParamMatcher.group());
-
-        }
-        return methods;
-    }
 
     /**
      * Set the method list for an implemented SuperApp class in the shared singleton list
-     * @param implementedClassName The name of the implemented class
-     * @param javaSourceCode The source code for the implemented class
+     *
+     * @param implementedClassName     The name of the implemented class
+     * @param pathToJavaClassDirectory The path to the directory where the class file is resided
      */
-    public static void SetMethodListForImplementedClass(String implementedClassName,String javaSourceCode){
+    public static void SetMethodAndConstructorListForImplementedClass(String implementedClassName, Path pathToJavaClassDirectory) throws MalformedURLException, ClassNotFoundException {
 
-        //tmp SOUT 1
-        System.out.println("Implemented class name -> "+implementedClassName+"\n");
+        try {
+            SuperApp superapp = DataStorage.getInstance()
+                    .getListOfCurrentSuperAppClasses()
+                    .stream()
+                    .filter(s -> s.getClassName()
+                            .equals(implementedClassName))
+                    .findFirst()
+                    .get();
 
+            superapp.setMethods(ExtractDeclaredMethodsFromClassFile(implementedClassName, pathToJavaClassDirectory));
+            superapp.setConstructors(ExtractDeclaredConstructorsFromClassFile(implementedClassName, pathToJavaClassDirectory));
+        } catch (Exception e) {
+            log.error("Could not set Method and/or Constructors for a compiled class...");
+        }
 
-        DataStorage.getInstance()
-                .getListOfCurrentSuperAppClasses()
-                .stream()
-                .filter(s -> s.getClassName()
-                        .equals(implementedClassName))
-                .findFirst()
-                .get()
-                .setMethods(CodeGeneratorUtil.ExtractMethodsFromJavaSourceCodeString(javaSourceCode));
     }
+
+    /**
+     * Checks if all classes in the super app creation are unimplemented
+     *
+     * @param superAppList A list that contains SuperApp instances
+     * @return boolean
+     */
+    public static boolean AreAllClassesUnImplemented(List<SuperApp> superAppList) {
+
+        if (superAppList != null) return superAppList.stream().anyMatch(SuperApp::isImplemented);
+        return false;
+    }
+
+    /**
+     * Get a formatted String that will differ depending on wherever the super app contains methods or not
+     * @Format-Style A String that is formatted for a query to an AI-Model
+     * @param superApp A SuperApp instance
+     * @return String
+     */
+    public static String GetFormattedListOfMethodsString(SuperApp superApp) {
+
+        if (superApp.getMethods().isEmpty())
+            return " ,with no public methods";
+        else
+            return " ,with methods: " + superApp.toStringForMethods();
+    }
+
+    /**
+     * Get a formatted String that will differ depending on wherever the super app contains constructors or not
+     * @Format-Style A String that is formatted for a query to an AI-Model
+     * @param superApp A SuperApp instance
+     * @return String
+     */
+    public static String GetFormattedListOfConstructorString(SuperApp superApp) {
+
+        if (superApp.getConstructors().isEmpty())
+            return ", " + "and it does not have any public constructors";
+        else return ", " + " and constructors: " + superApp.toStringForConstructors() + ",";
+    }
+
+    /**
+     * Get a formatted String for a class name
+     * @Format-Style A String that is formatted for a query to an AI-Model
+     * @param superApp A SuperApp instance
+     * @return String
+     */
+    public static String GetFormattedStringForAClassName(SuperApp superApp){
+        return "\nClass name: "+superApp.getClassName();
+    }
+
+    private static List<String> ExtractDeclaredConstructorsFromClassFile(String className, Path pathToClassFileDirectory) throws MalformedURLException, ClassNotFoundException {
+        return ExtractDeclared(className, pathToClassFileDirectory, OPTION_METHOD_CONSTRUCTOR.CONSTRUCTOR);
+    }
+
+    private static List<String> ExtractDeclaredMethodsFromClassFile(String className, Path pathToClassFileDirectory) throws MalformedURLException, ClassNotFoundException {
+
+        return ExtractDeclared(className, pathToClassFileDirectory, OPTION_METHOD_CONSTRUCTOR.METHOD);
+    }
+
+    private static List<String> ExtractDeclared(String className, Path pathToClassFileDirectory, OPTION_METHOD_CONSTRUCTOR option) throws MalformedURLException, ClassNotFoundException {
+
+        List<String> returnList = new LinkedList<>();
+        ;
+        String filePath = pathToClassFileDirectory.toString() + className + ".class"; // Replace with the actual path to your class
+
+        File file = new File(filePath);
+        URL url = file.getParentFile().toURI().toURL();
+        URLClassLoader loader = new URLClassLoader(new URL[]{url});
+
+        Class<?> clazz = loader.loadClass(className);
+
+        if (option == OPTION_METHOD_CONSTRUCTOR.METHOD) {
+            System.out.println("Public methods:");
+            for (Method method : clazz.getDeclaredMethods()) {
+                if (Modifier.isPublic(method.getModifiers())) {
+                    System.out.println(method.toString());
+                    returnList.add(method.toString());
+
+                }
+            }
+
+            return returnList;
+        } else if (option == OPTION_METHOD_CONSTRUCTOR.CONSTRUCTOR) {
+            System.out.println("\nPublic constructors:");
+            for (Constructor<?> constructor : clazz.getConstructors()) {
+                if (Modifier.isPublic(constructor.getModifiers())) {
+                    System.out.println(constructor.toString());
+                    returnList.add(constructor.toString());
+                }
+            }
+
+            return returnList;
+        }
+        // Return empty list
+        return returnList;
+    }
+
 }

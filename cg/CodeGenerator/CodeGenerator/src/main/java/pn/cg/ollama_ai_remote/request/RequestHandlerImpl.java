@@ -23,7 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static pn.cg.datastorage.constant.QuestionConstants.*;
-import static pn.cg.util.CodeGeneratorUtil.isThisACreateNewAppRequest;
+import static pn.cg.util.CodeGeneratorUtil.*;
+import static pn.cg.util.CodeGeneratorUtil.GetFormattedStringForAClassName;
 
 
 public class RequestHandlerImpl implements RequestHandler {
@@ -139,26 +140,44 @@ public class RequestHandlerImpl implements RequestHandler {
 
     @Override
     public String sendSuperAppQuestionToOllamaInstance(SuperApp superAppClass) {
-
         PromptBuilder promptBuilder;
         List<SuperApp> superAppList = DataStorage.getInstance().getListOfCurrentSuperAppClasses();
 
+        // Include the main method in the Main class
         if (superAppClass.getClassName().equalsIgnoreCase("main")) {
 
+            // Always include
             promptBuilder = new PromptBuilder()
                     .addLine(GREETING_TO_MODEL)
                     .addLine(PROVIDE_ME_JAVA_CODE_SUPER_APP_SPECIFIC + superAppClass.getClassName())
                     .addLine(IMPLEMENT_MAIN_CLASS_IN_SUPER_APP_CREATION)
-                    .addLine(CORRECT_IMPORTS_SUPER_APP_SPECIFIC);
+                    .addLine(AND_CORRECT_IMPORTS);
 
+
+            // At last one class has been implemented
             if (superAppList.stream().anyMatch(SuperApp::isImplemented)) {
                 promptBuilder.addLine(MAKE_SURE_IT_ALIGNS_WITH_OTHER_CLASSES);
                 superAppList.stream().filter(SuperApp::isImplemented).forEach(s -> promptBuilder
-                        .addLine("Class name: "+s.getClassName() + "with methods:" + s.toStringForMethods()));
+                        .add(GetFormattedStringForAClassName(s) + CodeGeneratorUtil.GetFormattedListOfMethodsString(s)
+                                + CodeGeneratorUtil.GetFormattedListOfConstructorString(s)));
                 promptBuilder.addLine(THAT_WAS_THE_LAST_LINE_OF_REMEMBER_CLASSES);
             }
+
+            // No class at all has been implemented
+            else {
+
+                promptBuilder.addLine(CONSIDER_ALL_CLASSES_IN_THIS_SUPER_APP_CREATION)
+                        .addLine(CLASSES_THAT_ARE_INCLUDED_IN_THE_SUPER_APP)
+                        .addLine(THE_UNIMPLEMENTED_CLASSES_OF_THE_SUPER_APP);
+
+                superAppList.stream().filter(s -> !(s.getClassName()
+                                .equalsIgnoreCase(superAppClass.getClassName())))
+                        .toList()
+                        .forEach(c -> promptBuilder.addLine(c.getClassName()));
+                promptBuilder.addLine(LAST_LINE_OF_UNIMPLEMENTED_CLASSES_OF_THE_SUPER_APP);
+            }
+            // Always include
             promptBuilder.addLine(QuestionConstants.INCLUDE_IN_ONE_FILE)
-                    .addLine(IF_YOU_USE_CLASSES_OF_YOURS_REMEMBER_TO_ADD_THOSE_AS_IMPORTS_IN_THE_CODE)
                     .addLine(QuestionConstants.AND_MAKE_SURE_CORRECT_NUMBER_OF_BRACE_BRACKETS_ARE_USED_AT_THE_END_OF_THE_JAVA_CODE)
                     .addLine(QuestionConstants.MARK_START_CHAR_DELIMITER)
                     .addLine(QuestionConstants.MARK_THE_END_CHAR_DELIMITER)
@@ -170,14 +189,14 @@ public class RequestHandlerImpl implements RequestHandler {
                     .addLine(QuestionConstants.IMPLEMENT_AS_MUCH_AS_POSSIBLE)
                     .addLine(QuestionConstants.THREAD_PACKAGE)
                     .addLine(QuestionConstants.ONLY_CODE);
-
-            // Instruct in prompt that the main method should be included in this class
-        } else {
-
+        }
+        // Use this block for all classes that is not named main or Main
+        else {
+            // Always include
             promptBuilder = new PromptBuilder()
                     .addLine(GREETING_TO_MODEL)
                     .addLine(PROVIDE_ME_JAVA_CODE_SUPER_APP_SPECIFIC + superAppClass.getClassName())
-                    .addLine(QuestionConstants.CORRECT_IMPORTS_SUPER_APP_SPECIFIC)
+                    .addLine(QuestionConstants.AND_CORRECT_IMPORTS)
                     .addLine(NO_MAIN_CLASS_UNLESS_THE_CLASS_NAME_IS_MAIN)
                     .addLine(QuestionConstants.AND_MAKE_SURE_CORRECT_NUMBER_OF_BRACE_BRACKETS_ARE_USED_AT_THE_END_OF_THE_JAVA_CODE)
                     .addLine(QuestionConstants.MARK_START_CHAR_DELIMITER)
@@ -185,12 +204,27 @@ public class RequestHandlerImpl implements RequestHandler {
                     .addLine(QuestionConstants.MAKE_SURE_THAT_START_DELIMITER_CHAR_IS_USED_ONCE)
                     .addLine(QuestionConstants.MAKE_SURE_THAT_END_DELIMITER_CHAR_IS_USED_ONCE);
 
+            // At last one class has been implemented
             if (superAppList.stream().anyMatch(SuperApp::isImplemented)) {
                 promptBuilder.addLine(MAKE_SURE_IT_ALIGNS_WITH_OTHER_CLASSES);
-                superAppList.stream().filter(SuperApp::isImplemented).forEach(s -> promptBuilder   .addLine("Class name: "+s.getClassName() + "with methods:" + s.toStringForMethods()));
-                promptBuilder.addLine(IF_YOU_USE_CLASSES_OF_YOURS_REMEMBER_TO_ADD_THOSE_AS_IMPORTS_IN_THE_CODE)
-                        .addLine(THAT_WAS_THE_LAST_LINE_OF_REMEMBER_CLASSES);
+                superAppList.stream().filter(SuperApp::isImplemented).forEach(s -> promptBuilder.add(GetFormattedStringForAClassName(s)
+                        + CodeGeneratorUtil.GetFormattedListOfMethodsString(s) + GetFormattedListOfConstructorString(s)));
+                promptBuilder.addLine(THAT_WAS_THE_LAST_LINE_OF_REMEMBER_CLASSES);
             }
+            // No class at all has been implemented
+            else {
+
+                promptBuilder.addLine(CONSIDER_ALL_CLASSES_IN_THIS_SUPER_APP_CREATION)
+                        .addLine(CLASSES_THAT_ARE_INCLUDED_IN_THE_SUPER_APP)
+                        .addLine(THE_UNIMPLEMENTED_CLASSES_OF_THE_SUPER_APP);
+
+                superAppList.stream().filter(s -> !(s.getClassName()
+                                .equalsIgnoreCase(superAppClass.getClassName())))
+                        .toList()
+                        .forEach(c -> promptBuilder.addLine(c.getClassName()));
+                promptBuilder.addLine(LAST_LINE_OF_UNIMPLEMENTED_CLASSES_OF_THE_SUPER_APP);
+            }
+            // Always include
             promptBuilder.addLine(QuestionConstants.INCLUDE_IN_ONE_FILE)
                     .addLine(QuestionConstants.NO_JAVA_FX)
                     .addLine(QuestionConstants.NO_SPECIAL_LIBRARIES)
@@ -211,14 +245,11 @@ public class RequestHandlerImpl implements RequestHandler {
         String outputFromOllamaAPI = (result.getResponse());
         log.info(outputFromOllamaAPI);
         return outputFromOllamaAPI;
-
     }
 
     private List<String> GetListOfClasses(String question) {
 
         List<String> classNames = new LinkedList<>();
-
-
         PromptBuilder initialPrompt = new PromptBuilder().addLine(QuestionConstants.WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX)
                 .addLine(question)
                 .addLine(QuestionConstants.LAST_LINE_OF_SUPER_APP)
@@ -240,7 +271,6 @@ public class RequestHandlerImpl implements RequestHandler {
         return classNames;
 
     }
-
 }
 
 
