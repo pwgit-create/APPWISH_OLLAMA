@@ -221,7 +221,7 @@ public record QuestionConstants() {
      * Clarify that the other classes are not implemented yet and can´t be referenced in the code yet
      * @chain-order 2/4
      */
-    public final static String CLASSES_THAT_ARE_INCLUDED_IN_THE_SUPER_APP="The classes that you need to consider are not yet implemented so you cant use them in your code yet but you can still consider what methods those classes might need from this class";
+    public final static String CLASSES_THAT_ARE_INCLUDED_IN_THE_SUPER_APP="The classes that you need to consider are not yet implemented so you can absolutly not use them in your code for this class but you can still consider what methods those classes might need from this class";
 
     /**
      * Start line before unimplemented classes are listed
@@ -233,7 +233,7 @@ public record QuestionConstants() {
      * End line after all unimplemented classes has been listed
      * @chain-order 4/4
      */
-    public final static String LAST_LINE_OF_UNIMPLEMENTED_CLASSES_OF_THE_SUPER_APP="The line above was the last line that included unimplemented classes that will be included in this application in the future";
+    public final static String LAST_LINE_OF_UNIMPLEMENTED_CLASSES_OF_THE_SUPER_APP="The line above was the last line that included unimplemented classes that will be included in this application in the future. Remember that you can not include them in your code for this class!";
 
 
     /// ***** ///

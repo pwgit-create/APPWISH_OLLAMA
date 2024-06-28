@@ -152,7 +152,7 @@ public class AppWish extends Application {
 
             waitForCompilationResult();
 
-            handleCompilationResult();
+            handleCompilationResult(false);
 
         });
 
@@ -263,7 +263,6 @@ public class AppWish extends Application {
         }
     }
 
-
     /**
      * Starts the AI Code-Generation if the text input field is not null
      */
@@ -293,25 +292,29 @@ public class AppWish extends Application {
         }
     }
 
-    private void waitUntilAllClassesOfTheSuperAppCreationHasBeenImplemented(){
 
-        while(!DataStorage.getInstance().isSuperAppCreated()){}
-    }
 
     /**
      * If a compilation result exist , check if the singleton in code-generator-ollama contains a path for an executable Java file
      * If the above is true , activate the "run application" button and remove the "generating code..." text
      */
-    private void handleCompilationResult() {
+    private void handleCompilationResult(boolean isSuperGeneration) {
         if (DataStorage.getInstance().getCompilationJob().isResult()) {
-            javaExecutablePath = DataStorage.getInstance().getJavaExecutionPath();
+
+            if (!isSuperGeneration) {
+                javaExecutablePath = DataStorage.getInstance().getJavaExecutionPath();
+            }
             // Draw success or error texts, and show run app button
             Platform.runLater(() -> {
-                if (DataStorage.getInstance().getJavaExecutionPath() != null) {
+                if (DataStorage.getInstance().getJavaExecutionPath() != null || isSuperGeneration) {
+                    if(!isSuperGeneration){
                     output_label.setVisible(false);
-                    btn_run_application.setVisible(true);
+                    btn_run_application.setVisible(true);}
                     setButtonGroupVisibilityForCodeGenerationButtons(true);
                     isCodeGenerationOnGoing = false;
+                    if(isSuperGeneration){
+                        output_label.setText("Success :)");
+                    }
                 } else {
                     output_label.setText("Something went wrong :(");
                 }
@@ -370,19 +373,34 @@ public class AppWish extends Application {
         isCodeGenerationOnGoing = true;
         DataStorage.getInstance().setCompilationJob(new CompilationJob(GUIConstants.DEFAULT_STAGE_TITLE));
         ThreadPoolMaster.getInstance().getExecutor().execute(() -> {
-
-            Platform.runLater(() -> {
-                setButtonGroupVisibilityForCodeGenerationButtons(false);
-                setButtonGroupVisibilityToFalseForStartAndStopApplicationsButtons();
-                output_label.setText(GENERATING_CODE_BASE_TEXT);
-                output_label.setVisible(true);
-
+            StartGuiThreadForSuperAppCreation();
 
                 AppSystem.StartSuperAppGeneration(tf_input.getText(), true, false, new LinkedList<>(), false, null);
 
-
+                waitUntilAllClassesOfTheSuperAppCreationHasBeenImplemented();
+                handleCompilationResult(true);
             });
+    }
+
+    /**
+     * Starts a thread that handles GUI Updates
+     */
+    private void StartGuiThreadForSuperAppCreation(){
+
+        Platform.runLater(() -> {
+            setButtonGroupVisibilityForCodeGenerationButtons(false);
+            setButtonGroupVisibilityToFalseForStartAndStopApplicationsButtons();
+            output_label.setText(GENERATING_CODE_BASE_TEXT);
+            output_label.setVisible(true);
         });
+    }
+
+    /**
+     * Wait until the singleton in code-generator-ollama has created the entire super app
+     */
+    private void waitUntilAllClassesOfTheSuperAppCreationHasBeenImplemented(){
+
+        while(!DataStorage.getInstance().isSuperAppCreated()){}
     }
 
 }
