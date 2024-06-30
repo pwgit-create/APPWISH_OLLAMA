@@ -153,11 +153,15 @@ public record CodeGeneratorUtil() {
 
     /**
      * Get a formatted String that will differ depending on wherever the super app contains methods or not
-     * @Format-Style A String that is formatted for a query to an AI-Model
+     *
      * @param superApp A SuperApp instance
      * @return String
+     * @Format-Style A String that is formatted for a query to an AI-Model
      */
     public static String GetFormattedListOfMethodsString(SuperApp superApp) {
+
+        if (superApp.getMethods() == null)
+            superApp.setMethods(new LinkedList<>());
 
         if (superApp.getMethods().isEmpty())
             return " ,with no public methods";
@@ -167,11 +171,15 @@ public record CodeGeneratorUtil() {
 
     /**
      * Get a formatted String that will differ depending on wherever the super app contains constructors or not
-     * @Format-Style A String that is formatted for a query to an AI-Model
+     *
      * @param superApp A SuperApp instance
      * @return String
+     * @Format-Style A String that is formatted for a query to an AI-Model
      */
     public static String GetFormattedListOfConstructorString(SuperApp superApp) {
+
+        if (superApp.getConstructors() == null)
+            superApp.setConstructors(new LinkedList<>());
 
         if (superApp.getConstructors().isEmpty())
             return ", " + "and it does not have any public constructors";
@@ -180,12 +188,67 @@ public record CodeGeneratorUtil() {
 
     /**
      * Get a formatted String for a class name
-     * @Format-Style A String that is formatted for a query to an AI-Model
+     *
      * @param superApp A SuperApp instance
      * @return String
+     * @Format-Style A String that is formatted for a query to an AI-Model
      */
-    public static String GetFormattedStringForAClassName(SuperApp superApp){
-        return "\nClass name: "+superApp.getClassName();
+    public static String GetFormattedStringForAClassName(SuperApp superApp) {
+        return "\nClass name: " + superApp.getClassName();
+    }
+
+    /**
+     * Writes the documentation for the super app creation to a file
+     *
+     * @param successfulSuperAppCreation A list that only should contain
+     *                                   implemented classes in a successful super app creation
+     * @param file                       The file that the documentation data shall be written to
+     * @return boolean
+     */
+    public static boolean WriteDocFileToSuperApp(List<SuperApp> successfulSuperAppCreation, File file) {
+
+        final StringBuilder formatStringBuilder = new StringBuilder();
+
+        formatStringBuilder.append("App Documentation\n\n");
+
+        successfulSuperAppCreation.forEach(s -> formatStringBuilder
+                .append("\n------------------")
+                .append(GetFormattedStringForAClassName(s))
+                .append("\n")
+                .append(GetFormattedListOfMethodsString(s))
+                .append(GetFormattedListOfConstructorString(s)));
+
+
+        try {
+            FileUtil.writeDataToFile(file, formatStringBuilder.toString());
+            return true;
+        } catch (IOException e) {
+            log.error("Could not write the documentation for this app to a file...");
+        }
+        return false;
+    }
+
+    /**
+     * Gets the path in text format to the current super app directory
+     * @return String
+     */
+    public static String GetDocFilePathForSuperApp(){
+
+        final String DOC_FILE_FOR_SUPER_APP_PATH = COMPILE_CLASS_STORAGE + File.separator + DataStorage.getInstance().getSuperAppDirectoryName()+File.separator+"DOCS.txt";
+        return DOC_FILE_FOR_SUPER_APP_PATH;
+    }
+
+    /**
+     * Validate the response on a "Get All Classes" question to an AI-Model
+     * @param responseFromAiModelOnGetAllClassesFromSuperAppQuestion Response from AI-Model
+     * @return boolean
+     */
+    public static boolean ValidateResponseOnSuperAppGetAllClassesQuestion(String responseFromAiModelOnGetAllClassesFromSuperAppQuestion){
+
+        return !responseFromAiModelOnGetAllClassesFromSuperAppQuestion.contains(" ")
+                && !responseFromAiModelOnGetAllClassesFromSuperAppQuestion.contains(":")
+                && !responseFromAiModelOnGetAllClassesFromSuperAppQuestion.contains(",");
+
     }
 
     private static List<String> ExtractDeclaredConstructorsFromClassFile(String className, Path pathToClassFileDirectory) throws MalformedURLException, ClassNotFoundException {
@@ -200,7 +263,7 @@ public record CodeGeneratorUtil() {
     private static List<String> ExtractDeclared(String className, Path pathToClassFileDirectory, OPTION_METHOD_CONSTRUCTOR option) throws MalformedURLException, ClassNotFoundException {
 
         List<String> returnList = new LinkedList<>();
-        ;
+
         String filePath = pathToClassFileDirectory.toString() + className + ".class"; // Replace with the actual path to your class
 
         File file = new File(filePath);
@@ -234,5 +297,4 @@ public record CodeGeneratorUtil() {
         // Return empty list
         return returnList;
     }
-
 }

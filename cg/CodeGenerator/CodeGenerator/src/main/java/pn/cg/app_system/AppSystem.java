@@ -183,6 +183,11 @@ public class AppSystem {
                 log.info("No more classes to implement in super app creation");
                 superAppCreationComplete = true;
                 DataStorage.getInstance().setSuperAppCreated(superAppCreationComplete);
+
+                // Write documentation file to the directory of the super app
+                CodeGeneratorUtil.WriteDocFileToSuperApp(DataStorage.getInstance().getListOfCurrentSuperAppClasses(),
+                        new File(CodeGeneratorUtil.GetDocFilePathForSuperApp()));
+
                 // Delete tmp files that where added to the class path when compiling
                 List<Path> pathOfTmpFilesInSuperAppCreation = DataStorage.getInstance().getListOfPathsToTmpFiles();
 
@@ -225,9 +230,13 @@ public class AppSystem {
                     log.info("No more classes to implement in super app creation");
                     superAppCreationComplete = true;
                     DataStorage.getInstance().setSuperAppCreated(superAppCreationComplete);
+
+                    // Write documentation file to the directory of the super app
+                    CodeGeneratorUtil.WriteDocFileToSuperApp(DataStorage.getInstance().getListOfCurrentSuperAppClasses(),
+                            new File(CodeGeneratorUtil.GetDocFilePathForSuperApp()));
+
                     // Delete tmp files that where added to the class path when compiling
                     List<Path> pathOfTmpFilesInSuperAppCreation = DataStorage.getInstance().getListOfPathsToTmpFiles();
-
                     pathOfTmpFilesInSuperAppCreation.forEach(p -> {
                         try {
                             Files.delete(p);

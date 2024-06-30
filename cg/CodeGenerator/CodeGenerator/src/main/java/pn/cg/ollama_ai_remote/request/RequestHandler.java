@@ -31,6 +31,7 @@ public interface RequestHandler {
     /**
      * Send a request to the AI-Model and ask which classes are needed for the super app creation
      * @param question Question that contains text that describes requirements and functionality of a new super app
+     * @Recursive
      * @return List<SuperApp> that contains the class names for the super app (decided by the AI-model) and their implementation status
      */
     List<SuperApp> sendClassesNeededForSuperAppQuestionToOllamaInstance(String question);

@@ -194,6 +194,9 @@ public class OllamaRemoteSystem {
         // Create file instance with class name and file extension
         File file = new File(TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION, DataStorage.getInstance().getSuperAppDirectoryName()));
 
+        if(className.equals("Main")){
+        // Save the path to shared storage (if user wants to execute the java app after the build
+        DataStorage.getInstance().setJavaExecutionPath(file.getAbsolutePath());}
 
         // Write the Java code provided from OLLAMA to file
         try {
@@ -212,14 +215,11 @@ public class OllamaRemoteSystem {
 
         if (DataStorage.getInstance().getCompilationJob().isResult()) {
 
-            // Wait for AppSystem to report that the compiled class is set to implemented
-            while(!(DataStorage.getInstance().getListOfCurrentSuperAppClasses().stream()
-                    .filter(e -> e.getClassName()
-                            .equalsIgnoreCase(classInSuperAppDesign.getClassName()))
-                    .findFirst().get().isImplemented())){
-                // Wait for it... 
+            try {
+                Thread.sleep(900);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
-
 
             // Set methods and constructors for the implemented class SuperApp Class representation
             try {

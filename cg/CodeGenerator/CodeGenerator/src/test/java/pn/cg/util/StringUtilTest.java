@@ -4,6 +4,9 @@ package pn.cg.util;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class StringUtilTest {
 
     @Test
@@ -322,6 +325,20 @@ public class StringUtilTest {
         final int actual = StringUtil.GetListOfClassNamesInSuperAppGeneration(text).size();
 
         Assertions.assertEquals(expected,actual);
+    }
+
+    @Test
+    public void GetListOfClassNamesInSuperAppGenerationTest(){
+
+        final String TEST_INPUT="Here are the class names for your application:\n\nQuestionClass\nAnswerClass\nUserClass\nQuestionServiceClass\nAnswerServiceClass\nUserServiceClass\nMainClass";
+
+        final String PERFECT_RESPONSE_FROM_AI_MODEL="\nQuestionClass\nAnswerClass\nUserClass\nQuestionServiceClass\nAnswerServiceClass\nUserServiceClass\nMainClass";
+
+
+        final List<String> EXPECTED = Arrays.stream(PERFECT_RESPONSE_FROM_AI_MODEL.split("\n")).toList();
+        final List<String> ACTUAL = StringUtil.GetListOfClassNamesInSuperAppGeneration(TEST_INPUT);
+
+        Assertions.assertEquals(EXPECTED,ACTUAL);
     }
 
 }

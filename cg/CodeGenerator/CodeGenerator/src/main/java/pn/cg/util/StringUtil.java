@@ -160,7 +160,7 @@ public class StringUtil {
             } else if (!isStartDelimiter) {
                 delimiter = CommonStringConstants.JAVA_CODE_GENERATION_END_DELMITER_STRING;
                 returnValue = RemoveAllExceptTheLastOccurrenceOfWord(returnValue, delimiter);
-                returnValue = RemoveAllExceptTheLastOccurrenceOfWord(returnValue,delimiter+"\n");
+                returnValue = RemoveAllExceptTheLastOccurrenceOfWord(returnValue, delimiter + "\n");
             }
         } catch (Exception e) {
             log.debug("Error on delimiter String removal process");
@@ -221,17 +221,24 @@ public class StringUtil {
     }
 
     /**
-     * Takes an input string formated with new lines and converts it into a list
+     * Takes an input string formated with new lines , parses it , and then converts it into a list
      *
      * @param input A string with class names delimited with new lines
      * @return List<String>
      */
     public static List<String> GetListOfClassNamesInSuperAppGeneration(String input) {
         try {
-
             String[] classNamesArr = input.split("\n");
+            List<String> tmpClassNames = new LinkedList<>();
 
-            return new LinkedList<>(Arrays.asList(classNamesArr));
+            for (String className : classNamesArr) {
+                if (!className.contains(" ") || !Character.isLowerCase(className.codePointAt(0))) {
+                    tmpClassNames.add(className);
+                }
+            }
+
+           return tmpClassNames.stream().filter(line -> !(line.contains(" "))).toList();
+
         } catch (Exception e) {
 
             log.error("Could not extract class names from the response from the AI-model");
@@ -271,4 +278,6 @@ public class StringUtil {
 
         return cleanedBeforerEndDelimiterString.concat(lastPart);
     }
+
+
 }

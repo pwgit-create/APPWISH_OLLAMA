@@ -130,10 +130,15 @@ public class RequestHandlerImpl implements RequestHandler {
     @Override
     public List<SuperApp> sendClassesNeededForSuperAppQuestionToOllamaInstance(String question) {
 
-        List<String> classNames = GetListOfClasses(question);
+      String responseFromAiModel  = GetListOfClasses(question);
 
-        if (classNames.isEmpty())
-            sendClassesNeededForSuperAppQuestionToOllamaInstance(question);
+        // Resend the question if validation fails (With recursive strategy)
+        if (responseFromAiModel.isEmpty() ||
+                !CodeGeneratorUtil.ValidateResponseOnSuperAppGetAllClassesQuestion(responseFromAiModel)){
+            sendClassesNeededForSuperAppQuestionToOllamaInstance(question);}
+
+        // Convert response into list format
+        List<String> classNames = StringUtil.GetListOfClassNamesInSuperAppGeneration(responseFromAiModel);
 
         return CodeGeneratorUtil.convertListOfStringClassNamesIntoAnListOfUnimplementedSuperAppClasses(classNames);
     }
@@ -144,7 +149,7 @@ public class RequestHandlerImpl implements RequestHandler {
         List<SuperApp> superAppList = DataStorage.getInstance().getListOfCurrentSuperAppClasses();
 
         // Include the main method in the Main class
-        if (superAppClass.getClassName().equalsIgnoreCase("main")) {
+        if (superAppClass.getClassName().equals("Main") || superAppClass.getClassName().equalsIgnoreCase("MainClass")) {
 
             // Always include
             promptBuilder = new PromptBuilder()
@@ -174,10 +179,12 @@ public class RequestHandlerImpl implements RequestHandler {
                                 .equalsIgnoreCase(superAppClass.getClassName())))
                         .toList()
                         .forEach(c -> promptBuilder.addLine(c.getClassName()));
-                promptBuilder.addLine(LAST_LINE_OF_UNIMPLEMENTED_CLASSES_OF_THE_SUPER_APP);
+                promptBuilder
+                        .addLine(LAST_LINE_OF_UNIMPLEMENTED_CLASSES_OF_THE_SUPER_APP)
+                        .addLine(QuestionConstants.DO_NOT_ASSUME_THAT_CLASSES_CONTAINS_METHODS_OR_CONSTRUCTORS_THAT_THEY_DO_NOT);
             }
             // Always include
-            promptBuilder.addLine(QuestionConstants.INCLUDE_IN_ONE_FILE)
+            promptBuilder
                     .addLine(QuestionConstants.AND_MAKE_SURE_CORRECT_NUMBER_OF_BRACE_BRACKETS_ARE_USED_AT_THE_END_OF_THE_JAVA_CODE)
                     .addLine(QuestionConstants.MARK_START_CHAR_DELIMITER)
                     .addLine(QuestionConstants.MARK_THE_END_CHAR_DELIMITER)
@@ -189,8 +196,11 @@ public class RequestHandlerImpl implements RequestHandler {
                     .addLine(QuestionConstants.IMPLEMENT_AS_MUCH_AS_POSSIBLE)
                     .addLine(QuestionConstants.THREAD_PACKAGE)
                     .addLine(QuestionConstants.ONLY_CODE);
+
         }
-        // Use this block for all classes that is not named main or Main
+
+
+        // Use this block for all other classes
         else {
             // Always include
             promptBuilder = new PromptBuilder()
@@ -209,7 +219,9 @@ public class RequestHandlerImpl implements RequestHandler {
                 promptBuilder.addLine(MAKE_SURE_IT_ALIGNS_WITH_OTHER_CLASSES);
                 superAppList.stream().filter(SuperApp::isImplemented).forEach(s -> promptBuilder.add(GetFormattedStringForAClassName(s)
                         + CodeGeneratorUtil.GetFormattedListOfMethodsString(s) + GetFormattedListOfConstructorString(s)));
-                promptBuilder.addLine(THAT_WAS_THE_LAST_LINE_OF_REMEMBER_CLASSES);
+                promptBuilder
+                        .addLine(THAT_WAS_THE_LAST_LINE_OF_REMEMBER_CLASSES)
+                        .addLine(DO_NOT_ASSUME_THAT_CLASSES_CONTAINS_METHODS_OR_CONSTRUCTORS_THAT_THEY_DO_NOT);
             }
             // No class at all has been implemented
             else {
@@ -225,7 +237,7 @@ public class RequestHandlerImpl implements RequestHandler {
                 promptBuilder.addLine(LAST_LINE_OF_UNIMPLEMENTED_CLASSES_OF_THE_SUPER_APP);
             }
             // Always include
-            promptBuilder.addLine(QuestionConstants.INCLUDE_IN_ONE_FILE)
+            promptBuilder
                     .addLine(QuestionConstants.NO_JAVA_FX)
                     .addLine(QuestionConstants.NO_SPECIAL_LIBRARIES)
                     .addLine(QuestionConstants.MAKE_SURE_IT_WORKS_ON_JAVA_19)
@@ -247,7 +259,7 @@ public class RequestHandlerImpl implements RequestHandler {
         return outputFromOllamaAPI;
     }
 
-    private List<String> GetListOfClasses(String question) {
+    private String GetListOfClasses(String question) {
 
         List<String> classNames = new LinkedList<>();
         PromptBuilder initialPrompt = new PromptBuilder().addLine(QuestionConstants.WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX)
@@ -262,13 +274,12 @@ public class RequestHandlerImpl implements RequestHandler {
         try {
             result = api.generate(codeGeneratorConfig.getOllamaModel(), initialPrompt.build(), options);
 
-            classNames = StringUtil.GetListOfClassNamesInSuperAppGeneration(result.getResponse());
 
         } catch (OllamaBaseException | IOException | InterruptedException e) {
             log.error("Error when sending the request to the local ollama server");
         }
 
-        return classNames;
+        return result.getResponse();
 
     }
 }
