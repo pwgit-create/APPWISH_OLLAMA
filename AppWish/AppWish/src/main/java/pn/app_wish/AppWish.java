@@ -182,7 +182,7 @@ public class AppWish extends Application {
         ProcessBuilder pb;
         if (output_label.isVisible()) {
             // Super App Creation
-            pb = new ProcessBuilder(StaticAppWishConstants.JAVA_PATH, StaticAppWishConstants.C_ARGUMENT_SUPER_APP,NOTHING_STRING + javaExecutablePath.replace(MAIN_TEXT, NOTHING_STRING) + SPACE_SPRING + MAIN_TEXT);
+            pb = new ProcessBuilder(StaticAppWishConstants.JAVA_PATH, StaticAppWishConstants.C_ARGUMENT_SUPER_APP, javaExecutablePath.replace(MAIN_DOT_JAVA, NOTHING_STRING) + SPACE_SPRING + MAIN_TEXT);
         } else {
             // New App
             // Continue an App

@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static pn.cg.util.CodeGeneratorUtil.ValidateResponseOnSuperAppGetAllClassesQuestion;
+
 
 public class StringUtil {
 
@@ -232,12 +234,15 @@ public class StringUtil {
             List<String> tmpClassNames = new LinkedList<>();
 
             for (String className : classNamesArr) {
-                if (!className.contains(" ") || !Character.isLowerCase(className.codePointAt(0))) {
+                if (!className.contains(" ")
+                        || !className.equals("\n")
+                        || !Character.isLowerCase(className.codePointAt(0))
+                        && className.matches("^[a-zA-Z0-9]+$")) {
                     tmpClassNames.add(className);
                 }
             }
 
-           return tmpClassNames.stream().filter(line -> !(line.contains(" "))).toList();
+            return tmpClassNames.stream().filter(line -> !(line.contains(" "))).toList();
 
         } catch (Exception e) {
 

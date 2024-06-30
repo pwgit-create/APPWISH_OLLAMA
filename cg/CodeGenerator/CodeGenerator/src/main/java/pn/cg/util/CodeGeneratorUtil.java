@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import pn.cg.app_system.code_generation.model.SuperApp;
 import pn.cg.app_system.code_generation.model.enum_.OPTION_METHOD_CONSTRUCTOR;
 import pn.cg.datastorage.DataStorage;
+import pn.cg.datastorage.ThreadPoolMaster;
 
 import java.io.File;
 import java.io.IOException;
@@ -108,7 +109,10 @@ public record CodeGeneratorUtil() {
                 return SUPER_APP_FOLDER_NAME + (maxNumberOfExistingSuperAppDirectories + 1);
             }
 
-        } catch (IOException e) {
+        } catch (NumberFormatException | IOException e) {
+            log.error("You have a folder in the that resides in the directory for the generated java applications that starts with \"APP_\" and have a suffix that is not an Integer\nPlease move or delete that folder to resolve this error");
+            ThreadPoolMaster.getInstance().TerminateThreads();
+            System.exit(1);
             throw new RuntimeException(e);
         }
     }
@@ -191,7 +195,7 @@ public record CodeGeneratorUtil() {
      *
      * @param superApp A SuperApp instance
      * @return String
-     * @Format-Style A String that is formatted for a query to an AI-Model
+     * @Format-Style A String that is formatted for a query to an AI-Model or for writing to a doc file
      */
     public static String GetFormattedStringForAClassName(SuperApp superApp) {
         return "\nClass name: " + superApp.getClassName();
@@ -209,16 +213,15 @@ public record CodeGeneratorUtil() {
 
         final StringBuilder formatStringBuilder = new StringBuilder();
 
-        formatStringBuilder.append("App Documentation\n\n");
+        formatStringBuilder.append("App Documentation\n");
 
         successfulSuperAppCreation.forEach(s -> formatStringBuilder
                 .append("\n------------------")
                 .append(GetFormattedStringForAClassName(s))
                 .append("\n")
-                .append(GetFormattedListOfMethodsString(s))
-                .append(GetFormattedListOfConstructorString(s)));
-
-
+                .append(GetFormattedListOfMethodsStringForDocFile(s))
+                .append("\n")
+                .append(GetFormattedListOfConstructorStringForDocFile(s)));
         try {
             FileUtil.writeDataToFile(file, formatStringBuilder.toString());
             return true;
@@ -249,6 +252,41 @@ public record CodeGeneratorUtil() {
                 && !responseFromAiModelOnGetAllClassesFromSuperAppQuestion.contains(":")
                 && !responseFromAiModelOnGetAllClassesFromSuperAppQuestion.contains(",");
 
+    }
+    /**
+     * Get a formatted String that will differ depending on wherever the super app contains methods or not
+     *
+     * @param superApp A SuperApp instance
+     * @return String
+     * @Format-Style A String that is formatted for writing to a doc file
+     */
+    private static String GetFormattedListOfMethodsStringForDocFile(SuperApp superApp) {
+
+        if (superApp.getMethods() == null)
+            superApp.setMethods(new LinkedList<>());
+
+        if (superApp.getMethods().isEmpty())
+            return "";
+        else
+            return "Methods: " + superApp.toStringForMethods();
+    }
+
+
+    /**
+     * Get a formatted String that will differ depending on wherever the super app contains constructors or not
+     *
+     * @param superApp A SuperApp instance
+     * @return String
+     * @Format-Style A String that is formatted for writing to a doc file
+     */
+    private static String GetFormattedListOfConstructorStringForDocFile(SuperApp superApp) {
+
+        if (superApp.getConstructors() == null)
+            superApp.setConstructors(new LinkedList<>());
+
+        if (superApp.getConstructors().isEmpty())
+            return "";
+        else return "Public Constructors: " + superApp.toStringForConstructors() + ",";
     }
 
     private static List<String> ExtractDeclaredConstructorsFromClassFile(String className, Path pathToClassFileDirectory) throws MalformedURLException, ClassNotFoundException {

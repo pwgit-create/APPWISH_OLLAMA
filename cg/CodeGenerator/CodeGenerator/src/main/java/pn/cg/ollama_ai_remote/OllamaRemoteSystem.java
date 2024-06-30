@@ -26,8 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static pn.cg.datastorage.constant.CommonStringConstants.*;
-import static pn.cg.datastorage.constant.PathConstants.RESOURCE_PATH;
-import static pn.cg.datastorage.constant.PathConstants.SHELL_SCRIPT_PATH;
+
 
 /**
  * This class holds the logic for the requests and responses to the OLLAMA AI API
@@ -233,6 +232,7 @@ public class OllamaRemoteSystem {
             // Copy class file to the script directory for the javac script, so it will be included in the class path
             try {
                 Path destinationPathForTempFile= Path.of(DataStorage.getInstance().getPROJECT_ROOT_WORKING_DIR().toString()+File.separator+className+CLASS_FILE_EXTENSION);
+                Files.deleteIfExists(destinationPathForTempFile);
                 DataStorage.getInstance().addPathToTmpFileList(destinationPathForTempFile);
                 Files.copy(Path.of(TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.CLASS_FILE_EXTENSION, DataStorage.getInstance().getSuperAppDirectoryName())),destinationPathForTempFile);
             } catch (IOException e) {

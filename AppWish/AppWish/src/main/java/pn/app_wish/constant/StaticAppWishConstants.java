@@ -7,6 +7,7 @@ public record StaticAppWishConstants() {
     public static final String JAVA_PATH="/usr/bin/java";
     public static final String C_ARGUMENT_SUPER_APP="-cp";
     public static final String MAIN_TEXT="Main";
+    public static final String MAIN_DOT_JAVA="Main.java";
     public static final String NOTHING_STRING="";
     public static final String SPACE_SPRING=" ";
 

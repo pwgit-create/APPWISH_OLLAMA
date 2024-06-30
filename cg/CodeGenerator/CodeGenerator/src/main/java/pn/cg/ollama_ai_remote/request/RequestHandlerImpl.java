@@ -134,13 +134,25 @@ public class RequestHandlerImpl implements RequestHandler {
 
         // Resend the question if validation fails (With recursive strategy)
         if (responseFromAiModel.isEmpty() ||
-                !CodeGeneratorUtil.ValidateResponseOnSuperAppGetAllClassesQuestion(responseFromAiModel)){
+                !(CodeGeneratorUtil.ValidateResponseOnSuperAppGetAllClassesQuestion(responseFromAiModel))){
             sendClassesNeededForSuperAppQuestionToOllamaInstance(question);}
 
         // Convert response into list format
         List<String> classNames = StringUtil.GetListOfClassNamesInSuperAppGeneration(responseFromAiModel);
 
-        return CodeGeneratorUtil.convertListOfStringClassNamesIntoAnListOfUnimplementedSuperAppClasses(classNames);
+        // Resend the question (Extra validation after method invocation)
+        if(classNames.size() < 2){
+            sendClassesNeededForSuperAppQuestionToOllamaInstance(question);
+        }
+
+        List<SuperApp> unimplementedSuperAppClasses = CodeGeneratorUtil.convertListOfStringClassNamesIntoAnListOfUnimplementedSuperAppClasses(classNames);
+
+        // (Extra validation after method invocation)
+        if(unimplementedSuperAppClasses.size() < 2) {
+            sendClassesNeededForSuperAppQuestionToOllamaInstance(question);
+        }
+        
+        return unimplementedSuperAppClasses;
     }
 
     @Override
@@ -165,7 +177,8 @@ public class RequestHandlerImpl implements RequestHandler {
                 superAppList.stream().filter(SuperApp::isImplemented).forEach(s -> promptBuilder
                         .add(GetFormattedStringForAClassName(s) + CodeGeneratorUtil.GetFormattedListOfMethodsString(s)
                                 + CodeGeneratorUtil.GetFormattedListOfConstructorString(s)));
-                promptBuilder.addLine(THAT_WAS_THE_LAST_LINE_OF_REMEMBER_CLASSES);
+                promptBuilder.addLine(THAT_WAS_THE_LAST_LINE_OF_REMEMBER_CLASSES)
+                        .addLine(QuestionConstants.DO_NOT_ASSUME_THAT_CLASSES_CONTAINS_METHODS_OR_CONSTRUCTORS_THAT_THEY_DO_NOT);
             }
 
             // No class at all has been implemented
