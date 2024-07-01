@@ -266,9 +266,9 @@ public record CodeGeneratorUtil() {
             superApp.setMethods(new LinkedList<>());
 
         if (superApp.getMethods().isEmpty())
-            return "";
+            return "No public methods";
         else
-            return "Methods: " + superApp.toStringForMethods();
+            return "Public Methods: " + superApp.toStringForMethods();
     }
 
 
@@ -285,8 +285,8 @@ public record CodeGeneratorUtil() {
             superApp.setConstructors(new LinkedList<>());
 
         if (superApp.getConstructors().isEmpty())
-            return "";
-        else return "Public Constructors: " + superApp.toStringForConstructors() + ",";
+            return "No public constructors";
+        else return "Public Constructors: " + superApp.toStringForConstructors();
     }
 
     private static List<String> ExtractDeclaredConstructorsFromClassFile(String className, Path pathToClassFileDirectory) throws MalformedURLException, ClassNotFoundException {

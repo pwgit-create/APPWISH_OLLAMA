@@ -237,8 +237,10 @@ public class StringUtil {
                 if (!className.contains(" ")
                         || !className.equals("\n")
                         || !Character.isLowerCase(className.codePointAt(0))
-                        && className.matches("^[a-zA-Z0-9]+$")) {
-                    tmpClassNames.add(className);
+                        && (className.matches("^[a-z\nA-Z]+$") || className.matches("^[0-9\n]+$"))) {
+
+                    if(!className.equalsIgnoreCase("\n")){
+                    tmpClassNames.add(className);}
                 }
             }
 

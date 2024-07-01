@@ -23,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.simple.SimpleLogger;
 
+import pn.app_wish.model.AppCmd;
+import pn.app_wish.model.CodeBaseCmd;
 import pn.app_wish.constant.CodeEvent;
 import pn.app_wish.constant.GUIConstants;
 import pn.app_wish.constant.StaticAppWishConstants;
@@ -167,7 +169,7 @@ public class AppWish extends Application {
         if (javaExecutablePath != null) {
 
             if (!output_label.isVisible()) {
-                System.out.println("Executing java app on path -> " + javaExecutablePath);
+                log.info("Executing java app on path -> {}", javaExecutablePath);
             }
             try {
                 ProcessBuilder pb = GetProcessBuilderForRunningGeneratedJavaApplications();
@@ -178,15 +180,23 @@ public class AppWish extends Application {
         }
     }
 
-    private ProcessBuilder GetProcessBuilderForRunningGeneratedJavaApplications() {
-        ProcessBuilder pb;
+    private final ProcessBuilder GetProcessBuilderForRunningGeneratedJavaApplications() {
+        ProcessBuilder pb = null;
+
+        final String classPath = javaExecutablePath.replace(MAIN_DOT_JAVA, NOTHING_STRING);
+
         if (output_label.isVisible()) {
             // Super App Creation
-            pb = new ProcessBuilder(StaticAppWishConstants.JAVA_PATH, StaticAppWishConstants.C_ARGUMENT_SUPER_APP, javaExecutablePath.replace(MAIN_DOT_JAVA, NOTHING_STRING) + SPACE_SPRING + MAIN_TEXT);
+
+            // Security
+            if (classPath.concat(MAIN_DOT_JAVA).equals(javaExecutablePath)) {
+                log.info("Executing java app on path -> {}", javaExecutablePath.replace(MAIN_DOT_JAVA, NOTHING_STRING) + MAIN_TEXT);
+                pb = new ProcessBuilder(new CodeBaseCmd(classPath).GetCMDForRunningCodeBaseApplication());
+            }
         } else {
             // New App
             // Continue an App
-            pb = new ProcessBuilder(StaticAppWishConstants.BASH_PATH, StaticAppWishConstants.C_ARGUMENT, StaticAppWishConstants.JAVA_TEXT + javaExecutablePath);
+            pb = new ProcessBuilder(new AppCmd(javaExecutablePath).GetCMDForRunningCodeBaseApplication());
         }
         return pb;
     }

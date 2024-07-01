@@ -4,12 +4,11 @@ public record StaticAppWishConstants() {
     public static final String BASH_PATH = "/bin/bash";
     public static final String C_ARGUMENT = "-c";
     public static final String JAVA_TEXT = "java ";
-    public static final String JAVA_PATH="/usr/bin/java";
-    public static final String C_ARGUMENT_SUPER_APP="-cp";
+
+
     public static final String MAIN_TEXT="Main";
     public static final String MAIN_DOT_JAVA="Main.java";
     public static final String NOTHING_STRING="";
-    public static final String SPACE_SPRING=" ";
 
     public final static String CONTINUE_ON_APPLICATION_FILTER_ON_JAVA_EXTENSION = "*.java";
     public final static String CONTINUE_ON_APPLICATION_FILTER_ON_JAVA_EXTENSION_DESCRIPTION = "A extension filter with purpose to only show .java files";

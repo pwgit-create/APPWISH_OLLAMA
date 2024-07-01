@@ -189,7 +189,7 @@ public record QuestionConstants() {
     /**
      * Share information to the AI-Model that it always should include a Main class that contains the Main Method
      */
-    public final static String MAIN_CLASS_SHOULD_ALWAYS_BE_ADDED_TO_THE_CLASS_LIST="The last entry in the class list that you will provide , please add a class called Main";
+    public final static String MAIN_CLASS_SHOULD_ALWAYS_BE_ADDED_TO_THE_CLASS_LIST="The last entry in the class list that you will provide , please add a class called Main for starting the application";
 
     /**
      * Share information to the AI-Model about the requirements for the implementation of the Main class ( In a super app generation process)
