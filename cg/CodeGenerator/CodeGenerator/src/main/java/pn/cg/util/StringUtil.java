@@ -5,6 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pn.cg.datastorage.constant.CommonStringConstants;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import static pn.cg.util.CodeGeneratorUtil.ValidateResponseOnSuperAppGetAllClassesQuestion;
+
 
 public class StringUtil {
 
@@ -76,6 +82,7 @@ public class StringUtil {
 
     /**
      * Removes chars that might cause ollama´s api to send 400
+     *
      * @param input input String
      * @return String
      */
@@ -156,7 +163,9 @@ public class StringUtil {
             } else if (!isStartDelimiter) {
                 delimiter = CommonStringConstants.JAVA_CODE_GENERATION_END_DELMITER_STRING;
                 returnValue = RemoveAllExceptTheLastOccurrenceOfWord(returnValue, delimiter);
-                returnValue = RemoveAllExceptTheLastOccurrenceOfWord(returnValue,delimiter+"\n");
+
+                returnValue = RemoveAllExceptTheLastOccurrenceOfWord(returnValue, delimiter + "\n");
+
             }
         } catch (Exception e) {
             log.debug("Error on delimiter String removal process");
@@ -177,7 +186,7 @@ public class StringUtil {
     /**
      * Appends brace buckets at the end of the String
      *
-     * @param input String Input
+     * @param input                String Input
      * @param numberOfBraceBuckets int
      * @return input string appended with the given amount of brace buckets
      */
@@ -207,19 +216,50 @@ public class StringUtil {
         try {
             returnValue = returnValue.replace("```java", "")
                     .replace("```", "")
-                    .replace("```Java","")
-                    .replace("```JAVA","");
+                    .replace("```Java", "")
+                    .replace("```JAVA", "");
         } catch (Exception e) {
 
-            log.debug("Could not remove common addition string");
+            log.error("Could not remove common addition string");
         }
         return returnValue;
     }
 
     /**
+     * Takes an input string formated with new lines , parses it , and then converts it into a list
+     *
+     * @param input A string with class names delimited with new lines
+     * @return List<String>
+     */
+    public static List<String> GetListOfClassNamesInSuperAppGeneration(String input) {
+        try {
+            String[] classNamesArr = input.split("\n");
+            List<String> tmpClassNames = new LinkedList<>();
+
+            for (String className : classNamesArr) {
+                if (!className.contains(" ")
+                        || !className.equals("\n")
+                        || !Character.isLowerCase(className.codePointAt(0))
+                        && (className.matches("^[a-z\nA-Z]+$") || className.matches("^[0-9\n]+$"))) {
+
+                    if(!className.equalsIgnoreCase("\n")){
+                    tmpClassNames.add(className);}
+                }
+            }
+
+            return tmpClassNames.stream().filter(line -> !(line.contains(" "))).toList();
+
+        } catch (Exception e) {
+
+            log.error("Could not extract class names from the response from the AI-model");
+        }
+        return new LinkedList<>();
+    }
+
+    /**
      * Replace all occurrences (with an empty String) except the first one of the delimiter word
      *
-     * @param input input String
+     * @param input     input String
      * @param delimiter delimiter String
      */
     private static String RemoveAllExceptTheFirstOccurrenceOfaAWord(String input, String delimiter) {
@@ -234,7 +274,7 @@ public class StringUtil {
     /**
      * Replace all occurrences (with an empty String) except the last one of the delimiter word
      *
-     * @param input input String
+     * @param input     input String
      * @param delimiter String
      */
     private static String RemoveAllExceptTheLastOccurrenceOfWord(String input, String delimiter) {
@@ -248,4 +288,6 @@ public class StringUtil {
 
         return cleanedBeforerEndDelimiterString.concat(lastPart);
     }
+
+
 }

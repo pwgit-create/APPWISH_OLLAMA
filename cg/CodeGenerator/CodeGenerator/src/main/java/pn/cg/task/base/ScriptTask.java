@@ -39,18 +39,9 @@ public abstract class ScriptTask {
 
     protected String RunScript() {
 
-       boolean isLinux = Objects.equals(File.separator, "/");
-
-       String logMessage = isLinux ? "Started Shell Script Task" : "Started PS Script Task";
-
-        log.debug(logMessage);
-
         pb = new ProcessBuilder();
 
-        if(isLinux)
         SetCommandsLinux(pb);
-        else
-            SetCommandsWin(pb);
 
         try {
 
@@ -89,24 +80,6 @@ public abstract class ScriptTask {
 
         if (inputArgs != null)
             cmdList.addAll(Arrays.asList(inputArgs));
-
-
-        pb.command(cmdList);
-
-
-    }
-
-    protected void SetCommandsWin(ProcessBuilder pb) {
-
-        List<String> cmdList = new LinkedList<>();
-
-        String PS = "powershell.exe";
-        cmdList.add(PS);
-
-        cmdList.add(PATH_TO_SCRIPT);
-
-        if (inputArgs != null)
-            cmdList.add("-pathToJavaFile "+"\""+inputArgs[0]+"\"") ;
 
 
         pb.command(cmdList);
