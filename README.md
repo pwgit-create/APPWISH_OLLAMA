@@ -6,29 +6,31 @@ With App Wish, you can unleash your creativity without worrying about the comple
 <br/>
 
 
-![Logo](https://github.com/pwgit-create/APPWISH_OLLAMA/blob/master/AppWish/AppWish/src/main/resources/shooting_star.png?raw=true)
-
-## AppWish Quick Start Guide(Release binary)
 
 
-Unzip the file from the latest release and follow the information provided in the [latest release notes](https://github.com/pwgit-create/APPWISH_OLLAMA/releases/tag/v2.0) 😃.
 
-
-## Functionallity
+## Functionality
 
 
 
 * ### Code Base Generation
-Since version 2.0 its possible to generate code bases from an appwish prompt. This option is sutiing if you are a developer
-or working with code at enterprises.
-
+Since version 2.0 its possible to generate code bases from an appwish prompt.
+If you are a developer or work professionally with code, this option is suitable for you.
 * ### New App
-Write a prompt of what your app should do and click on New App
+Write a prompt about what your app should do and click on New App
 
 * ### Continue an Application
 Write a prompt with your inteded changes and click on Continue
 
+## Quick Start Guide(Release binary)
+Follow the information provided in the [latest release notes](https://github.com/pwgit-create/APPWISH_OLLAMA/releases/tag/v2.0) 😃.
 
+1. Unzip the file from the latest release
+2. Run the install script before starting AppWish
+
+
+
+![Logo](https://github.com/pwgit-create/APPWISH_OLLAMA/blob/master/AppWish/AppWish/src/main/resources/shooting_star.png?raw=true)
 
 ## Apps made with AppWish Ollama
 [Stenography app](https://github.com/pwgit-create/Steganography-App)
