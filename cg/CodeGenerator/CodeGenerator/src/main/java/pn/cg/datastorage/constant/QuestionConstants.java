@@ -160,14 +160,14 @@ public record QuestionConstants() {
      * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
      * @chain-order 4/5
      */
-    public final static String ONLY_CLASS_NAMES_IN_ANSWER="Your response should only contain the needed classes name for the application and there should be one class name per line, your reply must not contain anything else";
+    public final static String ONLY_CLASS_NAMES_IN_ANSWER="Your response should only contain the needed classes name for the application and there shall be one class name per line, your reply must not contain anything else";
 
     /**
      * @use-info Clarify that no numbers or dots should be included in the response from the AI-model
      * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
      * @chain-order 5/5
      */
-    public final static String CLARIFY_THAT_NO_DOTS_OR_NUMBERS_SHOULD_BE_INCLUDED_IN_THE_RESPONSE="Your response should not contain number and dots to state the order of the classes, there should only be one class name per line and nothing else";
+    public final static String CLARIFY_THAT_NO_DOTS_OR_NUMBERS_SHOULD_BE_INCLUDED_IN_THE_RESPONSE="Your response should must not contain number,dots or spaces to state the order of the classes, there should only be one class name per line and nothing else";
 
     /**
      * This is the line that initiates the phase that happens after the classes for the super app has been stated
@@ -189,7 +189,12 @@ public record QuestionConstants() {
     /**
      * Share information to the AI-Model that it always should include a Main class that contains the Main Method
      */
-    public final static String MAIN_CLASS_SHOULD_ALWAYS_BE_ADDED_TO_THE_CLASS_LIST="The last entry in the class list that you will provide , please add a class called Main for starting the application";
+    public final static String MAIN_CLASS_SHOULD_ALWAYS_BE_ADDED_TO_THE_CLASS_LIST="The last entry in the class list that you will provide , please add a class called Main";
+
+    /**
+     * Instruct the AI-Model that the Main class is used to start the application (To avoid an extra class in the code base)
+     */
+    public final static String EXPLAIN_PURPOSE_WITH_MAIN_CLASS="The purpose with Main is to start the application but do not add that information in your response";
 
     /**
      * Share information to the AI-Model about the requirements for the implementation of the Main class ( In a super app generation process)
