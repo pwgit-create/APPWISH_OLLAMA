@@ -1,4 +1,4 @@
-# Turn Your App Ideas into Reality!
+# AppWish 2.0
 
 Introducing AppWish, a groundbreaking platform that empowers you to transform your app concepts into fully functional applications. 
 With App Wish, you can unleash your creativity without worrying about the complexities of coding.
@@ -11,7 +11,23 @@ With App Wish, you can unleash your creativity without worrying about the comple
 ## AppWish Quick Start Guide(Release binary)
 
 
-Unzip the file from the latest release and follow the information provided in the [latest release notes](https://github.com/pwgit-create/APPWISH_OLLAMA/releases/tag/v1.8) 😃.
+Unzip the file from the latest release and follow the information provided in the [latest release notes](https://github.com/pwgit-create/APPWISH_OLLAMA/releases/tag/v2.0) 😃.
+
+
+## Functionallity
+
+
+
+* ### Code Base Generation
+Since version 2.0 its possible to generate code bases from an appwish prompt. This option is sutiing if you are a developer
+or working with code at enterprises.
+
+* ### New App
+Write a prompt of what your app should do and click on New App
+
+* ### Continue an Application
+Write a prompt with your inteded changes and click on Continue
+
 
 
 ## Apps made with AppWish Ollama
