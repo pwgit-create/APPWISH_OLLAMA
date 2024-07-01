@@ -44,8 +44,8 @@ public class CompileClassTask extends ScriptTask implements Runnable {
     /**
      * Set compilation job to status successful,and add the value to the shared singleton
      */
-    private void successFullCompilation() {
-        log.debug("successFullCompilation");
+    private synchronized void successFullCompilation() {
+        log.info("successFullCompilation");
         CompilationJob compilationJob = new CompilationJob(assumedClassName);
         compilationJob.setResult(true);
         compilationJob.setErrorMessage(null);
@@ -56,8 +56,8 @@ public class CompileClassTask extends ScriptTask implements Runnable {
     /**
      * Set compilation job to status error,and adds the sanitized error String to the shared singleton
      */
-    private void compilationError(String javacOutput) {
-        log.debug("compilationError");
+    private synchronized void compilationError(String javacOutput) {
+        log.info("compilationError");
         CompilationJob compilationJob = new CompilationJob(assumedClassName);
         compilationJob.setResult(false);
         compilationJob.setErrorMessage(StringUtil

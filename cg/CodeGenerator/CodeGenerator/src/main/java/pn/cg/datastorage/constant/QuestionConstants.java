@@ -1,5 +1,7 @@
 package pn.cg.datastorage.constant;
 
+import javax.print.DocFlavor;
+
 public record QuestionConstants() {
 
     /**
@@ -32,23 +34,6 @@ public record QuestionConstants() {
     public final static String CLASS_DID_NOT_COMPILE_PREFIX_2 = "The java code you’ve sent me did not compile ";
 
 
-    /**
-     * Prefix that should be sent to fetch a list of classes from the ollama model
-     *
-     * @use-info The app wish should be concatenated at the tail of this String
-     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
-     * @chain-order 1/2
-     */
-    public final static String WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX = "Which classes are needed for java code on ";
-
-    /**
-     * Suffix for WHICH_CLASS_ARE_NEEDED_FOR_APP
-     *
-     * @use-info This String should be concatenated at the tail of the appWish (Instance variable in QuestionBuilder)
-     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
-     * @chain-order 2/2
-     */
-    public final static String WHICH_CLASS_ARE_NEEDED_FOR_APP_SUFFIX = "=? please provide me the java classes in a numbered list ";
 
     /**
      * Optional Suffix to APP_WISH
@@ -137,4 +122,131 @@ public record QuestionConstants() {
 
     public final static String ONLY_CODE ="Your answer should only contain code, any further explanations should be kept as comments within the code";
     /// ***** ///
+
+    /*
+     * Super app - specific questions
+     */
+    /// ***** ///
+
+    /**
+     * Prefix that should be sent to fetch a list of classes from the ollama model
+     *
+     * @use-info The (super) appWish should be concatenated at the tail of this String
+     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
+     * @chain-order 1/5
+     * @SuperApp-Question
+     */
+    public final static String WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX = "Which classes do we need to implement ourself in java to make an application with the features that is provided in the next coming lines?";
+
+    /**
+     * @use-info This is the string that will tell the AI-Model that the line above is the last line of the (super) appWish
+     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
+     * @chain-order 2/5
+     * @SuperApp-Question
+     */
+    public final static String LAST_LINE_OF_SUPER_APP="The line above was the last line that included features of the app I need";
+
+    /**
+     *
+     * @use-info Text that specifies the format of the response from the AI-model
+     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
+     * @chain-order 3/5
+     */
+    public final static String WHICH_CLASS_ARE_NEEDED_FOR_APP_RESPONSE_FORMAT_1 = "Please provide the name of the first java class and then make a new line for the second java class and then continue until you have listed all the class names of the application I need";
+
+
+    /**
+     * @use-info Additional guidelines regarding format in the response from the AI-model
+     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
+     * @chain-order 4/5
+     */
+    public final static String ONLY_CLASS_NAMES_IN_ANSWER="Your response should only contain the needed classes name for the application and there shall be one class name per line, your reply must not contain anything else";
+
+    /**
+     * @use-info Clarify that no numbers or dots should be included in the response from the AI-model
+     * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
+     * @chain-order 5/5
+     */
+    public final static String CLARIFY_THAT_NO_DOTS_OR_NUMBERS_SHOULD_BE_INCLUDED_IN_THE_RESPONSE="Your response should must not contain number,dots or spaces to state the order of the classes, there should only be one class name per line and nothing else";
+
+    /**
+     * This is the line that initiates the phase that happens after the classes for the super app has been stated
+     * @use-info Use this when the classes for the super app has been decided as the first line to the AI-model
+     */
+    public final static String FIRST_LINE_AFTER_CLASSES_HAS_BEEN_STATED_BY_MODEL="You have previously stated several classes that is needed to make my application";
+
+    /**
+     * Provide java code for a class
+     * @use-info Append the appWish at the tail of this question
+     */
+    public final static String PROVIDE_ME_JAVA_CODE_SUPER_APP_SPECIFIC=APP_WISH_PREFIX_FEATURE+"the class with name ";
+
+    /***
+     * Clarify the rules for the super app java class generation to the AI-model
+     */
+    public final static String  CLARIFY_JAVA_CODE_IN_SUPER_APP_RULES="Make sure that the generated code for the java class is compatible with the other classes that you stated was needed for the application , that includes correct variable names and correct imports and class names";
+
+    /**
+     * Share information to the AI-Model that it always should include a Main class that contains the Main Method
+     */
+    public final static String MAIN_CLASS_SHOULD_ALWAYS_BE_ADDED_TO_THE_CLASS_LIST="The last entry in the class list that you will provide , please add a class called Main";
+
+    /**
+     * Instruct the AI-Model that the Main class is used to start the application (To avoid an extra class in the code base)
+     */
+    public final static String EXPLAIN_PURPOSE_WITH_MAIN_CLASS="The purpose with Main is to start the application but do not add that information in your response";
+
+    /**
+     * Share information to the AI-Model about the requirements for the implementation of the Main class ( In a super app generation process)
+     */
+    public final static String IMPLEMENT_MAIN_CLASS_IN_SUPER_APP_CREATION=WITH_MAIN_METHOD +" and that the body of that main method is empty or invokes a method in one of the other classes that we generated before";
+
+    /**
+     * Instruct the AI-Model to not include a main method unless the class name is main
+     */
+    public final static String NO_MAIN_CLASS_UNLESS_THE_CLASS_NAME_IS_MAIN="Do not include a main method unless the class name is Main or main";
+
+    /**
+     * Remind the AI-Model that the current class generation should consider the other classes (of the entire super app)
+     */
+    public final static String MAKE_SURE_IT_ALIGNS_WITH_OTHER_CLASSES="Please make sure that the class you are generating now will work with the following classes that we generated previously and implemented and if you forgot their names they will be provided for you in the next lines along with the methods that it contains";
+
+    /**
+     * Just a line stating that for the AI-Model that the line above was the last line of the list of classes and their method members
+     */
+    public final static String THAT_WAS_THE_LAST_LINE_OF_REMEMBER_CLASSES="The line above was the last line of class names to consider when creating the class";
+
+    /**
+     * A line that only should be included if it is the first class of N in a super app generation
+     * @chain-order 1/4
+     */
+    public final static String CONSIDER_ALL_CLASSES_IN_THIS_SUPER_APP_CREATION="Please note that the class that you will create is one of many in this application and you need to consider that when creating this class";
+
+    /**
+     * Clarify that the other classes are not implemented yet and can´t be referenced in the code yet
+     * @chain-order 2/4
+     */
+    public final static String CLASSES_THAT_ARE_INCLUDED_IN_THE_SUPER_APP="The classes that you need to consider are not yet implemented so you can not use references to those classes in your code for this class unless you provide them as comments, but you can still consider what methods those classes might need from this class";
+
+    /**
+     * Start line before unimplemented classes are listed
+     * @chain-order 3/4
+     */
+    public final static String THE_UNIMPLEMENTED_CLASSES_OF_THE_SUPER_APP="These unimplemented classes are provided for you in the next coming lines";
+
+    /**
+     * End line after all unimplemented classes has been listed
+     * @chain-order 4/4
+     */
+    public final static String LAST_LINE_OF_UNIMPLEMENTED_CLASSES_OF_THE_SUPER_APP="The line above was the last line that included unimplemented classes that will be included in this application in the future. Remember that you can not use references to those classes in your code for this class unless you provide them as comments";
+
+    /**
+     * Instruct the AI-Model to not assume that classes contains methods or constructor parameters that they do not
+     */
+    public final static String DO_NOT_ASSUME_THAT_CLASSES_CONTAINS_METHODS_OR_CONSTRUCTORS_THAT_THEY_DO_NOT="Please do not assume parameter types in methods or constructors of other classes and include them in the code if it is not stated in the query that they exists";
+
+    /// ***** ///
+
+
+
 }

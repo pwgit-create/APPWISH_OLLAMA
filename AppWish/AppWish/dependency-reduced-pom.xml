@@ -2,9 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>pn.dev</groupId>
-  <artifactId>code-generator-ollama</artifactId>
+  <artifactId>code-generator-gui-ollama</artifactId>
+  <name>CodeGenerator-GUI</name>
   <version>1.8.1</version>
-  <description>The Java Application-Generator (pn.dev.code-generator-ollama) creates applications by giving a string of your desired features for a Java application, like this: AppSystem.StartCodeGenerator(String appWish)</description>
+  <description>The GUI interface for the pn.dev.code-generator-ollama library is included in this package</description>
   <inceptionYear>2024</inceptionYear>
   <developers>
     <developer>
@@ -29,15 +30,23 @@
         </configuration>
       </plugin>
       <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.1.2</version>
-        <dependencies>
-          <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.11.0-M2</version>
-          </dependency>
-        </dependencies>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>0.0.8</version>
+        <executions>
+          <execution>
+            <id>default-cli</id>
+            <configuration>
+              <mainClass>pn.app_wish.Main</mainClass>
+              <launcher>app</launcher>
+              <jlinkZipName>app</jlinkZipName>
+              <jlinkImageName>app</jlinkImageName>
+              <noManPages>true</noManPages>
+              <stripDebug>true</stripDebug>
+              <noHeaderFiles>true</noHeaderFiles>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
@@ -51,9 +60,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <manifestEntries>
-                    <Main-Class>pn.cg.Main</Main-Class>
-                  </manifestEntries>
+                  <mainClass>pn.app_wish.Main</mainClass>
                 </transformer>
               </transformers>
             </configuration>
@@ -84,22 +91,18 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-surefire-plugin</artifactId>
-      <version>3.3.0</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.11.0-M2</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
-          <artifactId>surefire-api</artifactId>
-          <groupId>org.apache.maven.surefire</groupId>
+          <artifactId>junit-platform-engine</artifactId>
+          <groupId>org.junit.platform</groupId>
         </exclusion>
         <exclusion>
-          <artifactId>surefire-extensions-api</artifactId>
-          <groupId>org.apache.maven.surefire</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>maven-surefire-common</artifactId>
-          <groupId>org.apache.maven.surefire</groupId>
+          <artifactId>apiguardian-api</artifactId>
+          <groupId>org.apiguardian</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -112,10 +115,10 @@
     </repository>
   </distributionManagement>
   <properties>
-    <maven.compiler.target>19</maven.compiler.target>
-    <maven.compiler.source>19</maven.compiler.source>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <javafx.version>19.0.2.1</javafx.version>
+    <junit.version>5.11.0-M2</junit.version>
     <sonar.organization>pn-dev</sonar.organization>
   </properties>
 </project>

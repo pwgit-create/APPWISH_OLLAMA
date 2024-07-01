@@ -3,7 +3,7 @@ package pn.cg.datastorage.constant;
 /**
  * Holder of common message Strings
  */
-public class CommonStringConstants {
+public record CommonStringConstants() {
 
     /**
      * String that should be returned if a String value will be used for error logic
@@ -14,6 +14,11 @@ public class CommonStringConstants {
      * Java file extensions (.java)
      */
     public static final String JAVA_FILE_EXTENSION = ".java";
+
+    /**
+     * Class file extension
+     */
+    public static final String CLASS_FILE_EXTENSION=".class";
 
     /**
      * The start delimiter String that will be requested in the query to the LLM Model

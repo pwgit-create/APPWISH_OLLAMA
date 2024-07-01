@@ -23,10 +23,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.simple.SimpleLogger;
 
+import pn.app_wish.model.AppCmd;
+import pn.app_wish.model.CodeBaseCmd;
 import pn.app_wish.constant.CodeEvent;
 import pn.app_wish.constant.GUIConstants;
 import pn.app_wish.constant.StaticAppWishConstants;
-import pn.app_wish.util.AppWishUtil;
 import pn.cg.app_system.AppSystem;
 import pn.cg.app_system.code_generation.model.CompilationJob;
 import pn.cg.datastorage.DataStorage;
@@ -38,12 +39,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import java.util.LinkedList;
 import java.util.List;
 
 
 import static java.util.Objects.requireNonNull;
-import static pn.app_wish.constant.GUIConstants.APP_HISTORY_STAGE_TILE;
-import static pn.app_wish.constant.GUIConstants.DEFAULT_FXML_FILE;
+import static pn.app_wish.constant.GUIConstants.*;
+import static pn.app_wish.constant.StaticAppWishConstants.*;
 
 
 public class AppWish extends Application {
@@ -67,6 +69,8 @@ public class AppWish extends Application {
     public Button btn_StopGeneratedApp;
     @FXML
     public ImageView logo;
+    @FXML
+    public Button btn_super_app_creation;
 
     private String javaExecutablePath;
     private Process executingJavaAppProcess;
@@ -100,11 +104,13 @@ public class AppWish extends Application {
         System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "DEBUG");
         Parent root = FXMLLoader.load(requireNonNull(getClass().getClassLoader().getResource(DEFAULT_FXML_FILE)));
         mainStage = primaryStage;
+        mainStage.setResizable(false);
         primaryStage.setTitle(GUIConstants.DEFAULT_STAGE_TITLE);
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+
     }
 
     /**
@@ -149,7 +155,7 @@ public class AppWish extends Application {
 
             waitForCompilationResult();
 
-            handleCompilationResult();
+            handleCompilationResult(false);
 
         });
 
@@ -161,10 +167,12 @@ public class AppWish extends Application {
         btn_StopGeneratedApp.setVisible(true);
 
         if (javaExecutablePath != null) {
-            System.out.println("Executing java app on path -> " + javaExecutablePath);
+
+            if (!output_label.isVisible()) {
+                log.info("Executing java app on path -> {}", javaExecutablePath);
+            }
             try {
-                ProcessBuilder pb;
-                pb = new ProcessBuilder(StaticAppWishConstants.BASH_PATH, StaticAppWishConstants.C_ARGUMENT, StaticAppWishConstants.JAVA_TEXT + javaExecutablePath);
+                ProcessBuilder pb = GetProcessBuilderForRunningGeneratedJavaApplications();
                 executingJavaAppProcess = pb.inheritIO().start();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -172,10 +180,31 @@ public class AppWish extends Application {
         }
     }
 
+    private final ProcessBuilder GetProcessBuilderForRunningGeneratedJavaApplications() {
+        ProcessBuilder pb = null;
+
+        final String classPath = javaExecutablePath.replace(MAIN_DOT_JAVA, NOTHING_STRING);
+
+        if (output_label.isVisible()) {
+            // Super App Creation
+
+            // Security
+            if (classPath.concat(MAIN_DOT_JAVA).equals(javaExecutablePath)) {
+                log.info("Executing java app on path -> {}", javaExecutablePath.replace(MAIN_DOT_JAVA, NOTHING_STRING) + MAIN_TEXT);
+                pb = new ProcessBuilder(new CodeBaseCmd(classPath).GetCMDForRunningCodeBaseApplication());
+            }
+        } else {
+            // New App
+            // Continue an App
+            pb = new ProcessBuilder(new AppCmd(javaExecutablePath).GetCMDForRunningCodeBaseApplication());
+        }
+        return pb;
+    }
+
     @FXML
     private void onViewAppHistory(ActionEvent ae) throws IOException {
 
-        if(!isCodeGenerationOnGoing) {
+        if (!isCodeGenerationOnGoing) {
             AnchorPane pane = FXMLLoader.load(
                     requireNonNull(getClass().getClassLoader().getResource(GUIConstants.APP_HISTORY_FXML_FILE)));
             Scene scene = new Scene(pane);
@@ -220,21 +249,22 @@ public class AppWish extends Application {
     /**
      * The method for the event CREATE_APPLICATION
      */
-    private void codeEventCreateApplication(){
-        if(!btn_StopGeneratedApp.isVisible()){
-        setButtonGroupVisibilityForCodeGenerationButtons(false);
-        output_label.setText("Generating code...");
-         }
+    private void codeEventCreateApplication() {
+        if (!btn_StopGeneratedApp.isVisible()) {
+            setButtonGroupVisibilityForCodeGenerationButtons(false);
+            output_label.setText(GUIConstants.GENERATING_CODE_DEFAULT_TEXT);
+        }
     }
+
     /**
      * The method for the event CONTINUE_ON_EXISTING_APPLICATION
      */
-    private void codeEventContinueAnApplication(){
-        if(!btn_StopGeneratedApp.isVisible()) {
+    private void codeEventContinueAnApplication() {
+        if (!btn_StopGeneratedApp.isVisible()) {
             setButtonGroupVisibilityForCodeGenerationButtons(false);
-            output_label.setText("Generating code...\nContinue with existing application");
-         }
+            output_label.setText(GUIConstants.CONTINUING_CODE_TEXT);
         }
+    }
 
     /**
      * Create application button event
@@ -259,7 +289,6 @@ public class AppWish extends Application {
             onAppWish(CodeEvent.CONTINUE_ON_EXISTING_APPLICATION);
         }
     }
-
 
     /**
      * Starts the AI Code-Generation if the text input field is not null
@@ -290,20 +319,27 @@ public class AppWish extends Application {
         }
     }
 
+
     /**
      * If a compilation result exist , check if the singleton in code-generator-ollama contains a path for an executable Java file
      * If the above is true , activate the "run application" button and remove the "generating code..." text
      */
-    private void handleCompilationResult() {
+    private void handleCompilationResult(boolean isSuperGeneration) {
         if (DataStorage.getInstance().getCompilationJob().isResult()) {
             javaExecutablePath = DataStorage.getInstance().getJavaExecutionPath();
             // Draw success or error texts, and show run app button
             Platform.runLater(() -> {
-                if (DataStorage.getInstance().getJavaExecutionPath() != null) {
-                    output_label.setVisible(false);
+                if (DataStorage.getInstance().getJavaExecutionPath() != null || isSuperGeneration) {
+                    if (!isSuperGeneration) {
+                        output_label.setVisible(false);
+                        btn_run_application.setVisible(true);
+                    }
                     btn_run_application.setVisible(true);
                     setButtonGroupVisibilityForCodeGenerationButtons(true);
                     isCodeGenerationOnGoing = false;
+                    if (isSuperGeneration) {
+                        output_label.setText(SUCCESS_ON_SUPER_APP_CREATION_TEXT);
+                    }
                 } else {
                     output_label.setText("Something went wrong :(");
                 }
@@ -318,6 +354,7 @@ public class AppWish extends Application {
     private void setButtonGroupVisibilityForCodeGenerationButtons(boolean isVisible) {
         btn_create_application.setVisible(isVisible);
         btn_continue_on_application.setVisible(isVisible);
+        btn_super_app_creation.setVisible(isVisible);
     }
 
     /**
@@ -354,4 +391,42 @@ public class AppWish extends Application {
             return null;
         }
     }
+
+    @FXML
+    public void OnSuperAppCreationButton(ActionEvent ae) {
+
+        isCodeGenerationOnGoing = true;
+        DataStorage.getInstance().setCompilationJob(new CompilationJob(GUIConstants.DEFAULT_STAGE_TITLE));
+        ThreadPoolMaster.getInstance().getExecutor().execute(() -> {
+            StartGuiThreadForSuperAppCreation();
+
+            AppSystem.StartSuperAppGeneration(tf_input.getText(), true, false, new LinkedList<>(), false, null);
+
+            waitUntilAllClassesOfTheSuperAppCreationHasBeenImplemented();
+            handleCompilationResult(true);
+        });
+    }
+
+    /**
+     * Starts a thread that handles GUI Updates
+     */
+    private void StartGuiThreadForSuperAppCreation() {
+
+        Platform.runLater(() -> {
+            setButtonGroupVisibilityForCodeGenerationButtons(false);
+            setButtonGroupVisibilityToFalseForStartAndStopApplicationsButtons();
+            output_label.setText(GENERATING_CODE_BASE_TEXT);
+            output_label.setVisible(true);
+        });
+    }
+
+    /**
+     * Wait until the singleton in code-generator-ollama has created the entire super app
+     */
+    private void waitUntilAllClassesOfTheSuperAppCreationHasBeenImplemented() {
+
+        while (!DataStorage.getInstance().isSuperAppCreated()) {
+        }
+    }
+
 }
