@@ -6,9 +6,6 @@ With App Wish, you can unleash your creativity without worrying about the comple
 <br/>
 
 
-
-
-
 ## Functionality
 
 
@@ -21,6 +18,7 @@ Write a prompt about what your app should do and click on New App
 
 * ### Continue an Application
 Write a prompt with your inteded changes and click on Continue
+
 
 ## Quick Start Guide(Release binary)
 Follow the information provided in the [latest release notes](https://github.com/pwgit-create/APPWISH_OLLAMA/releases/tag/v2.0) 😃.

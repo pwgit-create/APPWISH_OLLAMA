@@ -159,10 +159,13 @@ public class StringUtil {
             if (isStartDelimiter) {
                 delimiter = CommonStringConstants.JAVA_CODE_GENERATION_START_DELMITER_STRING;
                 returnValue = RemoveAllExceptTheFirstOccurrenceOfaAWord(returnValue, delimiter);
+                returnValue = RemoveAllExceptTheFirstOccurrenceOfaAWord(returnValue,delimiter + "\n");
             } else if (!isStartDelimiter) {
                 delimiter = CommonStringConstants.JAVA_CODE_GENERATION_END_DELMITER_STRING;
                 returnValue = RemoveAllExceptTheLastOccurrenceOfWord(returnValue, delimiter);
+
                 returnValue = RemoveAllExceptTheLastOccurrenceOfWord(returnValue, delimiter + "\n");
+
             }
         } catch (Exception e) {
             log.debug("Error on delimiter String removal process");
