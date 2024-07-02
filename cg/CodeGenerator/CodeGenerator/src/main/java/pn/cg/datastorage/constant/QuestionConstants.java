@@ -167,7 +167,7 @@ public record QuestionConstants() {
      * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
      * @chain-order 5/5
      */
-    public final static String CLARIFY_THAT_NO_DOTS_OR_NUMBERS_SHOULD_BE_INCLUDED_IN_THE_RESPONSE="Your response should must not contain number,dots or spaces to state the order of the classes, there should only be one class name per line and nothing else";
+    public final static String CLARIFY_THAT_NO_DOTS_OR_NUMBERS_SHOULD_BE_INCLUDED_IN_THE_RESPONSE="Your response should not contain number,dots or spaces to state the order of the classes, there should only be one class name per line and nothing else in your response";
 
     /**
      * This is the line that initiates the phase that happens after the classes for the super app has been stated
