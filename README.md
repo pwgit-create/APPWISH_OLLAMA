@@ -66,7 +66,7 @@ For more info on how to set up OLLAMA see: https://ollama.com
 * Make https://www.gnu.org/software/make/
 * Mvn https://maven.apache.org/
 * Java https://openjdk.org/projects/jdk/19/
-* OLLAMA https://ollama.com
+
 
 
 ## Getting OpenJDK 19 installed on Ubuntu
