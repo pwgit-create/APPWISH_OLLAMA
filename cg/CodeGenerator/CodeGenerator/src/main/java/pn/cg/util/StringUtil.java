@@ -237,8 +237,7 @@ public class StringUtil {
             List<String> tmpClassNames = new LinkedList<>();
 
             for (String className : classNamesArr) {
-                if (!className.equals("\n")
-                        || !Character.isLowerCase(className.codePointAt(0))) {
+                if (!className.equals("\n")) {
 
 
                     if (className.contains(" ")) {
