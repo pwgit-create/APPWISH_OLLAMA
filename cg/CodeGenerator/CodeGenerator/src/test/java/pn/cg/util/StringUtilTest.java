@@ -140,7 +140,6 @@ public class StringUtilTest {
                 "@END_HERE\n";
 
 
-
         //
         final String JAVA_CODE_WITH_EXTRA_DELIMITERS = "@START_HERE \\n" + //
                 "\"import java.awt.*;\n" + //
@@ -318,27 +317,40 @@ public class StringUtilTest {
     }
 
     @Test
-    public void ConvertStringWithClassNamesIntoAListTest(){
+    public void ConvertStringWithClassNamesIntoAListTest() {
 
-        final String text ="Jframe\nAccount\nMain";
-        final int expected=3;
+        final String text = "Jframe\nAccount\nMain";
+        final int expected = 3;
         final int actual = StringUtil.GetListOfClassNamesInSuperAppGeneration(text).size();
 
-        Assertions.assertEquals(expected,actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
-    public void GetListOfClassNamesInSuperAppGenerationTest(){
+    public void GetListOfClassNamesInSuperAppGenerationTest() {
 
-        final String TEST_INPUT="Here are the class names for your application:\n\nQuestionClass\nAnswerClass\nUserClass\nQuestionServiceClass\nAnswerServiceClass\nUserServiceClass\nMainClass";
+        final String TEST_INPUT = "Here are the class names for your application:\n\nQuestionClass\nAnswerClass\nUserClass\nQuestionServiceClass\nAnswerServiceClass\nUserServiceClass\nMainClass";
 
-        final String PERFECT_RESPONSE_FROM_AI_MODEL="\nQuestionClass\nAnswerClass\nUserClass\nQuestionServiceClass\nAnswerServiceClass\nUserServiceClass\nMainClass";
+        final String PERFECT_RESPONSE_FROM_AI_MODEL = "\nQuestionClass\nAnswerClass\nUserClass\nQuestionServiceClass\nAnswerServiceClass\nUserServiceClass\nMainClass";
 
 
         final List<String> EXPECTED = Arrays.stream(PERFECT_RESPONSE_FROM_AI_MODEL.split("\n")).toList();
         final List<String> ACTUAL = StringUtil.GetListOfClassNamesInSuperAppGeneration(TEST_INPUT);
 
-        Assertions.assertEquals(EXPECTED,ACTUAL);
+        Assertions.assertEquals(EXPECTED, ACTUAL);
+    }
+
+    @Test
+    public void GetListOfClassNamesInSuperAppGenerationTest2() {
+
+        final String TEST_INPUT = "1. PackageScanner\n2. SecurityAnalyzer\n3. VulnerabilityChecker\n4. ReportGenerator\n5. UserInterface\n6. ApplicationManager\n7. Main";
+        final String PERFECT_RESPONSE_FROM_AI_MODEL = "PackageScanner\nSecurityAnalyzer\nVulnerabilityChecker\nReportGenerator\nUserInterface\nApplicationManager\nMain";
+
+
+        final List<String> EXPECTED = Arrays.stream(PERFECT_RESPONSE_FROM_AI_MODEL.split("\n")).toList();
+        final List<String> ACTUAL = StringUtil.GetListOfClassNamesInSuperAppGeneration(TEST_INPUT);
+
+        Assertions.assertEquals(EXPECTED, ACTUAL);
     }
 
 }

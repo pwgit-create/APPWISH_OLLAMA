@@ -239,7 +239,6 @@ public class StringUtil {
             for (String className : classNamesArr) {
                 if (!className.equals("\n")) {
 
-
                     if (className.contains(" ")) {
 
                         className = className.trim();
@@ -251,9 +250,11 @@ public class StringUtil {
                         if (Character.isDigit(className.codePointAt(0))) {
                             className = className.
                                     replaceFirst(String.valueOf(className.codePointAt(0)), "");
+
                         }
+
                     }
-                    tmpClassNames.add(className);
+                    tmpClassNames.add(className.trim());
                 }
             }
 
