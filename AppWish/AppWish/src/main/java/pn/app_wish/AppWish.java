@@ -196,7 +196,7 @@ public class AppWish extends Application {
         } else {
             // New App
             // Continue an App
-            pb = new ProcessBuilder(new AppCmd(javaExecutablePath).GetCMDForRunningCodeBaseApplication());
+            pb = new ProcessBuilder(new AppCmd(javaExecutablePath).GetCMDForRunningApp_Application());
         }
         return pb;
     }

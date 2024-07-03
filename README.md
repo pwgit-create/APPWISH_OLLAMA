@@ -69,6 +69,7 @@ For more info on how to set up OLLAMA see: https://ollama.com
 * OLLAMA https://ollama.com
 
 
+
 ## Getting OpenJDK 19 installed on Ubuntu
             sudo apt update && sudo apt install openjdk-19-jdk            
 

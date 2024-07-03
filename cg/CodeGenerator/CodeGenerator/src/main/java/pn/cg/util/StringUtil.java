@@ -159,7 +159,7 @@ public class StringUtil {
             if (isStartDelimiter) {
                 delimiter = CommonStringConstants.JAVA_CODE_GENERATION_START_DELMITER_STRING;
                 returnValue = RemoveAllExceptTheFirstOccurrenceOfaAWord(returnValue, delimiter);
-                returnValue = RemoveAllExceptTheFirstOccurrenceOfaAWord(returnValue,delimiter + "\n");
+                returnValue = RemoveAllExceptTheFirstOccurrenceOfaAWord(returnValue, delimiter + "\n");
             } else if (!isStartDelimiter) {
                 delimiter = CommonStringConstants.JAVA_CODE_GENERATION_END_DELMITER_STRING;
                 returnValue = RemoveAllExceptTheLastOccurrenceOfWord(returnValue, delimiter);
@@ -237,13 +237,24 @@ public class StringUtil {
             List<String> tmpClassNames = new LinkedList<>();
 
             for (String className : classNamesArr) {
-                if (!className.contains(" ")
-                        || !className.equals("\n")
-                        || !Character.isLowerCase(className.codePointAt(0))
-                        && (className.matches("^[a-z\nA-Z]+$") || className.matches("^[0-9\n]+$"))) {
+                if (!className.equals("\n")) {
 
-                    if(!className.equalsIgnoreCase("\n")){
-                    tmpClassNames.add(className);}
+                    if (className.contains(" ")) {
+
+                        className = className.trim();
+
+                        if (className.contains(".")) {
+                            className = className.split("\\.")[1];
+                        }
+
+                        if (Character.isDigit(className.codePointAt(0))) {
+                            className = className.
+                                    replaceFirst(String.valueOf(className.codePointAt(0)), "");
+
+                        }
+
+                    }
+                    tmpClassNames.add(className.trim());
                 }
             }
 

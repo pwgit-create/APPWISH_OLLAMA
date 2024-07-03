@@ -248,8 +248,7 @@ public record CodeGeneratorUtil() {
      */
     public static boolean ValidateResponseOnSuperAppGetAllClassesQuestion(String responseFromAiModelOnGetAllClassesFromSuperAppQuestion){
 
-        return !responseFromAiModelOnGetAllClassesFromSuperAppQuestion.contains(" ")
-                && !responseFromAiModelOnGetAllClassesFromSuperAppQuestion.contains(":")
+        return !responseFromAiModelOnGetAllClassesFromSuperAppQuestion.contains(":")
                 && !responseFromAiModelOnGetAllClassesFromSuperAppQuestion.contains(",");
 
     }

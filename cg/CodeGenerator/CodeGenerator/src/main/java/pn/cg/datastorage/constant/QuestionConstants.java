@@ -160,14 +160,14 @@ public record QuestionConstants() {
      * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
      * @chain-order 4/5
      */
-    public final static String ONLY_CLASS_NAMES_IN_ANSWER="Your response should only contain the needed classes name for the application and there shall be one class name per line, your reply must not contain anything else";
+    public final static String ONLY_CLASS_NAMES_IN_ANSWER="The response should only contain the necessary class names for the application, with one class name per line, and should not contain any other information.";
 
     /**
      * @use-info Clarify that no numbers or dots should be included in the response from the AI-model
      * @part-of-question-chain WHICH_CLASS_ARE_NEEDED_FOR_APP_PREFIX
      * @chain-order 5/5
      */
-    public final static String CLARIFY_THAT_NO_DOTS_OR_NUMBERS_SHOULD_BE_INCLUDED_IN_THE_RESPONSE="Your response should not contain number,dots or spaces to state the order of the classes, there should only be one class name per line and nothing else in your response";
+    public final static String CLARIFY_THAT_NO_DOTS_OR_NUMBERS_SHOULD_BE_INCLUDED_IN_THE_RESPONSE="The only thing you need to include in your response is one class name per line. That is imperative!";
 
     /**
      * This is the line that initiates the phase that happens after the classes for the super app has been stated
