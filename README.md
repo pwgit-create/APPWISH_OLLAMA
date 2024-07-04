@@ -39,9 +39,9 @@ Follow the information provided in the [latest release notes](https://github.com
 ## Project information
 
 #### Instructional videos for installation and usage
-* [Installing Appwish Ollama](https://www.youtube.com/watch?v=_CJ_s8ZyaU0&list=PL0iduoILay6D9bTTqHQxIotqkzXEJBxln&index=2)
- Although the release is old, the installation process remains the same! </br> To guarantee the best experience, make sure to use the latest release.
-       </br></br>
+* [Installing Appwish Ollama](https://github.com/pwgit-create/APPWISH_OLLAMA/discussions/165)
+
+  </br>
 * [Adding new features to an existing application](https://www.youtube.com/watch?v=-kkeLQtlJTQ&list=PL0iduoILay6D9bTTqHQxIotqkzXEJBxln&index=5) 
 
 
