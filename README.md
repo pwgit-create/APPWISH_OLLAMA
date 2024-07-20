@@ -6,9 +6,6 @@ With App Wish, you can unleash your creativity without worrying about the comple
 <br/>
 
 
-
-
-
 ## Functionality
 
 
@@ -22,8 +19,8 @@ Write a prompt about what your app should do and click on New App
 * ### Continue an Application
 Write a prompt with your inteded changes and click on Continue
 
-## Quick Start Guide(Release binary)
-Follow the information provided in the [latest release notes](https://github.com/pwgit-create/APPWISH_OLLAMA/releases/tag/v2.0) 😃.
+## Quick Start!
+Follow the information provided in the [latest release notes](https://github.com/pwgit-create/APPWISH_OLLAMA/releases/tag/v2.0.1) 😃.
 
 1. Unzip the file from the latest release
 2. Run the install script before starting AppWish
@@ -42,9 +39,9 @@ Follow the information provided in the [latest release notes](https://github.com
 ## Project information
 
 #### Instructional videos for installation and usage
-* [Installing Appwish Ollama](https://www.youtube.com/watch?v=_CJ_s8ZyaU0&list=PL0iduoILay6D9bTTqHQxIotqkzXEJBxln&index=2)
- Although the release is old, the installation process remains the same! </br> To guarantee the best experience, make sure to use the latest release.
-       </br></br>
+* [Installing Appwish Ollama](https://github.com/pwgit-create/APPWISH_OLLAMA/discussions/165)
+
+  </br>
 * [Adding new features to an existing application](https://www.youtube.com/watch?v=-kkeLQtlJTQ&list=PL0iduoILay6D9bTTqHQxIotqkzXEJBxln&index=5) 
 
 
@@ -92,7 +89,7 @@ You can change the AI Model [here](https://github.com/pwgit-create/APPWISH_OLLMA
 2. Java 19 (Included in the latest release's install script)
 3. OLLAMA  (Included in the latest release's install script)
 
-## AppWish Quick Start Guide(Dev):
+## AppWish Quick Start for developers:
 
 ## Frameworks and tools
 * Make
@@ -105,10 +102,8 @@ You can change the AI Model [here](https://github.com/pwgit-create/APPWISH_OLLMA
 
 #### 2. Once the application is running, you'll find a text box provided.
 Write down the desired features and specifications for your application in the text box.
-Generate your application:
 
 #### 3. After defining your application features, click on the "Create" button.
-With these steps, you'll be on your way to generating your desired application using AppWish. Get ready to witness the magic of turning your ideas into reality!
+With these steps, you'll be on your way to generating your desired application using AppWish.
 
-If you have any further questions or need assistance, feel free to ask. Happy app building with AppWish!
-<br/><br/>:penguin:
+If you have any further questions or need assistance, feel free to ask. :penguin: :penguin: :penguin: :penguin: :penguin: :penguin:
