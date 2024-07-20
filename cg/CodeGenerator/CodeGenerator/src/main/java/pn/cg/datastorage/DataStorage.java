@@ -34,8 +34,12 @@ public class DataStorage {
     /**
      * Data holder for the current Super App Directory name
      */
-    private String SuperAppDirectoryName;
+    private String superAppDirectoryName;
 
+    /**
+     * Data holder for the current Continue an App Directory
+     */
+    private String continueAnAppDirectoryName;
     /**
      * The class that is selected for implementation tries in a super app creation process
      */
@@ -52,7 +56,7 @@ public class DataStorage {
      * The path for the project root directory
      */
     private final Path PROJECT_ROOT_WORKING_DIR;
-    private DataStorage() {
+    private  DataStorage() {
 
         this.compilationJob = getCompilationJob();
         this.isSuperAppCreated = false;
@@ -60,7 +64,7 @@ public class DataStorage {
     }
 
 
-    synchronized public static DataStorage getInstance() {
+     synchronized public static DataStorage getInstance() {
         if (instance == null) {
 
             instance = new DataStorage();
@@ -69,69 +73,77 @@ public class DataStorage {
     }
 
 
-    public CompilationJob getCompilationJob() {
+    public final CompilationJob getCompilationJob() {
         return compilationJob;
     }
 
-    public void setCompilationJob(CompilationJob compilationJob) {
+    public final void setCompilationJob(CompilationJob compilationJob) {
         this.compilationJob = compilationJob;
     }
 
-    public String getJavaExecutionPath() {
+    public final String getJavaExecutionPath() {
         return javaExecutionPath;
     }
 
-    public void setJavaExecutionPath(String javaExecutionPath) {
+    public final void setJavaExecutionPath(String javaExecutionPath) {
         this.javaExecutionPath = javaExecutionPath;
     }
 
-    public SuperApp getCurrentSuperClass() {
+    public final SuperApp getCurrentSuperClass() {
         return currentSuperClass;
     }
 
-    public void setCurrentSuperClass(SuperApp currentSuperClass) {
+    public final void setCurrentSuperClass(SuperApp currentSuperClass) {
         this.currentSuperClass = currentSuperClass;
     }
 
-    public boolean isSuperAppCreated() {
+    public final boolean isSuperAppCreated() {
         return isSuperAppCreated;
     }
 
-    public void setSuperAppCreated(boolean superAppCreated) {
+    public final void setSuperAppCreated(boolean superAppCreated) {
         isSuperAppCreated = superAppCreated;
     }
 
-    public String getSuperAppDirectoryName() {
-        return SuperAppDirectoryName;
+    public final String getSuperAppDirectoryName() {
+        return superAppDirectoryName;
     }
 
-    public void setSuperAppDirectoryName(String superAppDirectoryName) {
-        SuperAppDirectoryName = superAppDirectoryName;
+    public final void setSuperAppDirectoryName(String superAppDirectoryName) {
+        this.superAppDirectoryName = superAppDirectoryName;
     }
 
-    public List<SuperApp> getListOfCurrentSuperAppClasses() {
+    public final List<SuperApp> getListOfCurrentSuperAppClasses() {
         return listOfCurrentSuperAppClasses;
     }
 
-    public void setListOfCurrentSuperAppClasses(List<SuperApp> listOfCurrentSuperAppClasses) {
+    public final void setListOfCurrentSuperAppClasses(List<SuperApp> listOfCurrentSuperAppClasses) {
         this.listOfCurrentSuperAppClasses = listOfCurrentSuperAppClasses;
     }
 
-    public List<Path> getListOfPathsToTmpFiles() {
+    public final List<Path> getListOfPathsToTmpFiles() {
         return listOfPathsToTmpFiles;
     }
 
-    public void setListOfPathsToTmpFiles(List<Path> listOfPathsToTmpFiles) {
+    public final void setListOfPathsToTmpFiles(List<Path> listOfPathsToTmpFiles) {
         this.listOfPathsToTmpFiles = listOfPathsToTmpFiles;
     }
 
-    public void addPathToTmpFileList(Path path){
+    public final void addPathToTmpFileList(Path path){
 
         this.listOfPathsToTmpFiles.add(path);
     }
 
-    public Path getPROJECT_ROOT_WORKING_DIR() {
+    public final Path getPROJECT_ROOT_WORKING_DIR() {
         return PROJECT_ROOT_WORKING_DIR;
+    }
+
+    public final String getContinueAnAppDirectoryName() {
+        return continueAnAppDirectoryName;
+    }
+
+    public final void setContinueAnAppDirectoryName(String continueAnAppDirectoryName) {
+        this.continueAnAppDirectoryName = continueAnAppDirectoryName;
     }
 }
 
