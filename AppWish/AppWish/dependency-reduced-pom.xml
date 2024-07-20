@@ -4,7 +4,7 @@
   <groupId>pn.dev</groupId>
   <artifactId>code-generator-gui-ollama</artifactId>
   <name>CodeGenerator-GUI</name>
-  <version>2.0.1</version>
+  <version>2.0.2</version>
   <description>The GUI interface for the pn.dev.code-generator-ollama library is included in this package</description>
   <inceptionYear>2024</inceptionYear>
   <developers>
