@@ -26,7 +26,16 @@ public record TaskUtil() {
     public static String addFilePathOfSuperAppToClassName(String className, String superAppDirectory){
 
         return ScriptConstants.COMPILE_CLASS_STORAGE+File.separator+superAppDirectory+File.separator +className;
+    }
 
+    /**
+     *
+     * @param className Name of the class
+     * @param continueAppDirectory Name of the directory for the continue an application app
+     * @return String
+     */
+    public static String AddFilePathToContinueOnApplication(String className, String continueAppDirectory){
+        return ScriptConstants.COMPILE_CLASS_STORAGE+File.separator+continueAppDirectory+File.separator+className;
     }
 
 }

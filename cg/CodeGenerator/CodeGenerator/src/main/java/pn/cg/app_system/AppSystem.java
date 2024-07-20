@@ -7,6 +7,7 @@ import pn.cg.app_system.code_generation.model.SuperApp;
 import pn.cg.datastorage.DataStorage;
 import pn.cg.ollama_ai_remote.OllamaRemoteSystem;
 import pn.cg.util.CodeGeneratorUtil;
+import pn.cg.util.StringUtil;
 
 
 import java.io.File;
@@ -54,6 +55,13 @@ public class AppSystem {
             if (isCreateAppGeneration) {
                 appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, true, "", null);
             } else {
+                DataStorage.getInstance().setContinueAnAppDirectoryName(CodeGeneratorUtil.getIncrementedContinueOnAppDirectoryName(StringUtil.extractClassNameFromTextWithJavaClasses(javaFileContentInLines)));
+                try {
+                    Files.createDirectory(new File(COMPILE_CLASS_STORAGE + File.separator + DataStorage.getInstance().getContinueAnAppDirectoryName()).toPath());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
                 appWishCompileResult = ollamaRemoteSystem.CreateApp(appWish, true, pathOfJavaFileIfModifyRequest, javaFileContentInLines);
             }
         }

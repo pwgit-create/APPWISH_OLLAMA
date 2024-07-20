@@ -17,16 +17,44 @@ public class StringUtil {
     private static final Logger log = LoggerFactory.getLogger(StringUtil.class);
 
 
+    /***
+     *
+     * @param javaCodeInLines List<String> that contains Java code formatted by lines at the position of the list
+     * @return String
+     */
+    public static String extractClassNameFromTextWithJavaClasses(List<String> javaCodeInLines) {
+
+        String className = "";
+
+        for (String line : javaCodeInLines) {
+
+
+            if (line.contains("public class")) {
+
+                className = line.replace("public class", "").replace("{", "").trim();
+
+                className = className.split("\\s")[0];
+                break;
+            }
+        }
+        if (className.isBlank()) {
+            // log.error(ERROR_PREFIX_LOG_ERROR + unparsedJavaClassText);
+            return CommonStringConstants.ERROR;
+        } else
+            //log.debug("Class name -> "+className);
+            return className;
+    }
+
+
+
     /**
      * Extracts the public class name from a text with java classes
      *
-     * @param unparsedJavaClassText String that contains unparsed Java code
+     * @param unparsedJavaCode String that contains unparsed Java code
      * @return String
      */
-    public static String extractClassNameFromTextWithJavaClasses(String unparsedJavaClassText) {
-        String[] lines = unparsedJavaClassText.split("\n");
-
-        System.out.println(lines.length);
+    public static String extractClassNameFromTextWithJavaClasses(String unparsedJavaCode) {
+        String[] lines = unparsedJavaCode.split("\n");
 
         String className = "";
 
@@ -48,6 +76,8 @@ public class StringUtil {
             //log.debug("Class name -> "+className);
             return className;
     }
+
+
 
     /**
      * Removes the first line of a String
