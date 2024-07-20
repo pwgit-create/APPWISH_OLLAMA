@@ -8,9 +8,7 @@ import pn.cg.app_system.code_generation.model.SuperApp;
 import pn.cg.app_wish.QuestionBuilder;
 import pn.cg.datastorage.DataStorage;
 import pn.cg.datastorage.constant.CommonStringConstants;
-import pn.cg.datastorage.constant.PathConstants;
 import pn.cg.datastorage.constant.QuestionConstants;
-import pn.cg.datastorage.constant.ScriptConstants;
 import pn.cg.ollama_ai_remote.request.*;
 import pn.cg.util.CodeGeneratorUtil;
 import pn.cg.util.FileUtil;
@@ -112,8 +110,8 @@ public class OllamaRemoteSystem {
 
 
             log.info("Java source code after modification = {}", javaSourceCode);
-            // Create file instance with class name and file extension
-            File file = new File(TaskUtil.addFilePathToClassName(className + JAVA_FILE_EXTENSION));
+
+            File file = getFileForJavaFileOutput(isCreateNewApp, className);
 
             // Save the path to shared storage (if user wants to execute the java app after the build
             DataStorage.getInstance().setJavaExecutionPath(file.getAbsolutePath());
@@ -132,6 +130,35 @@ public class OllamaRemoteSystem {
             }
         }
         return DataStorage.getInstance().getCompilationJob().isResult();
+    }
+
+    /**
+     * Gets a File that is initialized with the correct path
+     *
+     * @param isCreateNewApp A new app will be stationed in the default resource folder while a continue an app will
+     *                       be stationed in its designated folder
+     * @param className      The name of the Class
+     * @return File
+     */
+    private static File getFileForJavaFileOutput(boolean isCreateNewApp, String className) {
+
+        // Placeholder for the output .java file
+        File file = null;
+
+        if (isCreateNewApp) {
+            // Create file instance with class name and file extension
+            file = new File(TaskUtil.addFilePathToClassName(className + JAVA_FILE_EXTENSION));
+
+        }
+
+        // Continue on existing application
+        else {
+
+            // Create file instance with class name and file extension
+            file = new File(TaskUtil.AddFilePathToContinueOnApplication(className + JAVA_FILE_EXTENSION, DataStorage.getInstance().getContinueAnAppDirectoryName()));
+
+        }
+        return file;
     }
 
     /**
@@ -193,9 +220,10 @@ public class OllamaRemoteSystem {
         // Create file instance with class name and file extension
         File file = new File(TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION, DataStorage.getInstance().getSuperAppDirectoryName()));
 
-        if(className.equals("Main")){
-        // Save the path to shared storage (if user wants to execute the java app after the build
-        DataStorage.getInstance().setJavaExecutionPath(file.getAbsolutePath());}
+        if (className.equals("Main")) {
+            // Save the path to shared storage (if user wants to execute the java app after the build
+            DataStorage.getInstance().setJavaExecutionPath(file.getAbsolutePath());
+        }
 
         // Write the Java code provided from OLLAMA to file
         try {
@@ -224,17 +252,17 @@ public class OllamaRemoteSystem {
             try {
                 CodeGeneratorUtil.SetMethodAndConstructorListForImplementedClass(className, Path.of(TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.CLASS_FILE_EXTENSION, DataStorage.getInstance().getSuperAppDirectoryName())));
             } catch (MalformedURLException | ClassNotFoundException e) {
-              log.error("Could not set Methods or/ and constructors");
-              classInSuperAppDesign.setConstructors(new LinkedList<String>());
-              classInSuperAppDesign.setMethods(new LinkedList<String>());
+                log.error("Could not set Methods or/ and constructors");
+                classInSuperAppDesign.setConstructors(new LinkedList<String>());
+                classInSuperAppDesign.setMethods(new LinkedList<String>());
             }
 
             // Copy class file to the script directory for the javac script, so it will be included in the class path
             try {
-                Path destinationPathForTempFile= Path.of(DataStorage.getInstance().getPROJECT_ROOT_WORKING_DIR().toString()+File.separator+className+CLASS_FILE_EXTENSION);
+                Path destinationPathForTempFile = Path.of(DataStorage.getInstance().getPROJECT_ROOT_WORKING_DIR().toString() + File.separator + className + CLASS_FILE_EXTENSION);
                 Files.deleteIfExists(destinationPathForTempFile);
                 DataStorage.getInstance().addPathToTmpFileList(destinationPathForTempFile);
-                Files.copy(Path.of(TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.CLASS_FILE_EXTENSION, DataStorage.getInstance().getSuperAppDirectoryName())),destinationPathForTempFile);
+                Files.copy(Path.of(TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.CLASS_FILE_EXTENSION, DataStorage.getInstance().getSuperAppDirectoryName())), destinationPathForTempFile);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

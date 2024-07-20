@@ -6,6 +6,7 @@ import pn.cg.app_system.code_generation.model.SuperApp;
 import pn.cg.app_system.code_generation.model.enum_.OPTION_METHOD_CONSTRUCTOR;
 import pn.cg.datastorage.DataStorage;
 import pn.cg.datastorage.ThreadPoolMaster;
+import pn.cg.datastorage.constant.CommonStringConstants;
 
 import java.io.File;
 import java.io.IOException;
@@ -110,7 +111,60 @@ public record CodeGeneratorUtil() {
             }
 
         } catch (NumberFormatException | IOException e) {
-            log.error("You have a folder in the that resides in the directory for the generated java applications that starts with \"APP_\" and have a suffix that is not an Integer\nPlease move or delete that folder to resolve this error");
+            log.error("You have a folder that resides in the directory of the generated java applications that starts with \"APP_\" and have a suffix that is not an Integer\nPlease move or delete that folder to resolve this error");
+            ThreadPoolMaster.getInstance().TerminateThreads();
+            System.exit(1);
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Read the files in the COMPILE_CLASS_STORAGE folder and filter the current continueClass directories (if any) and increment the number by one
+     *
+     * @param className The name of class that has been continued
+     * @return String
+     */
+    public static String getIncrementedContinueOnAppDirectoryName(String className) {
+        final String CONTINUE_ON_APP_DIRECTORY = className + "_";
+
+        // The number that will be appended to the APP_ directory
+        int appNumber = 1;
+
+        //Placeholder list that will be filled with the appending number of existing directories (if any)
+        List<Integer> listOfNumbersThatAreAppendedToExistingContinueOnAppDirectories = new LinkedList<>();
+
+        try {
+
+
+            List<Path> classNameFolders = (Files.list(new File(COMPILE_CLASS_STORAGE)
+                            .toPath())
+                    .filter(file -> file.getFileName().toString()
+                            .startsWith(CONTINUE_ON_APP_DIRECTORY))
+                    .filter(file -> !(file.getFileName().toString().equalsIgnoreCase(className + CommonStringConstants.CLASS_FILE_EXTENSION)))
+                    .filter(file -> !(file.getFileName().toString().equalsIgnoreCase(className + CommonStringConstants.JAVA_FILE_EXTENSION)))
+                    .toList());
+
+
+            if (classNameFolders.isEmpty()) {
+                return CONTINUE_ON_APP_DIRECTORY + appNumber;
+            } else {
+
+                classNameFolders.forEach(p -> listOfNumbersThatAreAppendedToExistingContinueOnAppDirectories
+                        .add(Integer.parseInt(p.getFileName().toString().split(CONTINUE_ON_APP_DIRECTORY)[1])));
+
+                // Take the highest and increment it by one
+                int maxNumberOfExistingSuperAppDirectories = listOfNumbersThatAreAppendedToExistingContinueOnAppDirectories
+                        .stream()
+                        .mapToInt(Integer::intValue)
+                        .max()
+                        .getAsInt();
+
+                return CONTINUE_ON_APP_DIRECTORY + (maxNumberOfExistingSuperAppDirectories + 1);
+            }
+
+        } catch (NumberFormatException | IOException e) {
+            log.error(e.getMessage());
+            log.error("You have a folder in the that resides in the directory for the generated java applications that starts with \"{}\" and have a suffix that is not an Integer\nPlease move or delete that folder to resolve this error", className);
             ThreadPoolMaster.getInstance().TerminateThreads();
             System.exit(1);
             throw new RuntimeException(e);
@@ -233,25 +287,28 @@ public record CodeGeneratorUtil() {
 
     /**
      * Gets the path in text format to the current super app directory
+     *
      * @return String
      */
-    public static String GetDocFilePathForSuperApp(){
+    public static String GetDocFilePathForSuperApp() {
 
-        final String DOC_FILE_FOR_SUPER_APP_PATH = COMPILE_CLASS_STORAGE + File.separator + DataStorage.getInstance().getSuperAppDirectoryName()+File.separator+"DOCS.txt";
+        final String DOC_FILE_FOR_SUPER_APP_PATH = COMPILE_CLASS_STORAGE + File.separator + DataStorage.getInstance().getSuperAppDirectoryName() + File.separator + "DOCS.txt";
         return DOC_FILE_FOR_SUPER_APP_PATH;
     }
 
     /**
      * Validate the response on a "Get All Classes" question to an AI-Model
+     *
      * @param responseFromAiModelOnGetAllClassesFromSuperAppQuestion Response from AI-Model
      * @return boolean
      */
-    public static boolean ValidateResponseOnSuperAppGetAllClassesQuestion(String responseFromAiModelOnGetAllClassesFromSuperAppQuestion){
+    public static boolean ValidateResponseOnSuperAppGetAllClassesQuestion(String responseFromAiModelOnGetAllClassesFromSuperAppQuestion) {
 
         return !responseFromAiModelOnGetAllClassesFromSuperAppQuestion.contains(":")
                 && !responseFromAiModelOnGetAllClassesFromSuperAppQuestion.contains(",");
 
     }
+
     /**
      * Get a formatted String that will differ depending on wherever the super app contains methods or not
      *
@@ -301,7 +358,7 @@ public record CodeGeneratorUtil() {
 
         List<String> returnList = new LinkedList<>();
 
-        String filePath = pathToClassFileDirectory.toString() + className + ".class"; // Replace with the actual path to your class
+        String filePath = pathToClassFileDirectory.toString() + className + ".class";
 
         File file = new File(filePath);
         URL url = file.getParentFile().toURI().toURL();
