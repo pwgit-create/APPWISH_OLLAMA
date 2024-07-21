@@ -140,7 +140,7 @@ public class OllamaRemoteSystem {
      * @param className      The name of the Class
      * @return File
      */
-    private static File getFileForJavaFileOutput(boolean isCreateNewApp, String className) {
+    private File getFileForJavaFileOutput(boolean isCreateNewApp, String className) {
 
         // Placeholder for the output .java file
         File file = null;
