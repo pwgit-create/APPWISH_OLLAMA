@@ -101,8 +101,7 @@ public class AppHistoryController implements Initializable {
         List<File> continueAnAppFiles = AppWishUtil.retrieveFilesInContinueAnAppFolders();
 
         AppWishUtil.removeDuplicateFilesWithAnDollarSign(continueAnAppFiles);
-        AppWishUtil.filterOnClassPrefix(continueAnAppFiles);
-
+        continueAnAppFiles = AppWishUtil.filterOnClassPrefix(continueAnAppFiles);
         files.addAll(continueAnAppFiles);
 
         fileListView.getItems().clear();

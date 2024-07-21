@@ -34,11 +34,11 @@ public record AppWishUtil( ){
     /**
      * Filter an array of files with .class prefix predicate.
      * This is useful for separating .java files from .class files
-     * @param listOfFilesInJavaAppFolder The list of files in the java_source_code_classes_tmp folder
+     * @param listOfFiles The list of files
      * @return File[]
      */
-    public static List<File> filterOnClassPrefix(List<File> listOfFilesInJavaAppFolder){
-    return listOfFilesInJavaAppFolder.stream().filter(f -> f.getPath().endsWith(".class")).collect(Collectors.toList());
+    public static List<File> filterOnClassPrefix(List<File> listOfFiles){
+    return listOfFiles.stream().filter(f -> f.getAbsolutePath().endsWith(".class")).collect(Collectors.toList());
     }
 
     /**
@@ -61,7 +61,7 @@ public record AppWishUtil( ){
                 outputListOfFiles.addAll(Arrays.stream(Objects.requireNonNull(file.listFiles())).toList());
             }
         }
-
         return outputListOfFiles;
     }
+
 }
