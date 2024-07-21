@@ -101,7 +101,6 @@ public class AppHistoryController implements Initializable {
         List<File> continueAnAppFiles = AppWishUtil.retrieveFilesInContinueAnAppFolders();
 
         AppWishUtil.removeDuplicateFilesWithAnDollarSign(continueAnAppFiles);
-        continueAnAppFiles = AppWishUtil.filterOnClassPrefix(continueAnAppFiles);
         files.addAll(continueAnAppFiles);
 
         fileListView.getItems().clear();
@@ -112,7 +111,7 @@ public class AppHistoryController implements Initializable {
                     @Override
                     protected void updateItem(File item, boolean empty) {
                         super.updateItem(item, empty);
-                        setText(item == null || empty ? null : item.getName());
+                        setText(item == null || empty ? null : item.getName().split("\\.")[0]);
                     }
                 };
             }

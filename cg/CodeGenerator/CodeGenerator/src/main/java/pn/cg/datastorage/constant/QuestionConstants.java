@@ -170,10 +170,9 @@ public record QuestionConstants() {
     public final static String CLARIFY_THAT_NO_DOTS_OR_NUMBERS_SHOULD_BE_INCLUDED_IN_THE_RESPONSE="The only thing you need to include in your response is one class name per line. That is imperative!";
 
     /**
-     * This is the line that initiates the phase that happens after the classes for the super app has been stated
-     * @use-info Use this when the classes for the super app has been decided as the first line to the AI-model
+     * @use-info Instruct the model that the list of classes should be ordered after how dependent they are of existing implementations from other classes in the list
      */
-    public final static String FIRST_LINE_AFTER_CLASSES_HAS_BEEN_STATED_BY_MODEL="You have previously stated several classes that is needed to make my application";
+    public final static String THE_ORDER_OF_CLASSES_ARE_IMPORTANT="Order the class list so the classes that are less depended on interactions with the other classes are implemented first";
 
     /**
      * Provide java code for a class
@@ -246,7 +245,4 @@ public record QuestionConstants() {
     public final static String DO_NOT_ASSUME_THAT_CLASSES_CONTAINS_METHODS_OR_CONSTRUCTORS_THAT_THEY_DO_NOT="Please do not assume parameter types in methods or constructors of other classes and include them in the code if it is not stated in the query that they exists";
 
     /// ***** ///
-
-
-
 }
