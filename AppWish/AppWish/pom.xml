@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>pn.dev</groupId>
     <artifactId>code-generator-gui-ollama</artifactId>
-    <version>2.0.2</version>
+    <version>2.0.3</version>
     <name>CodeGenerator-GUI</name>
 
 
@@ -45,7 +45,7 @@
         <dependency>
             <groupId>pn.dev</groupId>
             <artifactId>code-generator-ollama</artifactId>
-            <version>2.0.2</version>
+            <version>2.0.3</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>

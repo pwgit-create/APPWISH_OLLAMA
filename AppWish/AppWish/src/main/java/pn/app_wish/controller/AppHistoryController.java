@@ -97,6 +97,14 @@ public class AppHistoryController implements Initializable {
 
         List<File> files = AppWishUtil.filterOnClassPrefix(Arrays.stream(Objects.requireNonNull(selectedDirectory.listFiles()))
                 .collect(Collectors.toList()));
+
+        List<File> continueAnAppFiles = AppWishUtil.retrieveFilesInContinueAnAppFolders();
+
+        AppWishUtil.removeDuplicateFilesWithAnDollarSign(continueAnAppFiles);
+        AppWishUtil.filterOnClassPrefix(continueAnAppFiles);
+
+        files.addAll(continueAnAppFiles);
+
         fileListView.getItems().clear();
         fileListView.getItems().addAll(files);
         fileListView.setCellFactory(new Callback<>() {
@@ -114,7 +122,7 @@ public class AppHistoryController implements Initializable {
 
     @FXML
     private void goToMainScene(ActionEvent ae) {
-        if(this.executingJavaAppProcess != null) {
+        if (this.executingJavaAppProcess != null) {
             this.executingJavaAppProcess.toHandle().destroy();
         }
         Pane pane;
@@ -137,7 +145,8 @@ public class AppHistoryController implements Initializable {
         this.executingJavaAppProcess.toHandle().destroy();
     }
 
-    @FXML private void showConfirmDialogForDeletionOfAnJavaApplication(ActionEvent ae) {
+    @FXML
+    private void showConfirmDialogForDeletionOfAnJavaApplication(ActionEvent ae) {
 
         if (fileListView != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -147,10 +156,13 @@ public class AppHistoryController implements Initializable {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 deleteJavaApp(fileListView.getSelectionModel().selectedItemProperty().getValue());
-            } else {log.info("Action Canceled");}
+            } else {
+                log.info("Action Canceled");
+            }
         }
     }
-    private void deleteJavaApp(File classFileOfApplication){
+
+    private void deleteJavaApp(File classFileOfApplication) {
 
         Platform.runLater(() -> {
 
