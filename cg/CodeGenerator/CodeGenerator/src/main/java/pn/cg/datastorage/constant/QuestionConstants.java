@@ -244,5 +244,10 @@ public record QuestionConstants() {
      */
     public final static String DO_NOT_ASSUME_THAT_CLASSES_CONTAINS_METHODS_OR_CONSTRUCTORS_THAT_THEY_DO_NOT="Please do not assume parameter types in methods or constructors of other classes and include them in the code if it is not stated in the query that they exists";
 
+    /**
+     * Instruct the AI-Model to not assume package names
+     */
+    public final static String DO_NOT_ASSUME_PACKAGE_NAMES="The application won't run if you import non-existent packages, so don't assume package names";
+
     /// ***** ///
 }

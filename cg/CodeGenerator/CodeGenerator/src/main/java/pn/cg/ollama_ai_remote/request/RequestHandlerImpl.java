@@ -168,7 +168,8 @@ public class RequestHandlerImpl implements RequestHandler {
                     .addLine(GREETING_TO_MODEL)
                     .addLine(PROVIDE_ME_JAVA_CODE_SUPER_APP_SPECIFIC + superAppClass.getClassName())
                     .addLine(IMPLEMENT_MAIN_CLASS_IN_SUPER_APP_CREATION)
-                    .addLine(AND_CORRECT_IMPORTS);
+                    .addLine(AND_CORRECT_IMPORTS)
+                    .addLine(DO_NOT_ASSUME_PACKAGE_NAMES);
 
 
             // At last one class has been implemented
