@@ -168,7 +168,8 @@ public class RequestHandlerImpl implements RequestHandler {
                     .addLine(GREETING_TO_MODEL)
                     .addLine(PROVIDE_ME_JAVA_CODE_SUPER_APP_SPECIFIC + superAppClass.getClassName())
                     .addLine(IMPLEMENT_MAIN_CLASS_IN_SUPER_APP_CREATION)
-                    .addLine(AND_CORRECT_IMPORTS);
+                    .addLine(AND_CORRECT_IMPORTS)
+                    .addLine(DO_NOT_ASSUME_PACKAGE_NAMES);
 
 
             // At last one class has been implemented
@@ -281,7 +282,8 @@ public class RequestHandlerImpl implements RequestHandler {
                 .addLine(QuestionConstants.WHICH_CLASS_ARE_NEEDED_FOR_APP_RESPONSE_FORMAT_1)
                 .addLine(QuestionConstants.ONLY_CLASS_NAMES_IN_ANSWER)
                 .addLine(QuestionConstants.CLARIFY_THAT_NO_DOTS_OR_NUMBERS_SHOULD_BE_INCLUDED_IN_THE_RESPONSE)
-                .addLine(QuestionConstants.MAIN_CLASS_SHOULD_ALWAYS_BE_ADDED_TO_THE_CLASS_LIST);
+                .addLine(QuestionConstants.MAIN_CLASS_SHOULD_ALWAYS_BE_ADDED_TO_THE_CLASS_LIST)
+                .addLine(QuestionConstants.THE_ORDER_OF_CLASSES_ARE_IMPORTANT);
 
         OllamaResult result = null;
         try {

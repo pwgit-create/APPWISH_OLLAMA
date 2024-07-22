@@ -28,6 +28,7 @@ import pn.app_wish.model.CodeBaseCmd;
 import pn.app_wish.constant.CodeEvent;
 import pn.app_wish.constant.GUIConstants;
 import pn.app_wish.constant.StaticAppWishConstants;
+import pn.app_wish.util.AppWishUtil;
 import pn.cg.app_system.AppSystem;
 import pn.cg.app_system.code_generation.model.CompilationJob;
 import pn.cg.datastorage.DataStorage;
@@ -94,6 +95,7 @@ public class AppWish extends Application {
     @Override
     public void stop() throws Exception {
         System.out.println("Exiting app");
+        AppWishUtil.deleteTmpCodeBaseFiles();
         ThreadPoolMaster.getInstance().TerminateThreads();
         Platform.exit();
         super.stop();
@@ -104,7 +106,10 @@ public class AppWish extends Application {
         System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "DEBUG");
         Parent root = FXMLLoader.load(requireNonNull(getClass().getClassLoader().getResource(DEFAULT_FXML_FILE)));
         mainStage = primaryStage;
+        mainStage.setFullScreen(false);
         mainStage.setResizable(false);
+        primaryStage.setFullScreen(false);
+        primaryStage.setResizable(false);
         primaryStage.setTitle(GUIConstants.DEFAULT_STAGE_TITLE);
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
