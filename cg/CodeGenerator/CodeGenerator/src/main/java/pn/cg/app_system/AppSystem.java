@@ -201,7 +201,7 @@ public class AppSystem {
 
                 pathOfTmpFilesInSuperAppCreation.forEach(p -> {
                     try {
-                        Files.delete(p);
+                        Files.deleteIfExists(p);
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -247,7 +247,7 @@ public class AppSystem {
                     List<Path> pathOfTmpFilesInSuperAppCreation = DataStorage.getInstance().getListOfPathsToTmpFiles();
                     pathOfTmpFilesInSuperAppCreation.forEach(p -> {
                         try {
-                            Files.delete(p);
+                            Files.deleteIfExists(p);
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
                         }
