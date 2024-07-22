@@ -1,5 +1,6 @@
 package pn.app_wish.util;
 
+import pn.cg.datastorage.DataStorage;
 import pn.cg.datastorage.constant.PathConstants;
 
 import java.io.File;
@@ -64,4 +65,20 @@ public record AppWishUtil( ){
         return outputListOfFiles;
     }
 
-}
+    /**
+     * If a code base generation has been exited by the user , remove the tmp files that are copied to the class path
+     */
+    public final static void deleteTmpCodeBaseFiles(){
+
+        if(DataStorage.getInstance().getListOfPathsToTmpFiles() != null) {
+
+            DataStorage.getInstance().getListOfPathsToTmpFiles() .forEach(p -> {
+                try {
+                    Files.delete(p);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+        }}
+    }
+
