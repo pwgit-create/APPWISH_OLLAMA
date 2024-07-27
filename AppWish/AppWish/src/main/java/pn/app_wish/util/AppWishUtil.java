@@ -74,7 +74,7 @@ public record AppWishUtil( ){
 
             DataStorage.getInstance().getListOfPathsToTmpFiles() .forEach(p -> {
                 try {
-                    Files.delete(p);
+                    Files.deleteIfExists(p);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
