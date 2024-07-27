@@ -124,12 +124,15 @@ public class AppHistoryController implements Initializable {
             this.executingJavaAppProcess.toHandle().destroy();
         }
         Pane pane;
+
         try {
             pane = FXMLLoader.load(
                     Objects.requireNonNull(getClass().getClassLoader().getResource(GUIConstants.DEFAULT_FXML_FILE)));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        pane.requestLayout();
         Scene scene = new Scene(pane);
         Stage stage = AppWish.getMainStage();
         stage.setScene(scene);

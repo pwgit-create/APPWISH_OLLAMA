@@ -1,6 +1,13 @@
 package pn.cg.ollama_ai_remote.request;
 
 
+import io.github.ollama4j.OllamaAPI;
+import io.github.ollama4j.exceptions.OllamaBaseException;
+
+import io.github.ollama4j.models.OllamaResult;
+import io.github.ollama4j.utils.Options;
+import io.github.ollama4j.utils.OptionsBuilder;
+import io.github.ollama4j.utils.PromptBuilder;
 import pn.cg.app_system.code_generation.model.SuperApp;
 import pn.cg.datastorage.CodeGeneratorConfig;
 import pn.cg.datastorage.DataStorage;
@@ -9,12 +16,7 @@ import pn.cg.datastorage.constant.QuestionConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.amithkoujalgi.ollama4j.core.OllamaAPI;
-import io.github.amithkoujalgi.ollama4j.core.exceptions.OllamaBaseException;
-import io.github.amithkoujalgi.ollama4j.core.models.OllamaResult;
-import io.github.amithkoujalgi.ollama4j.core.utils.Options;
-import io.github.amithkoujalgi.ollama4j.core.utils.OptionsBuilder;
-import io.github.amithkoujalgi.ollama4j.core.utils.PromptBuilder;
+
 import pn.cg.util.CodeGeneratorUtil;
 import pn.cg.util.StringUtil;
 
@@ -116,7 +118,7 @@ public class RequestHandlerImpl implements RequestHandler {
 
         OllamaResult result = null;
         try {
-            result = api.generate(codeGeneratorConfig.getOllamaModel(), promptBuilder.build(), options);
+            result = api.generate(codeGeneratorConfig.getOllamaModel(), promptBuilder.build(),false, options);
 
         } catch (OllamaBaseException | IOException | InterruptedException e) {
             log.error("Error while sending a request to the local Ollama Server");
@@ -262,7 +264,7 @@ public class RequestHandlerImpl implements RequestHandler {
 
         OllamaResult result = null;
         try {
-            result = api.generate(codeGeneratorConfig.getOllamaModel(), promptBuilder.build(), options);
+            result = api.generate(codeGeneratorConfig.getOllamaModel(), promptBuilder.build(),false ,options);
 
         } catch (OllamaBaseException | IOException | InterruptedException e) {
             log.error("Error while sending a request to the local Ollama Server");
@@ -287,7 +289,7 @@ public class RequestHandlerImpl implements RequestHandler {
 
         OllamaResult result = null;
         try {
-            result = api.generate(codeGeneratorConfig.getOllamaModel(), initialPrompt.build(), options);
+            result = api.generate(codeGeneratorConfig.getOllamaModel(), initialPrompt.build(),false, options);
 
 
         } catch (OllamaBaseException | IOException | InterruptedException e) {
