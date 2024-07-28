@@ -5,9 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pn.cg.datastorage.constant.CommonStringConstants;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static pn.cg.util.CodeGeneratorUtil.ValidateResponseOnSuperAppGetAllClassesQuestion;
 
@@ -262,6 +260,7 @@ public class StringUtil {
      * @return List<String>
      */
     public static List<String> GetListOfClassNamesInSuperAppGeneration(String input) {
+        final String MAIN_CLASS_NAME = "Main";
         try {
             String[] classNamesArr = input.split("\n");
             List<String> tmpClassNames = new LinkedList<>();
@@ -288,7 +287,15 @@ public class StringUtil {
                 }
             }
 
-            return tmpClassNames.stream().filter(line -> !(line.contains(" "))).toList();
+            tmpClassNames =  tmpClassNames.stream().filter(line -> !(line.contains(" "))).toList();
+
+            if(!tmpClassNames.isEmpty() && tmpClassNames.get(0).equalsIgnoreCase(MAIN_CLASS_NAME)){
+                List<String> mutableList = new ArrayList<>(tmpClassNames);
+                Collections.reverse(mutableList);
+                return mutableList;
+            }
+
+            return tmpClassNames;
 
         } catch (Exception e) {
 
