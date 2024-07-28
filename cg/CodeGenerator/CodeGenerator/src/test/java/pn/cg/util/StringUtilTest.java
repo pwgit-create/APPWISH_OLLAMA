@@ -353,4 +353,17 @@ public class StringUtilTest {
         Assertions.assertEquals(EXPECTED, ACTUAL);
     }
 
+    @Test
+    public void ReverseListOfClassNamesInSuperAppGenerationIfFirstClassIsNamedMain() {
+
+        final String TEST_INPUT = "1. Main\n2. PackageScanner";
+        final String PERFECT_RESPONSE_FROM_AI_MODEL = "PackageScanner\nMain";
+
+
+        final List<String> EXPECTED = Arrays.stream(PERFECT_RESPONSE_FROM_AI_MODEL.split("\n")).toList();
+        final List<String> ACTUAL = StringUtil.GetListOfClassNamesInSuperAppGeneration(TEST_INPUT);
+
+        Assertions.assertEquals(EXPECTED, ACTUAL);
+    }
+
 }
