@@ -18,6 +18,12 @@
       <timezone>Central European Time</timezone>
     </developer>
   </developers>
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://raw.githubusercontent.com/pwgit-create/APPWISH_OLLAMA/master/LICENSE</url>
+    </license>
+  </licenses>
   <build>
     <plugins>
       <plugin>

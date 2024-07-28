@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 
+import javafx.stage.StageStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.simple.SimpleLogger;
@@ -101,10 +102,24 @@ public class AppWish extends Application {
         super.stop();
     }
 
-    @Override
-    public void start(Stage primaryStage) throws IOException {
-        System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "DEBUG");
-        Parent root = FXMLLoader.load(requireNonNull(getClass().getClassLoader().getResource(DEFAULT_FXML_FILE)));
+    private void loadSplashScreen(Stage primaryStage) throws IOException {
+
+        // Load splashscreen.fxml and show it
+        Parent root = FXMLLoader.load(requireNonNull(getClass().getClassLoader().getResource("splashscreen.fxml")));
+        Stage splashStage = new Stage();
+        splashStage.setScene(new Scene(root));
+        splashStage.initStyle(StageStyle.UNDECORATED);
+        splashStage.show();
+    }
+
+    private void loadDefaultScreen(Stage primaryStage){
+
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(requireNonNull(getClass().getClassLoader().getResource(DEFAULT_FXML_FILE)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         mainStage = primaryStage;
         mainStage.setResizable(false);
         primaryStage.setResizable(false);
@@ -113,6 +128,17 @@ public class AppWish extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws IOException {
+        System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "DEBUG");
+        // App Screen
+        //loadDefaultScreen(primaryStage);
+
+        // Splash Screen
+        loadSplashScreen(primaryStage);
+
 
     }
 
@@ -358,6 +384,7 @@ public class AppWish extends Application {
         btn_create_application.setVisible(isVisible);
         btn_continue_on_application.setVisible(isVisible);
         btn_super_app_creation.setVisible(isVisible);
+        btn_app_history.setVisible(isVisible);
     }
 
     /**
