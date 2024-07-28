@@ -5,10 +5,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import pn.app_wish.AppWish;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +24,8 @@ public class SplashScreenController implements Initializable {
     @FXML
     private ImageView splashImage;
 
+    @FXML
+    private Label label;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -38,6 +42,8 @@ public class SplashScreenController implements Initializable {
                 Stage mainStage = new Stage();
                 mainStage.setResizable(false);
                 mainStage.setScene(new Scene(root));
+
+                AppWish.mainStage = mainStage;
                 mainStage.show();
             } catch (IOException ex) {
                 // Handle exception

@@ -52,7 +52,7 @@ import static pn.app_wish.constant.StaticAppWishConstants.*;
 
 public class AppWish extends Application {
     private static final Logger log = LoggerFactory.getLogger(AppWish.class);
-    private static Stage mainStage;
+    public static  Stage mainStage;
     @FXML
     public TextField tf_input;
     @FXML
@@ -65,8 +65,7 @@ public class AppWish extends Application {
     public Button btn_app_history;
     @FXML
     public Button btn_continue_on_application;
-    @FXML
-    public BorderPane bp_main;
+
     @FXML
     public Button btn_StopGeneratedApp;
     @FXML
@@ -112,23 +111,6 @@ public class AppWish extends Application {
         splashStage.show();
     }
 
-    private void loadDefaultScreen(Stage primaryStage){
-
-        Parent root = null;
-        try {
-            root = FXMLLoader.load(requireNonNull(getClass().getClassLoader().getResource(DEFAULT_FXML_FILE)));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        mainStage = primaryStage;
-        mainStage.setResizable(false);
-        primaryStage.setResizable(false);
-        primaryStage.setTitle(GUIConstants.DEFAULT_STAGE_TITLE);
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    }
 
     @Override
     public void start(Stage primaryStage) throws IOException {
