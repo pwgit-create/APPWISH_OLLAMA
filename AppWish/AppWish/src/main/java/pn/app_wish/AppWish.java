@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 
+import javafx.stage.StageStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.simple.SimpleLogger;
@@ -51,7 +52,7 @@ import static pn.app_wish.constant.StaticAppWishConstants.*;
 
 public class AppWish extends Application {
     private static final Logger log = LoggerFactory.getLogger(AppWish.class);
-    private static Stage mainStage;
+    public static  Stage mainStage;
     @FXML
     public TextField tf_input;
     @FXML
@@ -64,8 +65,7 @@ public class AppWish extends Application {
     public Button btn_app_history;
     @FXML
     public Button btn_continue_on_application;
-    @FXML
-    public BorderPane bp_main;
+
     @FXML
     public Button btn_StopGeneratedApp;
     @FXML
@@ -101,18 +101,26 @@ public class AppWish extends Application {
         super.stop();
     }
 
+    private void loadSplashScreen(Stage primaryStage) throws IOException {
+
+        // Load splashscreen.fxml and show it
+        Parent root = FXMLLoader.load(requireNonNull(getClass().getClassLoader().getResource("splashscreen.fxml")));
+        Stage splashStage = new Stage();
+        splashStage.setScene(new Scene(root));
+        splashStage.initStyle(StageStyle.UNDECORATED);
+        splashStage.show();
+    }
+
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "DEBUG");
-        Parent root = FXMLLoader.load(requireNonNull(getClass().getClassLoader().getResource(DEFAULT_FXML_FILE)));
-        mainStage = primaryStage;
-        mainStage.setResizable(false);
-        primaryStage.setResizable(false);
-        primaryStage.setTitle(GUIConstants.DEFAULT_STAGE_TITLE);
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        // App Screen
+        //loadDefaultScreen(primaryStage);
+
+        // Splash Screen
+        loadSplashScreen(primaryStage);
+
 
     }
 
@@ -358,6 +366,7 @@ public class AppWish extends Application {
         btn_create_application.setVisible(isVisible);
         btn_continue_on_application.setVisible(isVisible);
         btn_super_app_creation.setVisible(isVisible);
+        btn_app_history.setVisible(isVisible);
     }
 
     /**
