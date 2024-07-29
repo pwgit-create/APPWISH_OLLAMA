@@ -3,12 +3,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pn.app_wish.controller.AppHistoryController">
+<AnchorPane maxHeight="400" maxWidth="592" minHeight="400.0" minWidth="592.0" style="-fx-background-color: #00277c; " xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pn.app_wish.controller.AppHistoryController">
 
-    <ListView fx:id="fileListView" prefHeight="400.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-    <Button fx:id="selectButton" layoutX="210.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleSelectButtonAction" style="-fx-background-color: green;" text="Run" textFill="#f8f8f8" />
+    <ListView fx:id="fileListView" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+
+
+    <Button fx:id="selectButton" layoutX="248.0" layoutY="2.0" mnemonicParsing="false" onAction="#handleSelectButtonAction" style="-fx-background-color: #00328c" text="Run" textFill="#f8f8f8" />
     <Button fx:id="btnMainScene" mnemonicParsing="false" onAction="#goToMainScene" style="-fx-background-color: #00328c" text="Back" textFill="WHITE" />
     <Button fx:id="btnStopApp" mnemonicParsing="false" onAction="#stopExecutedJavaApp" style="-fx-background-color: red" text="Stop your app" textFill="WHITE" />
-    <Button fx:id="btnDeleteApp" layoutX="531.0" layoutY="368.0" mnemonicParsing="false" onAction="#showConfirmDialogForDeletionOfAnJavaApplication" style="-fx-background-color:red;" text="Delete" textFill="#f5eef5" />
+    <Button fx:id="btnDeleteApp" layoutX="531.0" layoutY="374.0" onAction="#showConfirmDialogForDeletionOfAnJavaApplication" style="-fx-background-color: #00328c" text="Delete" textFill="#f5eef5" />
+    <Button fx:id="btnAbout" layoutX="248.0" layoutY="374.0" mnemonicParsing="false" onAction="#showAboutMessage" style="-fx-background-color: #00328c" text="About" textFill="#f5eef5" />
 
 </AnchorPane>
