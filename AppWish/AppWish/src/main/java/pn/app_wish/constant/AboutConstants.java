@@ -6,10 +6,10 @@ public record AboutConstants() {
     private static final String APP_WISH_VERSION = "Appwish Enterprise 2.0.5";
     private static final String ABOUT_APP_WISH = "AppWish (2) is a open source project that creates Java applications from text input with the help of AI models";
     private static final String DEVELOPED_BY = "Pwgit-Create / Peter Westin";
-    private static final String CONTACT = "\nEmail: snow_900@outlook.com\nIssue Portal at: ";
-    private static final String LINK_TO_DISCUSSION = "link";
-    private static final String LINK_TO_ISSUE_PORTAL="link";
-    private static final String IF_YOU_LIKE_THE_PROJECT = "\n\nIf you like AppWish and wants to show your support ,please let me know by leaving a post at: ";
+    private static final String CONTACT = "\nEmail: snow_900@outlook.com";
+    private static final String LINK_TO_DISCUSSION = "https://github.com/pwgit-create/APPWISH_OLLAMA/discussions";
+    private static final String LINK_TO_ISSUE_PORTAL="https://github.com/pwgit-create/APPWISH_OLLAMA/issues";
+    private static final String IF_YOU_LIKE_THE_PROJECT = "\n\nIf you like AppWish and wants to show your support, please let me know by leaving a post";
     private static final String THANKS_FOR_USING_APP_WISH_ENTERPRISE = "\n\nThanks for taking the time to read the about section, you rock! :)";
 
 
@@ -27,6 +27,7 @@ public record AboutConstants() {
                 DEVELOPED_BY +
                 "\n\nQuestions or in need of support? " +
                 CONTACT +
+                "\nIssue Portal: " +
                 LINK_TO_ISSUE_PORTAL +
                 "\n\nJoin the discussion and see updates: " +
                 LINK_TO_DISCUSSION +

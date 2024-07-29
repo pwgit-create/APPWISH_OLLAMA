@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -14,8 +15,11 @@
     </ImageView>
    <Label layoutX="168.0" layoutY="242.0" text="AppWish Enterprise" textFill="WHITE">
       <font>
-         <Font size="36.0"  name="Arif" />
+         <Font name="Arif" size="36.0" />
       </font>
+      <effect>
+         <DropShadow />
+      </effect>
    </Label>
 
 </AnchorPane>

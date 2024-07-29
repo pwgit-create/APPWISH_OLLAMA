@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -174,7 +175,15 @@ public class AppHistoryController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(AboutConstants.GetTitleTest());
             alert.setHeaderText(AboutConstants.GetHeaderText());
-            alert.setContentText(AboutConstants.BuildAboutString());
+
+            // Make text copyable
+            final TextArea textArea = new TextArea(AboutConstants.BuildAboutString());
+            textArea.setEditable(false);
+            textArea.setWrapText(true);
+            GridPane gridPane = new GridPane();
+            gridPane.setMaxWidth(Double.MAX_VALUE);
+            gridPane.add(textArea, 0, 0);
+            alert.getDialogPane().setContent(gridPane);
             alert.showAndWait();
         }
     }
