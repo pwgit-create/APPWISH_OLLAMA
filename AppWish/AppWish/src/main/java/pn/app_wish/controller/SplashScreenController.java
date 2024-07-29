@@ -40,7 +40,7 @@ public class SplashScreenController implements Initializable {
             try {
                 Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("start.fxml")));
                 Stage mainStage = new Stage();
-                mainStage.setResizable(false);
+                //mainStage.setResizable(false);
                 mainStage.setScene(new Scene(root));
 
                 AppWish.mainStage = mainStage;

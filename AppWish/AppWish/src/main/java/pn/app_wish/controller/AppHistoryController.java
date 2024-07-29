@@ -14,6 +14,7 @@ import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pn.app_wish.AppWish;
+import pn.app_wish.constant.AboutConstants;
 import pn.app_wish.constant.GUIConstants;
 import pn.app_wish.constant.StaticAppWishConstants;
 import pn.app_wish.util.AppWishUtil;
@@ -51,12 +52,16 @@ public class AppHistoryController implements Initializable {
     @FXML
     private Button btnDeleteApp;
 
+    @FXML
+    private Button btnAbout;
+
     private Process executingJavaAppProcess;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         AnchorPane.setRightAnchor(btnMainScene, 0d);
+        AnchorPane.setRightAnchor(btnDeleteApp, 0d);
         AnchorPane.setRightAnchor(btnStopApp, 80d);
         btnStopApp.setVisible(false);
         try {
@@ -160,6 +165,17 @@ public class AppHistoryController implements Initializable {
             } else {
                 log.info("Action Canceled");
             }
+        }
+    }
+
+    @FXML
+    private void showAboutMessage(ActionEvent ae) {
+        if (fileListView != null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(AboutConstants.GetTitleTest());
+            alert.setHeaderText(AboutConstants.GetHeaderText());
+            alert.setContentText(AboutConstants.BuildAboutString());
+            alert.showAndWait();
         }
     }
 

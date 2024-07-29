@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pn.app_wish.AppWish">
+<BorderPane minHeight="179" minWidth="400" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pn.app_wish.AppWish">
     <top>
         <!-- Title Bar -->
         <HBox alignment="CENTER" style="-fx-background-color: #00277c; -fx-padding: 10;">

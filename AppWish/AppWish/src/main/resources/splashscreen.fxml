@@ -14,7 +14,7 @@
     </ImageView>
    <Label layoutX="168.0" layoutY="242.0" text="AppWish Enterprise" textFill="WHITE">
       <font>
-         <Font size="36.0" />
+         <Font size="36.0"  name="Arif" />
       </font>
    </Label>
 

@@ -292,7 +292,7 @@ public class StringUtil {
             if(!tmpClassNames.isEmpty() && tmpClassNames.get(0).equalsIgnoreCase(MAIN_CLASS_NAME)){
                 List<String> mutableList = new ArrayList<>(tmpClassNames);
                 Collections.reverse(mutableList);
-                return mutableList;
+                return new LinkedList<>(mutableList);
             }
 
             return tmpClassNames;

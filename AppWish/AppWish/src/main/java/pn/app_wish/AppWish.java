@@ -76,6 +76,7 @@ public class AppWish extends Application {
     private String javaExecutablePath;
     private Process executingJavaAppProcess;
     private boolean isCodeGenerationOnGoing = false;
+    private boolean isSuperAppGeneration = false;
 
     public static void main(String[] args) {
         launch(args);
@@ -114,9 +115,8 @@ public class AppWish extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "DEBUG");
-        // App Screen
-        //loadDefaultScreen(primaryStage);
+        System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "INFO");
+
 
         // Splash Screen
         loadSplashScreen(primaryStage);
@@ -129,6 +129,7 @@ public class AppWish extends Application {
      */
     private void onAppWish(CodeEvent codeEvent) {
         isCodeGenerationOnGoing = true;
+        output_label.setStyle("-fx-background-color: #00277c; -fx-text-fill: white;");
         // The File Object will be null if it's a new app request or have
         // a value if it is a continuous build from an existing app
         File file;
@@ -151,6 +152,7 @@ public class AppWish extends Application {
             file = null;
         }
 
+        isSuperAppGeneration = false;
 
         ThreadPoolMaster.getInstance().getExecutor().execute(() -> {
             startGuiThread(codeEvent);
@@ -176,10 +178,11 @@ public class AppWish extends Application {
     private void onRunJavaApp(ActionEvent ae) {
         btn_run_application.setVisible(false);
         btn_StopGeneratedApp.setVisible(true);
+        output_label.setVisible(false);
 
         if (javaExecutablePath != null) {
 
-            if (!output_label.isVisible()) {
+            if (!isCodeGenerationOnGoing) {
                 log.info("Executing java app on path -> {}", javaExecutablePath);
             }
             try {
@@ -196,8 +199,7 @@ public class AppWish extends Application {
 
         final String classPath = javaExecutablePath.replace(MAIN_DOT_JAVA, NOTHING_STRING);
 
-        if (output_label.isVisible()) {
-            // Super App Creation
+        if (isSuperAppGeneration) {
 
             // Security
             if (classPath.concat(MAIN_DOT_JAVA).equals(javaExecutablePath)) {
@@ -342,17 +344,22 @@ public class AppWish extends Application {
             Platform.runLater(() -> {
                 if (DataStorage.getInstance().getJavaExecutionPath() != null || isSuperGeneration) {
                     if (!isSuperGeneration) {
-                        output_label.setVisible(false);
+
                         btn_run_application.setVisible(true);
+                        output_label.setText(SUCCESS_ON_SUPER_APP_CREATION_TEXT);
+                        output_label.setStyle("-fx-background-color: green; -fx-text-fill: white;");
                     }
                     btn_run_application.setVisible(true);
                     setButtonGroupVisibilityForCodeGenerationButtons(true);
                     isCodeGenerationOnGoing = false;
                     if (isSuperGeneration) {
                         output_label.setText(SUCCESS_ON_SUPER_APP_CREATION_TEXT);
+                        output_label.setStyle("-fx-background-color: green; -fx-text-fill: white;");
+
                     }
                 } else {
-                    output_label.setText("Something went wrong :(");
+                    output_label.setText("Failed! Try again or write an issue report.");
+                    output_label.setStyle("-fx-background-color: red; -fx-text-fill: white;");
                 }
             });
 
@@ -408,6 +415,8 @@ public class AppWish extends Application {
     public void OnSuperAppCreationButton(ActionEvent ae) {
 
         isCodeGenerationOnGoing = true;
+        isSuperAppGeneration = true;
+        output_label.setStyle("-fx-background-color: #00277c; -fx-text-fill: white;");
         DataStorage.getInstance().setCompilationJob(new CompilationJob(GUIConstants.DEFAULT_STAGE_TITLE));
         ThreadPoolMaster.getInstance().getExecutor().execute(() -> {
             StartGuiThreadForSuperAppCreation();
