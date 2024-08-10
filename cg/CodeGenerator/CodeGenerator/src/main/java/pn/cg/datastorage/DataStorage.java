@@ -56,6 +56,9 @@ public class DataStorage {
      * The path for the project root directory
      */
     private final Path PROJECT_ROOT_WORKING_DIR;
+
+    private CodeGeneratorConfig codeGeneratorConfig;
+
     private  DataStorage() {
 
         this.compilationJob = getCompilationJob();
@@ -144,6 +147,14 @@ public class DataStorage {
 
     public final void setContinueAnAppDirectoryName(String continueAnAppDirectoryName) {
         this.continueAnAppDirectoryName = continueAnAppDirectoryName;
+    }
+
+    public void setCodeGeneratorConfig(CodeGeneratorConfig codeGeneratorConfig) {
+        this.codeGeneratorConfig = codeGeneratorConfig;
+    }
+
+    public CodeGeneratorConfig getCodeGeneratorConfig() {
+        return codeGeneratorConfig;
     }
 }
 
