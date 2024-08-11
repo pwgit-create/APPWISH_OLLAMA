@@ -3,7 +3,10 @@ package pn.app_wish.constant;
 public record StaticAppWishConstants() {
     public static final String BASH_PATH = "/bin/bash";
     public static final String C_ARGUMENT = "-c";
+    public static final String CP_ARGUMENT="-cp ";
     public static final String JAVA_TEXT = "java ";
+
+    public static final String CP_PATH= ".:external_libs/* " ;
 
 
     public static final String MAIN_TEXT="Main";
