@@ -1,5 +1,6 @@
 package pn.app_wish.util;
 
+import pn.cg.datastorage.CodeGeneratorConfig;
 import pn.cg.datastorage.DataStorage;
 import pn.cg.datastorage.constant.PathConstants;
 
@@ -80,5 +81,20 @@ public record AppWishUtil( ){
                 }
             });
         }}
+
+    /**
+     * See if external libraries are used or not. Will also create a new CodeGenerator config
+     * in case no code generation has occurred in the session previously
+     * @return boolean
+     */
+    public final static boolean isExternalLibrariesBeingUsed(){
+
+        if(DataStorage.getInstance().getCodeGeneratorConfig() == null) {
+          final CodeGeneratorConfig codeGeneratorConfig = new CodeGeneratorConfig();
+            DataStorage.getInstance().setCodeGeneratorConfig(codeGeneratorConfig);}
+
+       return DataStorage.getInstance().getCodeGeneratorConfig().isUSE_EXTERNAL_LIBRARIES();
     }
+
+}
 
