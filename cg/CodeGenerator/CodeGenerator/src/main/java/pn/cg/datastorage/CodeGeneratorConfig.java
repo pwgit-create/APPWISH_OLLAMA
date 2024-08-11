@@ -19,8 +19,8 @@ public class CodeGeneratorConfig {
 
     /**
      * @OllamaDocs Size of context window (default 2048)
-     * @use-info  Remember that a high context window demands more compute resources
-     * @use-info  It is important to check the documentation of the AI-Model you are using regarding the supported context window sizes
+     * @use-info Remember that a high context window demands more compute resources
+     * @use-info It is important to check the documentation of the AI-Model you are using regarding the supported context window sizes
      */
     private final int NUM_CTX;
 
@@ -39,6 +39,11 @@ public class CodeGeneratorConfig {
      */
     private final float TEMPERATURE;
 
+    /**
+     * This config states wherever external libraries should be added to the classpath or not
+     */
+    private final boolean USE_EXTERNAL_LIBRARIES;
+
     public CodeGeneratorConfig() {
         // This method should only be called once (when app is initializing) constructor
         this.OLLAMA_MODEL = GetOllamaModelNameFromPropFile();
@@ -51,10 +56,12 @@ public class CodeGeneratorConfig {
         this.TOP_K = ollamaConfig.top_k();
         this.NUM_PREDICT = ollamaConfig.num_predict();
         this.TEMPERATURE = ollamaConfig.temperature();
+        this.USE_EXTERNAL_LIBRARIES = ollamaConfig.useExternalLibraries();
     }
 
     /**
      * Get the value from the "ollama_model.props"
+     *
      * @return String that contains the model name
      */
     private final String GetOllamaModelNameFromPropFile() {
@@ -77,8 +84,9 @@ public class CodeGeneratorConfig {
 
     /**
      * Creates an OllamaConfigDTO.
-     * @use-info In the event of an error, the record returned will only contain the default values
+     *
      * @return Record with Ollama config options that are editable in appwish
+     * @use-info In the event of an error, the record returned will only contain the default values
      */
     private final OllamaConfig CreateOllamaConfigDTOFromPropFile() {
         OllamaConfig newOllamaConfigRecord;
@@ -96,23 +104,26 @@ public class CodeGeneratorConfig {
             final String PROPERTY_NAME_TOP_K = "TOP_K";
             final String PROPERTY_NAME_NUM_PREDICT = "NUM_PREDICT";
             final String PROPERTY_NAME_TEMPERATURE = "TEMPERATURE";
+            final String PROPERTY_NAME_USE_EXTERNAL_LIBRARIES = "USE_EXTERNAL_LIBRARIES";
 
             final Properties properties = PropUtil.ReadPropertiesFile(PROPERTIES_FILE_NAME_FOR_CONFIG);
 
             newOllamaConfigRecord = new OllamaConfig(Integer.parseInt(properties.getProperty(PROPERTY_NAME_NUM_CTX)),
                     Integer.parseInt(properties.getProperty(PROPERTY_NAME_TOP_K)),
                     Integer.parseInt(properties.getProperty(PROPERTY_NAME_NUM_PREDICT)),
-                    Float.parseFloat(properties.getProperty(PROPERTY_NAME_TEMPERATURE)));
+                    Float.parseFloat(properties.getProperty(PROPERTY_NAME_TEMPERATURE)),
+                    convertExternalLibConfigIntoBooleanValue(properties.getProperty(PROPERTY_NAME_USE_EXTERNAL_LIBRARIES)));
         } catch (IOException e) {
             System.err.println("Error when fetching the ollama config file\nSetting default values for all config parameters..");
             // Default values should be returned if the ollama config file is corrupted
-            newOllamaConfigRecord = new OllamaConfig(2048, 40, 128, 0.8f);
+            newOllamaConfigRecord = new OllamaConfig(2048, 40, 128, 0.8f, false);
         }
         return newOllamaConfigRecord;
     }
 
     /**
      * Retrieves the name of the AI model that is being used with AppWish
+     *
      * @return String
      */
     public final String getOllamaModel() {
@@ -121,6 +132,7 @@ public class CodeGeneratorConfig {
 
     /**
      * Get the value of the context window
+     *
      * @return int
      */
     public final int getNUM_CTX() {
@@ -129,6 +141,7 @@ public class CodeGeneratorConfig {
 
     /**
      * Get the TOP_K value
+     *
      * @return int
      */
     public final int getTOP_K() {
@@ -137,6 +150,7 @@ public class CodeGeneratorConfig {
 
     /**
      * Get the number of tokens to predict
+     *
      * @return int
      */
     public final int getNUM_PREDICT() {
@@ -145,9 +159,20 @@ public class CodeGeneratorConfig {
 
     /**
      * Get the temperature that the AI Model uses
+     *
      * @return float
      */
     public final float getTEMPERATURE() {
         return TEMPERATURE;
+    }
+
+    public boolean isUSE_EXTERNAL_LIBRARIES() {
+        return USE_EXTERNAL_LIBRARIES;
+    }
+
+    private final boolean convertExternalLibConfigIntoBooleanValue(String value) {
+
+        return value.equalsIgnoreCase("On");
+
     }
 }

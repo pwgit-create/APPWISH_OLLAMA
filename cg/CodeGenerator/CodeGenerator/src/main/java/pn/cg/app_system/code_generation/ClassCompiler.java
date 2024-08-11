@@ -23,7 +23,8 @@ public class ClassCompiler {
 
     /**
      * Tries to compile a file with java source code into byte code
-     * @param className Class name of the class that we will try to compile
+     *
+     * @param className   Class name of the class that we will try to compile
      * @param superAppDir A String path that will be provided if it is a super app generation and left as null if not
      */
     private final void compile(String className, String superAppDir) {
@@ -35,35 +36,49 @@ public class ClassCompiler {
 
         ExecutorService executor = ThreadPoolMaster.getInstance().getExecutor();
 
-        if(isSuperAppGeneration)
+        if (isSuperAppGeneration)
             log.info("Compiler path -> {}", TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION, DataStorage.getInstance().getSuperAppDirectoryName()));
-            else
-        log.info("Compiler path -> {}", TaskUtil.addFilePathToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION));
+        else
+            log.info("Compiler path -> {}", TaskUtil.addFilePathToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION));
 
-        String scriptToUse = ScriptConstants.JAVAC_SCRIPT_NAME;
-        log.debug("script used when compiling -> {}", scriptToUse);
+        String regularCompileScript = ScriptConstants.JAVAC_SCRIPT_NAME;
+        String compileScriptWithAddedClassPath = ScriptConstants.JAVAC_WITH_ADDED_CLASS_PATH_TO_EXTERNAL_LIBRARIES;
 
-        if(isSuperAppGeneration)
-           executor.execute(new CompileClassTask(scriptToUse,new String[]{TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION,DataStorage.getInstance().getSuperAppDirectoryName())}));
-            else
-        executor.execute(new CompileClassTask(scriptToUse, new String[]{TaskUtil.addFilePathToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION)}));
+        final boolean useExternalLibraries = DataStorage.getInstance().getCodeGeneratorConfig().isUSE_EXTERNAL_LIBRARIES();
 
+        if (isSuperAppGeneration) {
+
+            if (useExternalLibraries) {
+                executor.execute(new CompileClassTask(compileScriptWithAddedClassPath, new String[]{TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION, DataStorage.getInstance().getSuperAppDirectoryName())}));
+            } else {
+                executor.execute(new CompileClassTask(regularCompileScript, new String[]{TaskUtil.addFilePathOfSuperAppToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION, DataStorage.getInstance().getSuperAppDirectoryName())}));
+            }
+        } else {
+
+            if (useExternalLibraries) {
+                executor.execute(new CompileClassTask(compileScriptWithAddedClassPath, new String[]{TaskUtil.addFilePathToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION)}));
+
+            } else {
+                executor.execute(new CompileClassTask(regularCompileScript, new String[]{TaskUtil.addFilePathToClassName(className + CommonStringConstants.JAVA_FILE_EXTENSION)}));
+            }
+        }
     }
+
     /**
      * Tries to compile a file with java source code into byte code
+     *
      * @param className Class name of the class that we will try to compile
      */
-    public void compileClass(String className){
-        compile(className,null);
+    public void compileClass(String className) {
+        compile(className, null);
     }
 
     /**
-     *
-     * @param className Class name of the class that we will try to compile
+     * @param className   Class name of the class that we will try to compile
      * @param superAppDir The path to the directory of the super app
      */
-    public void compileSuperClass(String className, String superAppDir){
-        compile(className,superAppDir);
+    public void compileSuperClass(String className, String superAppDir) {
+        compile(className, superAppDir);
 
     }
 
