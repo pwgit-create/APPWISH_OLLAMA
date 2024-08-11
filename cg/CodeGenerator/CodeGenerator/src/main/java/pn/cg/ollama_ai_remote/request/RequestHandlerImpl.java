@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import pn.cg.util.CodeGeneratorUtil;
 import pn.cg.util.StringUtil;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
