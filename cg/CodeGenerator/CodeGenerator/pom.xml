@@ -18,8 +18,8 @@
             <id>Peter</id>
             <email>snow_900@outlook.com</email>
             <roles>
-                <role>CCT Scheme Committee (2023-2026)</role>
-                <role>Open Source Developer</role>
+                  <role>CCT Scheme Committee (2023-2026)</role>
+                  <role>Open Source Developer</role>
             </roles>
             <timezone>Central European Time</timezone>
         </developer>
