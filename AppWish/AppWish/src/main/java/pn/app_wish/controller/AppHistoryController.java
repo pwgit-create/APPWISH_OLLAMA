@@ -17,7 +17,8 @@ import org.slf4j.LoggerFactory;
 import pn.app_wish.AppWish;
 import pn.app_wish.constant.AboutConstants;
 import pn.app_wish.constant.GUIConstants;
-import pn.app_wish.constant.StaticAppWishConstants;
+
+import pn.app_wish.model.AppCmd;
 import pn.app_wish.util.AppWishUtil;
 import pn.cg.datastorage.constant.PathConstants;
 
@@ -26,7 +27,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import java.nio.file.Files;
-import java.nio.file.Path;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -85,7 +86,8 @@ public class AppHistoryController implements Initializable {
             final String r2 = ".java";
             final String executePath = selectedFile.getAbsolutePath().replace(r1, r2);
 
-            processBuilder = new ProcessBuilder(BASH_PATH, C_ARGUMENT, JAVA_TEXT + executePath);
+
+            processBuilder = new ProcessBuilder(new AppCmd(executePath).GetCMDForRunningApp_Application());
             executingJavaAppProcess = processBuilder.inheritIO().start();
         } catch (IOException e) {
             System.out.println("RuntimeException while starting Java executable");
@@ -195,7 +197,7 @@ public class AppHistoryController implements Initializable {
             try {
 
                 // Delete the Class File of the chosen application
-                Files.delete(classFileOfApplication.toPath());
+                Files.deleteIfExists(classFileOfApplication.toPath());
                 log.info("The class file of your selected application has been deleted");
             } catch (IOException e) {
 

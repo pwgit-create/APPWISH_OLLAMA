@@ -116,7 +116,7 @@ public record QuestionConstants() {
 
     public final static String NOTE_TO_KEEP_AS_MUCH_ORIGINAL_STRUCTURE_AS_POSSIBLE="Make sure that your generated code keep the current functionality and only add functionality to the existing code";
 
-    public final static String NO_EXISTING_CODE_COMMENTS="I need the actual code without any comments or placeholders referencing existing code";
+    public final static String NO_EXISTING_CODE_COMMENTS="I need the actual code without any comments and without any placeholders referencing existing code";
 
     public final static String THREAD_PACKAGE="If your code requires the Java Thread package use import java.lang.Thread";
 
@@ -248,6 +248,8 @@ public record QuestionConstants() {
      * Instruct the AI-Model to not assume package names
      */
     public final static String DO_NOT_ASSUME_PACKAGE_NAMES="The application won't run if you import non-existent packages, so don't assume package names";
+
+    public final static String NEVER_ADD_EXISTING_CODE_REFERENCE_COMMENTS="You will never ever write a comment that references existing code but must instead include that code along with the new code";
 
     /// ***** ///
 }

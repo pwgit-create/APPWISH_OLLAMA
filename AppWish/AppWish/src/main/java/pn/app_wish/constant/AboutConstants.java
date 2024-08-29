@@ -3,8 +3,8 @@ package pn.app_wish.constant;
 
 public record AboutConstants() {
 
-    private static final String APP_WISH_VERSION = "Appwish Enterprise 2.0.5";
-    private static final String ABOUT_APP_WISH = "AppWish (2) is a open source project that creates Java applications from text input with the help of AI models";
+    private static final String APP_WISH_VERSION = "Appwish Enterprise 2.1";
+    private static final String ABOUT_APP_WISH = "AppWish 2 is a open source project that creates Java applications from text input with the help of AI models";
     private static final String DEVELOPED_BY = "Pwgit-Create / Peter Westin";
     private static final String CONTACT = "\nEmail: snow_900@outlook.com";
     private static final String LINK_TO_DISCUSSION = "https://github.com/pwgit-create/APPWISH_OLLAMA/discussions";
