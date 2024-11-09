@@ -20,7 +20,7 @@ Write a prompt about what your app should do and click on New App
 Write a prompt with your inteded changes and click on Continue
 
 ## Quick Start!
-Follow the information provided in the [latest release notes](https://github.com/pwgit-create/APPWISH_OLLAMA/releases/tag/v2.1) 😃.
+Follow the information provided in the [latest release notes](https://github.com/pwgit-create/APPWISH_OLLAMA/releases/tag/v.2.1.1) 😃.
 
 1. Unzip the file from the latest release
 2. Run the install script before starting AppWish
