@@ -103,7 +103,7 @@ public class RequestHandlerImpl implements RequestHandler {
                     .addLine(question)
                     .addLine(QuestionConstants.NOTE_TO_KEEP_AS_MUCH_ORIGINAL_STRUCTURE_AS_POSSIBLE)
                     .addLine(QuestionConstants.NO_EXISTING_CODE_COMMENTS)
-                    .add(QuestionConstants.NEVER_ADD_EXISTING_CODE_REFERENCE_COMMENTS)
+                    .addLine(QuestionConstants.NEVER_ADD_EXISTING_CODE_REFERENCE_COMMENTS)
                     .addLine(QuestionConstants.AND_CORRECT_IMPORTS)
                     .addLine(QuestionConstants.MARK_START_CHAR_DELIMITER)
                     .addLine(QuestionConstants.MARK_THE_END_CHAR_DELIMITER)
